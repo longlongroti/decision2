@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+
+    <title>领导班子-</title>
+    <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
+
+    <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/asserts/js/layer/laydate/skins/default/laydate.css}" rel="stylesheet">
+    <link th:href="@{/asserts/js/layer/laydate/need/laydate.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/jquery-file-upload.min.css}" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 class="col-sm-10 padding-top-10">[[${manageLeaderSel!=null}?编辑领导:新增领导]]</h5>
+                    <div class="col-sm-2 text-right"><a href="javascript:history.back(-1)">返回</a></div>
+                </div>
+                <input id="moduleName" name="moduleName" value="receive" type="hidden"/>
+
+                <div class="ibox-content">
+                    <form th:action="@{/manageLeader/add}" th:method="post">
+                        <input name="_method" th:if="${manageLeaderSel!=null}" type="hidden" value="PUT"/>
+                        <input id="uuid" name="uuid" th:value="${manageLeaderSel!=null}?${manageLeaderSel.uuid}" type="hidden"/>
+                        <!--第一行-->
+                        <fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-1 col-form-label my-font-bold">领导姓名</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" id="leaderName" name="leaderName"
+                                           th:placeholder="请输入领导姓名"
+                                           th:value="${manageLeaderSel!=null}?${manageLeaderSel.leaderName}">
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!--第二行-->
+                        <fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-1 col-form-label my-font-bold">排序</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" id="leaderSort" name="leaderSort"
+                                           th:placeholder="请输入序号"
+                                           th:value="${manageLeaderSel!=null}?${manageLeaderSel.leaderSort}"
+                                           onfocus="sysOrgShow('DC')">
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!--第三行-->
+                        <fieldset>
+                            <div class="form-group row">
+
+                                <label class="col-sm-1 col-form-label my-font-bold">备注</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" id="remark" name="remark"
+                                           th:placeholder="请输入备注"
+                                           th:value="${manageLeaderSel!=null}?${manageLeaderSel.remark}" >
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="clr"></div>
+                        <div class="hr-line-dashed"></div>
+                        <h4>所属领导班子列表</h4>
+                        <div class="form-group row input-dyna-add">
+                            <span class="col-sm-12" th:each="dat:${manageLeaderGrpoupSel}"
+                                  th:if="${manageLeaderGrpoupSel!=null}">
+                                <div>
+                                    <div class='col-sm-2'>
+                                        <select class="form-control" id="leaderGroup" name="leaderGroup" >
+                                            <option></option>
+                                            <option value="0" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '0'}">党委(党组)成员(党委会)</option>
+                                            <option value="1" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '1'}">党委(党组)成员(党组会)</option>
+                                            <option value="2" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '2'}">经理班子成员(总经理办公室)</option>
+                                            <option value="3" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '3'}">党委(党组)成员(党委(党组)会)</option>
+                                            <option value="4" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '4'}">股东会成员(股东会)</option>
+                                            <option value="5" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '5'}">董事会成员(董事会)</option>
+                                            <option value="6" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '6'}">经理班子成员(经理层办公会)</option>
+                                            <option value="7" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '7'}">(职代会)</option>
+                                            <option value="8" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '8'}">(其他)</option>
+                                        </select>
+                                    </div>
+                                    <div class='col-sm-2'>
+                                        <input type='text' required name='jobTitle' class='form-control m-t-sm col-sm-2'
+                                               placeholder='职位名称' th:value="${dat.jobTitle}">
+                                    </div>
+                                    <div class='col-sm-2'>
+                                        <input type='text' required name='officeStartDate'
+                                               class='form-control m-t-sm col-sm-2' placeholder='任职开始日期'
+                                               th:value="${dat.officeStartDate}">
+                                    </div>
+                                    <div class='col-sm-2'>
+                                        <input type='text' name='officeEndDate'
+                                               class='form-control m-t-sm col-sm-2' placeholder='至今'
+                                               th:value="${dat.officeEndDate}">
+                                    </div>
+
+                                    <div class='col-sm-3'>
+                                        <button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>
+                                            <span class='glyphicon glyphicon-minus'></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+                        <input type="button" class="btn btn-success" onclick="addInput()" value="添加" />
+
+                        <!--<div class="hr-line-dashed" style="margin: 0 0 15px 0;"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label   my-font-bold"
+                                   for="fileuploader">设备领用附件</label>
+                            <div class="col-sm-8 ">
+                                <div id="fileuploader">上传</div>
+                            </div>
+                        </div>-->
+
+                        <div class="clr"></div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary btn-sm badge-pill fa fa-save" type="submit">
+                                    [[${manageLeaderSel!=null}?保存编辑:保存新增]]
+                                </button>
+                                <a class="btn btn-white btn-sm " href="javascript:history.back(-1)">[[#{message.cancel}]]</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/asserts/js/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/layer/layer.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap-table/bootstrap-table.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/tree-view/js/bootstrap-treeview-cl.js}" type="text/javascript"></script>
+<!--<script th:src="@{/asserts/js/plugins/iCheck/icheck.min.js}" type="text/javascript"></script>-->
+<script th:src="@{/asserts/js/layer/laydate/laydate.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/plugins/validate/jquery.validate.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/plugins/validate/messages_zh.min.js}" type="text/javascript"></script>
+<script th:replace="common/myJs::myCommonJs"></script>
+<script th:src="@{/asserts/js/jquery-file-upload.min.js?v=1.1}" type="text/javascript"></script>
+
+<script th:inline="javascript">
+    /*$(function () {
+        let ret = [[${manageLeaderSel!=null}?${manageLeaderSel.fileUploads}]];
+        myFileAction.do("fileuploader", "fileIds", "deviceReceiveFile", ret);
+    })*/
+
+    function addInput() {
+        let input = $(
+            "<div><div class='col-sm-2'><!--<input type required name='leaderGroup' class='form-control m-t-sm col-sm-2'   placeholder='所属领导班子'>--> " +
+            "<select class=\"form-control\" id=\"leaderGroup\" name=\"leaderGroup\" >\n" +
+            "<option></option>\n" +
+            "<option value=\"0\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '0'}\">党委(党组)成员(党委会)</option>\n" +
+            "<option value=\"1\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '1'}\">党委(党组)成员(党组会)</option>\n" +
+            "<option value=\"2\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '2'}\">经理班子成员(总经理办公室)</option>\n" +
+            "<option value=\"3\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '3'}\">党委(党组)成员(党委(党组)会)</option>\n" +
+            "<option value=\"4\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '4'}\">股东会成员(股东会)</option>\n" +
+            "<option value=\"5\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '5'}\">董事会成员(董事会)</option>\n" +
+            "<option value=\"6\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '6'}\">经理班子成员(经理层办公会)</option>\n" +
+            "<option value=\"7\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '7'}\">(职代会)</option>\n" +
+            "<option value=\"8\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '8'}\">(其他)</option>\n" +
+            "</select></div>" +
+            "<div class='col-sm-2'><input type='text'  name='jobTitle'  class='form-control m-t-sm col-sm-2'  placeholder='职位名称'></div>" +
+            "<div class='col-sm-2'><input type='text'  name='officeStartDate'  class='form-control m-t-sm col-sm-2'  placeholder='任职开始日期'></div>" +
+            "<div class='col-sm-2'><input type='text' name='officeEndDate'  class='form-control m-t-sm col-sm-2'  placeholder='任职结束日期'></div>" +
+            "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
+            "<span class='glyphicon glyphicon-minus'></span>" +
+            "</button></div></div>");
+        $(".input-dyna-add").append(input);
+    }
+
+    $("body").on("click", ".removeclass", function (e) {
+        $(this).parent().parent('div').remove();
+        return false;
+    })
+
+</script>
+
+</body>
+</html>

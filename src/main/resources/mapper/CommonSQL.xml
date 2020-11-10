@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Common">
+    <sql id="condition_sql">
+
+        <if test="createdDateStart != null">
+            AND Date(created_date) &gt;= Date(#{createdDateStart,jdbcType=TIMESTAMP})
+        </if>
+        <if test="createdDateEnd != null">
+            AND Date(created_date) &lt;= Date(#{createdDateEnd,jdbcType=TIMESTAMP})
+        </if>
+        <if test="status != null">
+            AND status = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="createdBy != null">
+            AND (created_by = #{createdBy,jdbcType=VARCHAR}
+            <if test="supervisedOrg !=null and supervisedOrg.size!=0">
+                <foreach collection="supervisedOrg" item="supervisedOrg" index="index"
+                         open="or (" close=")" separator="OR">
+                    created_by_org like concat(#{supervisedOrg,jdbcType=VARCHAR},'%')
+                </foreach>
+            </if>
+            )
+        </if>
+    </sql>
+</mapper>
+

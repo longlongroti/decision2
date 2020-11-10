@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+
+    <title>制度信息-</title>
+    <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
+
+    <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/asserts/js/layer/laydate/skins/default/laydate.css}" rel="stylesheet">
+    <link th:href="@{/asserts/js/layer/laydate/need/laydate.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/jquery-file-upload.min.css}" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 class="col-sm-10 padding-top-10">[[${manageSystemSel!=null}?编辑制度:新增制度]]</h5>
+                    <div class="col-sm-2 text-right"><a href="javascript:history.back(-1)">返回</a></div>
+                </div>
+                <input id="moduleName" name="moduleName" value="receive" type="hidden"/>
+
+                <div class="ibox-content">
+                    <form th:action="@{/manageSystem/add}" th:method="post">
+                        <input name="_method" th:if="${manageSystemSel!=null}" type="hidden" value="PUT"/>
+                        <input id="uuid" name="uuid" th:value="${manageSystemSel!=null}?${manageSystemSel.uuid}" type="hidden"/>
+                        <!--第一行-->
+                        <fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label my-font-bold">制度名称</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" id="systemName" name="systemName"
+                                           th:placeholder="制度名称"
+                                           th:value="${manageSystemSel!=null}?${manageSystemSel.systemName}">
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!--第二行-->
+                        <fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label my-font-bold" >制度类型</label>
+                                <div class="col-sm-5">
+                                    <select class="form-control" id="systemType" name="systemType" >
+                                        <option></option>
+                                        <option value="0" th:selected="${deviceSel!=null}?${deviceSel.systemType == '0'}">议事规则</option>
+                                        <option value="1" th:selected="${deviceSel!=null}?${deviceSel.systemType == '1'}">公司章程</option>
+                                        <option value="2" th:selected="${deviceSel!=null}?${deviceSel.systemType == '2'}">授权管理办法</option>
+                                        <option value="3" th:selected="${deviceSel!=null}?${deviceSel.systemType == '3'}">董事会议事规则</option>
+                                        <option value="4" th:selected="${deviceSel!=null}?${deviceSel.systemType == '4'}">党委(党组)议事规则</option>
+                                        <option value="5" th:selected="${deviceSel!=null}?${deviceSel.systemType == '5'}">实施办法</option>
+                                        <option value="6" th:selected="${deviceSel!=null}?${deviceSel.systemType == '6'}">经理层办公室会议事规则</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!--第三行-->
+                        <fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label my-font-bold">审批日期</label>
+                                <div class="col-sm-5">
+                                    <input class="laydate-icon form-control layer-date" id="financeEqmDate" name="financeEqmDate" th:placeholder="请选择时间"
+                                           onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
+                                           th:value="${deviceSel!=null}?${deviceSel.financeEqmDate}" >
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!--第四行-->
+                        <fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label my-font-bold">生效日期</label>
+                                <div class="col-sm-5">
+                                    <input class="laydate-icon form-control layer-date" id="financeEqmDate" name="financeEqmDate" th:placeholder="请选择时间"
+                                           onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
+                                           th:value="${deviceSel!=null}?${deviceSel.financeEqmDate}" >
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!--第五行-->
+                        <fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label my-font-bold">失效日期</label>
+                                <div class="col-sm-5">
+                                    <input class="laydate-icon form-control layer-date" id="financeEqmDate" name="financeEqmDate" th:placeholder="请选择时间"
+                                           onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
+                                           th:value="${deviceSel!=null}?${deviceSel.financeEqmDate}" >
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!--第六行-->
+                        <fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label my-font-bold" >经过合法审查</label>
+                                <div class="col-sm-5">
+                                    <select class="form-control" id="sourceWayType" name="sourceWayType" >
+                                        <option></option>
+                                        <option value="0" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '0'}">是</option>
+                                        <option value="1" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '1'}">否</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!--第七行-->
+                        <fieldset>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label my-font-bold" >会议类型</label>
+                                <div class="col-sm-5">
+                                    <select class="form-control" id="sourceWayType" name="sourceWayType" >
+                                        <option></option>
+                                        <option value="0" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '0'}">党委会</option>
+                                        <option value="1" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '1'}">职代会</option>
+                                        <option value="2" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '2'}">党组会</option>
+                                        <option value="3" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">董事会</option>
+                                        <option value="4" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">经理层办公会</option>
+                                        <option value="5" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">股东会</option>
+                                        <option value="6" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">党委(党组)会</option>
+                                        <option value="7" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">其他</option>
+                                        <option value="8" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">总经理办公会</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="clr"></div>
+                        <div class="hr-line-dashed"></div>
+                        <h4>事项表决列表(*允许存在一条默认事项的表决方式，默认事项名称为空)</h4>
+                        <div class="form-group row input-dyna-add">
+                            <span class="col-sm-12" th:each="dat:${manageLeaderGrpoupSel}"
+                                  th:if="${manageLeaderGrpoupSel!=null}">
+                                <div>
+                                    <div class='col-sm-2'>
+                                        <input type='text' required name='leaderGroup' class='form-control m-t-sm col-sm-2'
+                                               placeholder='事项名称' th:value="${dat.leaderGroup}">
+                                    </div>
+                                    <div class='col-sm-2'>
+                                        <input type='text' required name='jobTitle' class='form-control m-t-sm col-sm-2'
+                                               placeholder='表决方式' th:value="${dat.jobTitle}">
+                                    </div>
+                                    <div class='col-sm-2'>
+                                        <input type='text' required name='officeStartDate'
+                                               class='form-control m-t-sm col-sm-2' placeholder='人数占比'
+                                               th:value="${dat.officeStartDate}">
+                                    </div>
+
+                                    <div class='col-sm-3'>
+                                        <button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>
+                                            <span class='glyphicon glyphicon-minus'></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+                        <input type="button" class="btn btn-success" onclick="addInput()" value="添加" />
+
+                        <!--<div class="hr-line-dashed" style="margin: 0 0 15px 0;"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label   my-font-bold"
+                                   for="fileuploader">设备领用附件</label>
+                            <div class="col-sm-8 ">
+                                <div id="fileuploader">上传</div>
+                            </div>
+                        </div>-->
+
+                        <div class="clr"></div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary btn-sm badge-pill fa fa-save" type="submit">
+                                    [[${manageSystemSel!=null}?保存编辑:保存新增]]
+                                </button>
+                                <a class="btn btn-white btn-sm " href="javascript:history.back(-1)">[[#{message.cancel}]]</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/asserts/js/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/layer/layer.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap-table/bootstrap-table.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/tree-view/js/bootstrap-treeview-cl.js}" type="text/javascript"></script>
+<!--<script th:src="@{/asserts/js/plugins/iCheck/icheck.min.js}" type="text/javascript"></script>-->
+<script th:src="@{/asserts/js/layer/laydate/laydate.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/plugins/validate/jquery.validate.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/plugins/validate/messages_zh.min.js}" type="text/javascript"></script>
+<script th:replace="common/myJs::myCommonJs"></script>
+<script th:src="@{/asserts/js/jquery-file-upload.min.js?v=1.1}" type="text/javascript"></script>
+
+<script th:inline="javascript">
+    /*$(function () {
+        let ret = [[${manageSystemSel!=null}?${manageSystemSel.fileUploads}]];
+        myFileAction.do("fileuploader", "fileIds", "deviceReceiveFile", ret);
+    })*/
+
+    function addInput() {
+        let input = $(
+            "<div><div class='col-sm-2'><!--<input type required name='leaderGroup' class='form-control m-t-sm col-sm-2'   placeholder='所属领导班子'>--> " +
+            "<div class='col-sm-2'><input type='text'  name='jobTitle'  class='form-control m-t-sm col-sm-2'  placeholder='事项名称'></div>" +
+            "<select class=\"form-control\" id=\"leaderGroup\" name=\"leaderGroup\" >\n" +
+            "       <option></option>\n" +
+            "       <option value=\"0\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '0'}\">赞成票超过应到会成员人数的4/5</option>\n" +
+            "       <option value=\"1\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '1'}\">赞成票超过应到会成员人数的1/2</option>\n" +
+            "       <option value=\"2\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '2'}\">赞成票超过应到会成员人数的2/3</option>\n" +
+            "       <option value=\"3\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '3'}\">赞成票超过到会成员人数的1/2</option>\n" +
+            "       <option value=\"4\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '4'}\">赞成票超过应到会成员人数的4/5</option>\n" +
+            "       <option value=\"5\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '5'}\">赞成票超过应到会成员人数的3/4</option>\n" +
+            "       <option value=\"6\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '6'}\">赞成票超过到会成员人数的4/5</option>\n" +
+            "       <option value=\"7\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '7'}\">赞成票超过到会成员人数的2/3</option>\n" +
+            "       <option value=\"8\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '8'}\">全票通过</option>\n" +
+            "</select></div>" +
+            "<div class='col-sm-2'><input type='text'  name='officeStartDate'  class='form-control m-t-sm col-sm-2'  placeholder='人数占比'></div>" +
+            "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
+            "<span class='glyphicon glyphicon-minus'></span>" +
+            "</button></div></div>");
+        $(".input-dyna-add").append(input);
+    }
+
+    $("body").on("click", ".removeclass", function (e) {
+        $(this).parent().parent('div').remove();
+        return false;
+    })
+
+</script>
+
+</body>
+</html>

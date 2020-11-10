@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.SysOrgMapper">
+    <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.SysOrg">
+        <id column="uuid" jdbcType="CHAR" property="uuid"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="fax" jdbcType="VARCHAR" property="fax"/>
+        <result column="parent" jdbcType="VARCHAR" property="parent"/>
+        <result column="company_id" jdbcType="VARCHAR" property="companyId"/>
+        <result column="short_name" jdbcType="VARCHAR" property="shortName"/>
+        <result column="storage_org" jdbcType="VARCHAR" property="storageOrg"/>
+        <result column="is_rent_org" jdbcType="VARCHAR" property="isRentOrg"/>
+        <result column="is_two_level" jdbcType="VARCHAR" property="isTwoLevel"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.shanxi.coal.domain.SysOrg">
+        <id column="uuid" jdbcType="CHAR" property="uuid"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="fax" jdbcType="VARCHAR" property="fax"/>
+        <result column="parent" jdbcType="VARCHAR" property="parent"/>
+        <result column="company_id" jdbcType="VARCHAR" property="companyId"/>
+        <result column="short_name" jdbcType="VARCHAR" property="shortName"/>
+        <result column="storage_org" jdbcType="VARCHAR" property="storageOrg"/>
+        <result column="is_rent_org" jdbcType="VARCHAR" property="isRentOrg"/>
+        <result column="is_two_level" jdbcType="VARCHAR" property="isTwoLevel"/>
+        <association property="parentOrg" column="parent"
+                     select="com.law.dao.SysOrgMapper.selectByPrimaryKey"></association>
+    </resultMap>
+    <sql id="Base_Column_List">
+    uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del,
+    status, name, code, address, phone, email, fax, parent,short_name,company_id,storage_org, is_rent_org, is_two_level
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where uuid = #{uuid,jdbcType=CHAR}
+    </select>
+    <select id="findRoot" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where parent='0' and is_del=0
+    </select>
+    <select id="listOrgByParent" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where parent = #{uuid,jdbcType=VARCHAR} and is_del=0
+    </select>
+    <select id="selectOrgNameById" resultType="java.lang.String">
+        select
+        `name`
+        from sys_org
+        where uuid = #{uuid,jdbcType=CHAR}
+    </select>
+    <select id="listAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where is_del=0
+    </select>
+    <select id="page" resultMap="BaseResultMap2" parameterType="com.shanxi.coal.domain.SysOrg">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where is_del=0
+        <if test="name != null">
+            AND name LIKE concat(concat('%',#{name,jdbcType=VARCHAR}),'%')
+        </if>
+    </select>
+    <select id="listStorageOrg" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where is_del=0 and storage_org = 1
+    </select>
+
+    <select id="listRealStorageOrg" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where is_del=0 and storage_org = 1 and uuid not in ('1','102','103','104','105','109','115')
+    </select>
+
+    <select id="listRentOrg" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where is_del=0 and is_rent_org = 1
+    </select>
+    <select id="listTwoLevelOrg" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where is_del=0 and is_two_level = 1
+    </select>
+
+
+    <select id="listStorageOrgById" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where is_del=0 and storage_org = 1 and code like concat(#{uuid,jdbcType=VARCHAR},'%')
+    </select>
+    <select id="listOrgByUuid" resultType="com.shanxi.coal.domain.SysOrg">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where is_del=0
+        AND uuid = #{uuid,jdbcType=CHAR}
+    </select>
+    <select id="listStorageOrgLikeUuid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_org
+        where is_del=0 and storage_org = 1 and uuid like concat(#{uuid,jdbcType=VARCHAR},'%')
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    update sys_org set is_del = 1
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+    <insert id="insert" parameterType="com.shanxi.coal.domain.SysOrg">
+    insert into sys_org (uuid, created_date, created_by,
+      created_by_org, modified_by, modified_date,
+      is_del, status, name,
+      code, address, phone,
+      email, fax, parent)
+    values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR},
+      #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP},
+      #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR},
+      #{code,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+      #{email,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{parent,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.shanxi.coal.domain.SysOrg">
+        insert into sys_org
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null">
+                uuid,
+            </if>
+            <if test="createdDate != null">
+                created_date,
+            </if>
+            <if test="createdBy != null">
+                created_by,
+            </if>
+            <if test="createdByOrg != null">
+                created_by_org,
+            </if>
+            <if test="modifiedBy != null">
+                modified_by,
+            </if>
+            <if test="modifiedDate != null">
+                modified_date,
+            </if>
+            <if test="isDel != null">
+                is_del,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="fax != null">
+                fax,
+            </if>
+            <if test="parent != null">
+                parent,
+            </if>
+            <if test="shortName != null">
+                short_name,
+            </if>
+            <if test="companyId != null">
+                company_id,
+            </if>
+            <if test="storageOrg != null">
+                storage_org,
+            </if>
+            <if test="isRentOrg != null">
+                is_rent_org,
+            </if>
+            <if test="isTwoLevel != null">
+                is_two_level
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null">
+                #{uuid,jdbcType=CHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdByOrg != null">
+                #{createdByOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedBy != null">
+                #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedDate != null">
+                #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null">
+                #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="parent != null">
+                #{parent,jdbcType=VARCHAR},
+            </if>
+            <if test="shortName != null">
+                #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyId != null">
+                #{companyId,jdbcType=VARCHAR},
+            </if>
+            <if test="storageOrg != null">
+                #{storageOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="isRentOrg != null">
+                #{isRentOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="isTwoLevel != null">
+                #{isTwoLevel,jdbcType=VARCHAR},
+            </if>
+
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.SysOrg">
+        update sys_org
+        <set>
+            <if test="createdDate != null">
+                created_date = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdByOrg != null">
+                created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedDate != null">
+                modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null">
+                fax = #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="parent != null">
+                parent = #{parent,jdbcType=VARCHAR},
+            </if>
+            <if test="shortName != null">
+                short_name = #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="shortName != null">
+                short_name = #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="storageOrg != null">
+                storage_org = #{storageOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="isRentOrg != null">
+                is_Rent_Org = #{isRentOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="isTwoLevel != null">
+                is_Two_Level = #{isTwoLevel,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where uuid = #{uuid,jdbcType=CHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.SysOrg">
+    update sys_org
+    set created_date = #{createdDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      parent = #{parent,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+</mapper>

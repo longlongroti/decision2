@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+
+    <title>[[#{message.login.tip}]]</title>
+    <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS -->
+    <link href="asserts/css/font-awesome.min.css" rel="stylesheet" th:href="@{/asserts/css/font-awesome.min.css}">
+    <link href="asserts/css/bootstrap.min.css" rel="stylesheet" th:href="@{/asserts/css/bootstrap.min.css}">
+    <!-- Custom styles for this template -->
+    <link href="asserts/css/dashboard.css" rel="stylesheet" th:href="@{/asserts/css/dashboard.css}">
+    <link href="asserts/css/animate.css" rel="stylesheet" th:href="@{/asserts/css/animate.css}">
+    <link href="asserts/css/style.css" rel="stylesheet" th:href="@{/asserts/css/style.css}">
+    <link href="asserts/css/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}">
+    <link href="asserts/css/myCss.css" rel="stylesheet" th:href="@{/asserts/css/myCss.css}">
+
+</head>
+<body class="gray-bg">
+
+<div class="container-fluid">
+    <div class="row">
+        <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4" role="main">
+            <div class="row">
+                <div class="col-sm-11"></div>
+                <a class="col-sm-1" href="javascript:history.back(-1)">[[#{message.goback}]]</a>
+            </div>
+
+            <p>[[${timestamp}]]</p>
+            <p>[[${status}]]</p>
+            <p>[[${error}]]</p>
+            <p>[[${exception}]]</p>
+            <p>[[${message}]]</p>
+
+            <img th:src="@{/asserts/img/500.png}"  height="400px">
+
+
+        </main>
+    </div>
+</div>
+</body>
+
+</html>

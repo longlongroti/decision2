@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
+
+    <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/asserts/css/bootstrap-tree-view-badge.css}">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>用户管理</h5>
+                </div>
+                <div class="ibox-content table-responsive">
+                    <div class="col-sm-4 " id="tree">
+                    </div>
+
+                    <div class="col-sm-8 orgDoTable" style="display:none;">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <input class="form-control form-control-sm search" id="name-search" placeholder="姓名"
+                                       th:placeholder="#{message.name}" type="text">
+                                <input class="form-control form-control-sm" id="org-search" type="hidden">
+                            </div>
+                            <div class="col-sm-4">
+                                <a class="btn btn-sm btn-primary badge-pill" href="javascript:createTable()"><i class="fa fa-search"> </i>
+                                    [[#{message.search}]]</a>
+                                <a class="btn btn-sm btn-default badge-pill" href="javascript:resetTable()"><i class="fa fa-circle-o"> </i>
+                                    [[#{message.reset}]]</a>
+                            </div>
+                        </div>
+                        <div>
+                            <hr style="margin: 15px 0px 5px 0px "/>
+                            <a class="btn btn-warning  btn-sm badge-pill mb-1" href="javascript:goAdd()"><i
+                                    class="fa fa-plus"> </i> [[#{message.add}]]</a>
+                            <div class="table-responsive">
+                                <table id="table">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="common/pop/confirm::showConfirm"></div>
+
+<script th:src="@{/asserts/js/jquery.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap.min.js}"></script>
+<script th:src="@{/asserts/js/plugins/footable/footable.all.min.js}"></script>
+<script th:src="@{/asserts/js/content.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/bootstrap-table.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}"></script>
+<script th:src="@{/asserts/js/tree-view/js/bootstrap-treeview-cl.js?v=1.1}" type="text/javascript"></script>
+
+<script th:replace="common/myJs::myCommonJs"></script>
+<script>
+    $(function () {
+        getTree();
+    });
+
+    function getTree() {
+        let url = '[[@{/sysorg/list}]]';
+        $.ajax({
+            url: url,
+            type: "get",
+            success: function (data) {
+                data = eval('(' + data + ')');
+                resolve(data)
+            },
+            error: function (data) {
+            }
+        });
+    }
+
+    function resolve(data) {
+        $('#tree').treeview({
+            collapseIcon: "fa fa-minus",
+            nodeIcon: "fa fa-building-o",
+            emptyIcon: "",
+            showIcon: true,
+            levels: 2,
+            expandIcon: "fa fa-plus",
+            data: data,
+            showTags: true,
+            onNodeSelected: function (event, data) {
+                $(".orgDoTable").show();
+                $("#org-search").val(data.uuid);
+                createTable();
+            }, onNodeUnselected: function (event, data) {
+                $(".orgDoTable").hide();
+                $('.form-control').val('');
+            }, onNodeExpanded: function (event, data) {
+                let url = '[[@{/sysorg/getByParent}]]';
+                let id = data['nodeId'];		//获取节点的nodeid （nodeid是treeview自动生成的，每个节点不同）
+                $.ajax({					//异步加载当前节点的子节点数据
+                    type: "post",
+                    url: url,
+                    async: false,
+                    dataType: 'json',
+                    data: 'parentId=' + data['uuid'],
+                    success: function (result) {
+                        let arr = [];
+                        $("#tree").treeview("deleteChildrenNode", id);
+                        for (var i = 0; i < result.length; i++) {
+                            //result[i]的格式如下图
+                            arr.push(result[i]);
+                        }
+                        $("#tree").treeview("addNode", [id, {node: arr, silent: true}]);
+                    }
+                })
+            }
+        });
+    }
+
+
+    let createTable = function () {
+        let url = '[[@{/sysuser/list}]]';
+        $("#table").bootstrapTable('destroy');
+        $("#table").bootstrapTable({
+            url: url,        //请求后台的URL（*）
+            method: 'post',                      //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            pagination: true,                   //是否显示分页（*）
+            cache: false,
+            pageSize: 10,//每页一条数据
+            striped: true,  //表格显示条纹
+            dataField: "list",
+            queryParamsType: "undefined",
+            queryParams: function queryParams(params) {   //设置查询参数
+                var param = {
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize,
+                    name: $('#name-search').val(),
+                    org: $('#org-search').val(),
+                };
+                return param;
+            },
+            sidePagination: 'server',
+            pageNumber: 1,
+            columns: [{
+                field: "uuid",
+                visible: false
+            }, {
+                field: "name",
+                title: '[[#{message.name}]]',
+                width: "15%",
+            }, {
+                field: "userName",
+                title: '[[#{message.user.name}]]',
+                width: "15%",
+            }, {
+                field: "",
+                title: '菜单角色',
+                width: "20%", formatter: function (value, row) {
+                    let a = '';
+                    if (row.sysUserRoles) {
+                        for (let b = 0; b < row.sysUserRoles.length; b++) {
+                            if (row.sysUserRoles[b].sysRole) {
+                                a += row.sysUserRoles[b].sysRole.name + ",";
+                            }
+                        }
+                        return a;
+                    }
+                    return "";
+                }
+            }, {
+                field: "",
+                title: '[[#{message.post}]]',
+                width: "20%", formatter: function (value, row) {
+                    let a = '';
+                    if (row.sysUserAuditRoles) {
+                        for (let b = 0; b < row.sysUserAuditRoles.length; b++) {
+                            a += row.sysUserAuditRoles[b].auditRoleName + ",";
+                        }
+                        return a;
+                    }
+                    return "";
+                }
+            }, {
+                field: "",
+                title: '数据角色',
+                width: "20%", formatter: function (value, row) {
+                    let a = '';
+                    if (row.sysUserDataRoles) {
+                        for (let b = 0; b < row.sysUserDataRoles.length; b++) {
+                            if (row.sysUserDataRoles[b].sysDataRole) {
+                                a += row.sysUserDataRoles[b].sysDataRole.name + ",";
+                            }
+                        }
+                        return a;
+                    }
+                    return "";
+                }
+            }, {
+                field: "col7",
+                title: '[[#{message.operation}]]',
+                width: "30%",
+                formatter: function (value, row) {
+                    var editHtml = '<a href="javascript:;" class="btn btn-sm btn-success edit badge-pill" ><i class="fa fa-pencil"> </i> ' + '[[#{message.edit}]]' + '</a>&nbsp;';
+                    var delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill"><i class="fa fa-trash"> </i> ' + '[[#{message.delete}]]' + '</a>&nbsp;';
+                    var buttonhtml = editHtml + delHtml;
+                    return buttonhtml;
+                },
+                events: {
+                    'click .edit': function (e, value, row, index) {
+                        var id = row.uuid;
+                        location.href = '[[@{/sysuser/goedit}]]' + "?uuid=" + id;
+                    },
+                    'click .del': function (e, value, row, index) {
+                        var id = row.uuid;
+                        var url = '[[@{/sysuser/delete}]]';
+                        commonAction.delAction(id, url, createTable, 'confirmModal')
+                    }
+                }
+            }]
+        });
+    };
+
+    function goAdd() {
+        let id = $('#org-search').val();
+        if (id) {
+            location.href = '[[@{/sysuser/goadd}]]' + "?org=" + id;
+        }
+    }
+
+</script>
+</body>
+
+</html>

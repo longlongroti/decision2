@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.ManageLeaderGroupMapper">
+  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.ManageLeaderGroup">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="created_date" jdbcType="VARCHAR" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="modified_date" jdbcType="VARCHAR" property="modifiedDate" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="leader_group" jdbcType="VARCHAR" property="leaderGroup" />
+    <result column="job_title" jdbcType="VARCHAR" property="jobTitle" />
+    <result column="office_start_date" jdbcType="VARCHAR" property="officeStartDate" />
+    <result column="office_end_date" jdbcType="VARCHAR" property="officeEndDate" />
+    <result column="leader_id" jdbcType="CHAR" property="leaderId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 
+    status, remark, leader_group, job_title, office_start_date, office_end_date, leader_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_leader_group
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from manage_leader_group
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shanxi.coal.domain.ManageLeaderGroup">
+    insert into manage_leader_group (uuid, created_date, created_by, 
+      created_by_org, modified_by, modified_date, 
+      is_del, status, remark, 
+      leader_group, job_title, office_start_date, 
+      office_end_date, leader_id)
+    values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=VARCHAR}, 
+      #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
+      #{leaderGroup,jdbcType=VARCHAR}, #{jobTitle,jdbcType=VARCHAR}, #{officeStartDate,jdbcType=VARCHAR}, 
+      #{officeEndDate,jdbcType=VARCHAR}, #{leaderId,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageLeaderGroup">
+    insert into manage_leader_group
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="createdDate != null">
+        created_date,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdByOrg != null">
+        created_by_org,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="leaderGroup != null">
+        leader_group,
+      </if>
+      <if test="jobTitle != null">
+        job_title,
+      </if>
+      <if test="officeStartDate != null">
+        office_start_date,
+      </if>
+      <if test="officeEndDate != null">
+        office_end_date,
+      </if>
+      <if test="leaderId != null">
+        leader_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdByOrg != null">
+        #{createdByOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderGroup != null">
+        #{leaderGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="jobTitle != null">
+        #{jobTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="officeStartDate != null">
+        #{officeStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="officeEndDate != null">
+        #{officeEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderId != null">
+        #{leaderId,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageLeaderGroup">
+    update manage_leader_group
+    <set>
+      <if test="createdDate != null">
+        created_date = #{createdDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdByOrg != null">
+        created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=VARCHAR},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderGroup != null">
+        leader_group = #{leaderGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="jobTitle != null">
+        job_title = #{jobTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="officeStartDate != null">
+        office_start_date = #{officeStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="officeEndDate != null">
+        office_end_date = #{officeEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderId != null">
+        leader_id = #{leaderId,jdbcType=CHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.ManageLeaderGroup">
+    update manage_leader_group
+    set created_date = #{createdDate,jdbcType=VARCHAR},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=VARCHAR},
+      is_del = #{isDel,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      leader_group = #{leaderGroup,jdbcType=VARCHAR},
+      job_title = #{jobTitle,jdbcType=VARCHAR},
+      office_start_date = #{officeStartDate,jdbcType=VARCHAR},
+      office_end_date = #{officeEndDate,jdbcType=VARCHAR},
+      leader_id = #{leaderId,jdbcType=CHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+</update>
+
+  <select id="listByUseId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_leader_group
+    where leader_id = #{uuid,jdbcType=CHAR}
+  </select>
+
+  <select id="listByParentId" resultType="java.lang.String">
+      select *
+      from manage_leader_group
+      where leader_id = #{uuid,jdbcType=CHAR}
+    </select>
+</mapper>

@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div class="form-group row" th:fragment="blankReport">
+    <label class="col-sm-2 col-form-label  my-font-bold ">[[#{message.approve.form}]]</label>
+    <div class="my-2 col-sm-8">
+        <iframe id="textHTMLPreviewerBlank" class="frm" scrolling="yes" style="width:80%;height:800px">
+        </iframe>
+    </div>
+</div>
+
+<div class="form-group row" th:fragment="commonApprovalBtn">
+    <div class="row col-sm-12 ml-2 mr-2 m-t-sm">
+        <button class="btn btn-primary btn-sm badge-pill col-sm-1 m-l-sm" onclick="approve()">同意(下一步审批人)</button>
+        <button class="btn btn-danger btn-sm badge-pill  col-sm-1 m-l-sm" onclick="reject()">终止(打回发起人)</button>
+        <div th:hidden="${currentAssignee!='EQU_CHIEF' and currentAssignee!='EQU_JUNIOR_CHIEF' and currentAssignee!='EQU_LEADER'}">
+            <button class="btn btn-primary btn-sm badge-pil  col-sm-1 m-l-sm" th:text="审批通过结束" onclick="passall()">
+                审批通过结束(跳转至结束)
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="form-group row" th:fragment="contractTypeFragment">
+    <label class="col-sm-2 my-2 my-font-bold" for="contractType">[[#{message.contractReview.contractType}]]<span
+            th:if="${required}" style="color:red;">*</span></label>
+    <div class="col-sm-8">
+        <select class="custom-select " id="contractType" name="contractType" required
+                onchange="showTech(this.options[this.options.selectedIndex].text)">
+            <option th:each="c:${ct}" th:value="${c.key}" th:text="${c.value}"
+                    th:selected="${data!=null}?${data.contractType}==${c.key}"></option>
+        </select>
+    </div>
+</div>
+
+
+<div class="form-group row" th:fragment="processImageView">
+    <label class="col-sm-12 col-form-label my-font-bold " for="inlineFormDealerSelectPref" style="font-weight: bold">[[#{message.audit.map}]]</label>
+    <div class="col-sm-12 text-center" id="inlineFormDealerSelectPref">
+        <img style="height:90%" id="imgId" th:src="@{/asserts/img/img_not_found.jpg}">
+    </div>
+</div>
+
+<div class="form-group row" th:fragment="orgBossSelection">
+    <label class="col-sm-1 col-form-label my-font-bold" for="remark">下一步审批人</label>
+    <div class="col-sm-8">
+        <select class="form-control m-b " id="orgBoss" name="orgBoss" required>
+            <option th:each="f:${auditor}" th:text="${f.userName}"
+                    th:value="${f.userId}"></option>
+        </select>
+    </div>
+</div>
+
+<div class="col-sm-12 col-md-6 col-lg-2 " th:fragment="searchProcessType">
+    <select class="form-control form-control-sm search" id="processType">
+        <option value="">[[#{message.choose}]]</option>
+        <option th:text="#{message.authorization}" th:value="0"></option>
+        <option th:text="#{message.review.contract}" th:value="1"></option>
+        <option th:text="#{message.change.contract}" th:value="3"></option>
+        <option th:text="#{message.relieve.contract}" th:value="4"></option>
+    </select>
+</div>
+
+<div class="col-sm-2" th:fragment="searchAuditedCode">
+    <input class="form-control form-control-sm search" id="auditedCode" th:placeholder="#{message.auditing.code}"
+           type="text">
+</div>
+
+<div class="col-sm-12 col-md-6 col-lg-2 " th:fragment="searchAuditStatus">
+    <select class="form-control form-control-sm search" id="status">
+        <option value="">[[#{message.choose}]]</option>
+        <option value="0">[[#{message.audit.status.pending}]]</option>
+        <option value="1">[[#{message.audit.status.auditing}]]</option>
+        <option value="2">[[#{message.audit.status.audited}]]</option>
+        <option value="3">[[#{message.audit.status.fail}]]</option>
+    </select>
+</div>
+
+<div class="col-sm-12 col-md-6 col-lg-2 " th:fragment="searchCreatedDate">
+    <input type="text" name="dateRange" class="form-control form-control-sm search dateRange"
+           th:placeholder="#{message.created.date}">
+</div>
+
+
+<div class="form-group row" th:fragment="processAuditComments">
+    <label class="col-sm-12 col-form-label my-font-bold "
+           style="font-weight: bold">[[#{message.audit.comments}]]</label>
+    <p class="col-sm-4" th:if="${data==null}"> [[#{message.tip.empty}]] </p>
+    <span class="col-sm-12" th:each="dat:${data}" th:if="${data!=null}">
+        <p><b>[[${dat.userName}]]</b>(<span class="prettyTime">[[${dat.time}]]</span>，[[#{message.audit.spend}]]<span
+                class="prettyPeriod">[[${dat.endedTime - dat.startedTime}]] </span> )  : </p><p> [[${dat.msg}]] </p>
+     </span>
+</div>
+
+<div class="form-group row" th:fragment="processMyRemark">
+    <label class="col-sm-12 col-form-label my-font-bold " style="font-weight: bold">[[#{message.remark}]]</label>
+    <div class="col-sm-8">
+        <textarea class="form-control" disabled id="remark" name="remark" rows="4" type="text">[[${data}]]</textarea>
+    </div>
+</div>
+
+
+<div class="row mt-2" th:fragment="searchBtnGroup">
+    <div class="col-sm-12">
+        <a class="btn btn-sm btn-primary badge-pill" href="javascript:createTable()"><i class="fa fa-search"> </i>
+            [[#{message.search}]]</a>
+        <a class="btn btn-sm btn-default badge-pill" href="javascript:resetTable()"><i class="fa fa-circle-o"> </i>
+            [[#{message.reset}]]</a>
+    </div>
+</div>
+
+
+<div class="form-group row" th:fragment="saveBtnGroup">
+    <div class="col-md-1">
+        <button class="btn btn-primary btn-sm badge-pill fa fa-save" type="submit">
+            [[${data!=null}?#{message.save.edit}:#{message.save.add}]]
+        </button>
+    </div>
+    <div class="col-md-1" th:replace="common/bar::backBtn"></div>
+</div>
+<div class="form-group row" th:fragment="saveBtnAjaxGroup">
+    <div class="ml-4 mr-2">
+        <input class="btn btn-primary btn-sm badge-pill fa fa-save" type="button" id="save_btn">
+        [[${data!=null}?#{message.save.edit}:#{message.save.add}]]
+        </input>
+    </div>
+    <div th:replace="common/bar::backBtn"></div>
+</div>
+
+<div class="form-group row" th:fragment="approveBtnGroup">
+    <div class="ml-2 mr-2">
+        <button class="btn btn-primary btn-sm badge-pill" th:text="#{message.save.submit}" type="submit"></button>
+    </div>
+    <div th:replace="common/bar::backBtn"></div>
+</div>
+
+<div th:fragment="backBtn">
+    <a class="btn btn-white btn-sm fa badge-pill" href="javascript:history.back(-1)">[[#{message.cancel}]]</a>
+</div>
+
+<div class="row col-sm-12" th:fragment="fileSpecification">
+    <label class="col-sm-12 control-label my-font-bold">[[#{message.file.name}]]</label>
+    <div class="col-sm-12">
+        <p class="form-control-static">[[${data.fileName}]]</p>
+    </div>
+    <label class="col-sm-12 control-label my-font-bold">[[#{message.file.size}]]</label>
+    <div class="col-sm-12">
+        <p class="form-control-static pSize"></p>
+    </div>
+    <label class="col-sm-12 control-label my-font-bold">[[#{message.file.category}]]</label>
+    <div class="col-sm-10">
+        <p class="form-control-static fileCat">[[${data.fileCategory}]]</p>
+    </div>
+    <label class="col-sm-12 control-label my-font-bold">[[#{message.file.type}]]</label>
+    <div class="col-sm-10">
+        <p class="form-control-static">[[${data.fileType}]]</p>
+    </div>
+    <label class="col-sm-12 control-label my-font-bold">[[#{message.created.date}]]</label>
+    <div class="col-sm-10">
+        <p class="form-control-static createdDate">[[${data.createdDate}]]</p>
+    </div>
+    <label class="col-sm-12 control-label my-font-bold">[[#{message.created.by}]]</label>
+    <div class="col-sm-10">
+        <p class="form-control-static">[[${data.createdByName}]]([[${data.createdByOrgName}]])</p>
+    </div>
+</div>
+
+<div class="form-group row" th:fragment="authorizationDetail">
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.authorization.company}]]:</label> <span class="col-sm-8 ">[[${data!=null}?${data.applicantCompany}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.authorization.agent}]]:</label> <span class="col-sm-8 ">[[${data!=null}?${data.agent}]]</span>
+    </div>
+
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.authorization.assignee}]]:</label> <span class="col-sm-8 ">[[${data!=null}?${data.assignee}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.authorization.code}]]:</label> <span class="col-sm-8 ">[[${data!=null}?${data.authorizationCode}]]</span>
+    </div>
+    <div style="clear: both;"></div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.authorization.num}]]:</label> <span class="col-sm-8">[[${data!=null}?${data.authorizationNum}]]</span>
+    </div>
+    <div class="col-sm-12 mt-4">
+        <label class="col-sm-2 my-font-bold ">[[#{message.authorization.desc}]]:</label> <span class="col-sm-9 ">[[${data!=null}?${data.desc}]]</span>
+    </div>
+    <div class="col-sm-12 mt-4">
+        <label class="col-sm-2 my-font-bold ">[[#{message.authorization.content}]]:</label> <span class="col-sm-9 ">[[${data!=null}?${data.applicationContent}]]</span>
+    </div>
+</div>
+
+<div class="form-group row" th:fragment="contractRelievDetail">
+    <div class="col-sm-6">
+        <label class="col-sm-2 my-font-bold ">[[#{message.auditing.code}]]:</label> <span
+            class="col-sm-9 ">[[${data!=null}?${data.auditedCode}]]</span>
+    </div>
+
+    <div class="col-sm-6">
+        <label class="col-sm-2 my-font-bold ">[[#{message.contractRelieve.contractCode}]]:</label> <span
+            class="col-sm-9 ">[[${data!=null}?${data.contractCode}]]</span>
+    </div>
+
+    <div class="col-sm-12">
+        <label class="col-sm-2 my-font-bold ">[[#{message.contractRelieve.relieveReason}]]:</label> <span
+            class="col-sm-9 ">[[${data!=null}?${data.relieveReason}]]</span>
+    </div>
+</div>
+
+<div class="form-group row" th:fragment="contractChangeDetail">
+    <div class="col-sm-6">
+        <label class="col-sm-2 my-font-bold ">[[#{message.auditing.code}]]:</label> <span
+            class="col-sm-9 ">[[${data!=null}?${data.auditedCode}]]</span>
+    </div>
+
+    <div class="col-sm-6">
+        <label class="col-sm-2 my-font-bold ">[[#{message.contractChange.contractCode}]]:</label> <span
+            class="col-sm-9 ">[[${data!=null}?${data.contractCode}]]</span>
+    </div>
+    <div class="col-sm-12">
+        <label class="col-sm-2 my-font-bold ">[[#{message.contractChange.changeReason}]]:</label> <span
+            class="col-sm-9 ">[[${data!=null}?${data.changeReason}]]</span>
+    </div>
+</div>
+
+<div class="form-group row" th:fragment="contractReviewDetail">
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.auditing.code}]]:</label>
+        <span class="col-sm-8 ">[[${data!=null}?${data.auditedCode}]]</span><br/>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold "></label>
+        <span class="col-sm-8 ">[[${data!=null}?${data.techCode}]]</span><br/>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.authorization.code}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.authorizationCode}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.contractName}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.contractName}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.contractCode}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.contractCode}]]</span>
+    </div>
+
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.contractType}]]:</label> <span
+            class="col-sm-8 " id="contractDetailType">[[${data!=null}?${data.contractType}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.toReviewUnit}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.toReviewUnit}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.toReviewTime}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.toReviewTime}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.contractAgent}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.contractAgent}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.agent}]]:</label> <span class="col-sm-8 ">[[${data!=null}?${data.agent}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.otherUnits}]]:</label> <span class="col-sm-8 ">[[${data!=null}?${data.dealer.name}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.performTime}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.performTime}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.targetMoney}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.targetMoney}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contractReview.unitOpinion}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.unitOpinion}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contract.sign.basis}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.contractSignDesc}]]</span>
+    </div>
+    <div class="col-sm-6 mt-4">
+        <label class="col-sm-4 my-font-bold ">[[#{message.contract.apendix.desc}]]:</label> <span
+            class="col-sm-8 ">[[${data!=null}?${data.contractPaperDesc}]]</span>
+    </div>
+</div>
+
+
+<div class="form-group row" th:fragment="fileUploader">
+    <label class="my-2 col-sm-12 my-font-bold" for="fileUploaded">[[${label}]]<span style="color:red;"
+                                                                                    th:if="${required}">*</span></label>
+    <div class="col-sm-10">
+        <input class="filepond" id="fileUploaded" name="fileUploaded" type="file" th:required="${required}">
+    </div>
+</div>
+
+
+<!--th:fragment将其定义为公共模块-->
+<nav class="navbar navbar-dark sticky-top fixed-top bg-dark flex-md-nowrap p-0" th:fragment="topbar">
+
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#" th:href="@{/go/dashboard}">
+        <span property="name" shiro:principal></span>
+        (<span property="orgName" shiro:principal></span>)，[[#{message.welcome.tip}]]</a>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#" th:href="@{/user/logout}" th:text="#{message.logout.btn.sign.out}"></a>
+        </li>
+    </ul>
+</nav>
+
+
+<!--Describe：选择合同-Start-->
+<div id="contractSelectionBox" style="display: none; " th:fragment="contractSelection">
+    <div class="ibox-content">
+        <div class="col-sm-12 pd-lr-0  mb-1 mt-1">
+            <div class="input-group">
+                <input type="text" id="searchCode" name="searchCode"
+                       th:placeholder="#{message.contractReview.contractCode}"
+                       class="input-sm form-control">
+                <a class="btn btn-sm btn-primary badge-pill ml-1" href="javascript:createTable()"><i
+                        class="fa fa-search"> </i>
+                    [[#{message.search}]]</a>
+            </div>
+
+        </div>
+
+        <!--bootsrap表格带分页 Start-->
+        <div class="table-responsive col-sm-12 box-border pd-lr-0 margin-top-20">
+            <table id="table">
+            </table>
+        </div>
+        <script th:inline="javascript">
+            var selectionIds = [];  //保存选中ids
+            var selectionNames = [];
+            let url = [[@{/contractReview/list
+            }]]
+
+            function createTable() {
+                $("#table").bootstrapTable('destroy');
+                $("#table").bootstrapTable({
+                    url: url,        //请求后台的URL（*）
+                    method: 'post',                      //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    pagination: true,                   //是否显示分页（*）
+                    cache: false,
+                    pageSize: 10,//每页一条数据
+                    striped: true,  //表格显示条纹
+                    dataField: "list",
+                    queryParamsType: "undefined",
+                    singleSelect: true,
+                    responseHandler: responseHandler,
+                    queryParams: function queryParams(params) {   //设置查询参数
+                        var param = {
+                            pageNumber: params.pageNumber,
+                            pageSize: params.pageSize,
+                            contractCode: $('#searchCode').val(),
+                            status: 2,
+                            isReleased: 0
+                        };
+                        return param;
+                    },
+                    sidePagination: 'server',
+                    pageNumber: 1,
+                    columns: [{
+                        field: "uuid",
+                        visible: false
+                    }, {
+                        field: "checkStatus",
+                        checkbox: true,
+                    }, {
+                        field: "contractCode",
+                        title: [[#{message.contractReview.contractCode}]]
+                    }, {
+                        field: "auditedCode",
+                        title: [[#{message.auditing.code}]]
+                    }, {
+                        field: "agent",
+                        title: [[#{message.contractReview.agent}]]
+                    }, {
+                        field: "contractType",
+                        title: [[#{message.contractReview.contractType}]],
+                        formatter: function (val, row, index) {
+                            return formatter.formatContractType(row.contractType);
+                        }
+                    }, {
+                        field: "contractName",
+                        title: [[#{message.contractReview.contractName}]]
+                    }, {
+                        field: "toReviewUnit",
+                        title: [[#{message.contractReview.toReviewUnit}]]
+                    }, {
+                        field: "status",
+                        title: [[#{message.audit.status}]],
+                        formatter: function (value, row) {
+                            return formatter.formatAuditStatus(value);
+                        }
+                    }]
+                });
+
+                $("#table").on('check.bs.table check-all.bs.table uncheck.bs.table uncheck-all.bs.table', function (e, list) {
+                    selectionIds = list.uuid;
+                    selectionNames = list.contractCode;
+                });
+
+                //表格分页之前处理多选框数据
+                function responseHandler(res) {
+                    $.each(res.list, function (i, list) {
+                        list.checkStatus = $.inArray(list.uuid, selectionIds) != -1;  //判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
+                    });
+                    return res;
+                }
+            }
+
+        </script>
+        <!--bootsrap表格带分页 Start-->
+    </div>
+</div><!--Describe：选择合同-Start-->
+<div id="authorizationSelectionBox" style="display: none; " th:fragment="authorizationSelectionBox">
+    <div class="ibox-content">
+        <div class="col-sm-12 pd-lr-0  mb-1 mt-1">
+            <div class="input-group">
+                <input type="text" id="authorizationCode" name="authorizationCode"
+                       th:placeholder="#{message.contractReview.contractCode}"
+                       class="input-sm form-control">
+                <a class="btn btn-sm btn-primary badge-pill ml-1" href="javascript:createAuthorizationTable()"><i
+                        class="fa fa-search"> </i>
+                    [[#{message.search}]]</a>
+            </div>
+
+        </div>
+
+        <!--bootsrap表格带分页 Start-->
+        <div class="table-responsive col-sm-12 box-border pd-lr-0 margin-top-20">
+            <table id="tableAuthorization">
+            </table>
+        </div>
+        <script th:inline="javascript">
+            var selectionAuthorizationIds = [];
+            var selectionAuthorizationNames = [];
+            var selectionAuthorizationAgent = [];
+            var selectionAuthorizationAgentId = [];
+            var selectionAuthorizationAssignee = [];
+            var selectionAuthorizationAssigneeId = [];
+
+            function createAuthorizationTable() {
+                let url = [[@{/authorization/list
+            }]]
+                $("#tableAuthorization").bootstrapTable('destroy');
+                $("#tableAuthorization").bootstrapTable({
+                    url: url,        //请求后台的URL（*）
+                    method: 'post',                      //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    pagination: true,                   //是否显示分页（*）
+                    cache: false,
+                    pageSize: 10,//每页一条数据
+                    striped: true,  //表格显示条纹
+                    dataField: "list",
+                    queryParamsType: "undefined",
+                    singleSelect: true,
+                    responseHandler: responseHandler,
+                    queryParams: function queryParams(params) {   //设置查询参数
+                        var param = {
+                            pageNumber: params.pageNumber,
+                            pageSize: params.pageSize,
+                            authorizationCode: $('#authorizationCode').val(),
+                            status: 2
+                        };
+                        return param;
+                    },
+                    sidePagination: 'server',
+                    pageNumber: 1,
+                    columns: [{
+                        field: "uuid",
+                        visible: false
+                    }, {
+                        field: "checkStatus",
+                        checkbox: true,
+                    }, {
+                        width: "20%",
+                        field: "createdDate",
+                        title: [[#{message.created.date}]],
+                        formatter: function (val, row, index) {
+                            return formatter.formatDate(val);
+                        }
+                    }, {
+                        field: "applicantCompany",
+                        title: [[#{message.authorization.company}]]
+                    }, {
+                        field: "agent",
+                        title: [[#{message.authorization.agent}]]
+                    }, {
+                        field: "assignee",
+                        title: [[#{message.authorization.assignee}]]
+                    }, {
+                        field: "authorizationCode",
+                        title: [[#{message.authorization.code}]]
+                    }, {
+                        field: "status",
+                        title: [[#{message.audit.status}]],
+                        formatter: function (value, row) {
+                            return formatter.formatAuditStatus(value);
+                        }
+                    }]
+                });
+
+                $("#tableAuthorization").on('check.bs.table check-all.bs.table uncheck.bs.table uncheck-all.bs.table', function (e, list) {
+                    selectionAuthorizationIds = list.uuid;
+                    selectionAuthorizationNames = list.authorizationCode;
+                    selectionAuthorizationAgent = list.agent;
+                    selectionAuthorizationAgentId = list.agentId;
+                    selectionAuthorizationAssignee = list.assignee;
+                    selectionAuthorizationAssigneeId = list.assigneeId;
+                });
+
+                //表格分页之前处理多选框数据
+                function responseHandler(res) {
+                    $.each(res.list, function (i, list) {
+                        list.checkStatus = $.inArray(list.uuid, selectionAuthorizationIds) != -1;  //判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
+                    });
+                    return res;
+                }
+            }
+
+        </script>
+        <!--bootsrap表格带分页 Start-->
+    </div>
+</div>
+
+
+<div id="assigneeSelectionBox" style="display: none; " th:fragment="assigneeSelectionBox">
+    <div class="ibox-content">
+        <div class="row col-sm-12 box-border pd-lr-0 margin-top-20">
+            <div class="col-sm-6" id="orgUserTree">
+            </div>
+            <input class="form-control form-control-sm" id="org-search" type="hidden">
+            <div class="col-sm-5">
+                <table id="userTable" style="display:none;">
+                </table>
+            </div>
+        </div>
+        <script th:inline="javascript">
+            var selectionAssigneeIds = [];
+            var selectionAssigneeNames = [];
+            var selectionAgentIds = [];
+            var selectionAgentNames = [];
+
+            function getOrgUserTree(a) {
+                let url = [[@{/sysorg/list
+            }]]
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    success: function (data) {
+                        data = eval('(' + data + ')');
+                        resolveB(data, a)
+                    },
+                    error: function (data) {
+                    }
+                });
+            }
+
+            function resolveB(data, a) {
+                $('#orgUserTree').treeview({
+                    collapseIcon: "fa fa-minus",
+                    nodeIcon: "fa fa-building-o",
+                    emptyIcon: "",
+                    showIcon: true,
+                    levels: 2,
+                    expandIcon: "fa fa-plus",
+                    data: data,
+                    showTags: true,
+                    onNodeSelected: function (event, data) {
+                        $("#userTable").show();
+                        $("#org-search").val(data.uuid);
+                        createTable(a);
+                    }, onNodeUnselected: function (event, data) {
+                        $("#userTable").hide();
+                        $("#userTable").bootstrapTable('destroy');
+                    }
+                });
+            }
+
+            function createTable(a) {
+                let url = [[@{/sysuser/list
+            }]]
+                $("#userTable").bootstrapTable('destroy');
+                $("#userTable").bootstrapTable({
+                    url: url,        //请求后台的URL（*）
+                    method: 'post',                      //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    pagination: true,                   //是否显示分页（*）
+                    cache: false,
+                    pageSize: 10,//每页一条数据
+                    striped: true,  //表格显示条纹
+                    dataField: "list",
+                    queryParamsType: "undefined",
+                    queryParams: function queryParams(params) {   //设置查询参数
+                        var param = {
+                            pageNumber: params.pageNumber,
+                            pageSize: params.pageSize,
+                            org: $('#org-search').val(),
+                        };
+                        return param;
+                    },
+                    sidePagination: 'server',
+                    pageNumber: 1,
+                    columns: [{
+                        field: "uuid",
+                        visible: false
+                    }, {
+                        field: "name",
+                        title: [[#{message.name}]],
+                    }, {
+                        field: "userName",
+                        title: [[#{message.user.name}]],
+                    }, {
+                        field: "col7",
+                        title: [[#{message.operation}]],
+                        formatter: function (value, row) {
+                            let checkHtml = '<a href="javascript:;" class="btn btn-sm btn-primary check badge-pill"><i class="fa fa-arrow-right"></i></a>&nbsp;';
+                            return checkHtml;
+                        }, events: {
+                            'click .check': function (e, value, row, index) {
+                                if (a == 'assignee') {
+                                    selectionAssigneeIds = row.uuid;
+                                    selectionAssigneeNames = row.name;
+                                    $('#assigneeId').val(selectionAssigneeIds);
+                                    $('#assignee').val(selectionAssigneeNames);
+                                    $('#contractAgentId').val(selectionAssigneeIds);
+                                    $('#contractAgent').val(selectionAssigneeNames);
+                                } else {
+                                    selectionAgentIds = row.uuid;
+                                    selectionAgentNames = row.name;
+                                    $('#agentId').val(selectionAgentIds);
+                                    $('#agent').val(selectionAgentNames);
+                                }
+                                $("#userTable").bootstrapTable('destroy');
+                                layer.close(layer.index);
+                            }
+                        }
+                    }]
+                });
+            }
+        </script>
+    </div>
+</div>
+
+<!--Describe：选择合同-Start-->
+<div id="orgSelectionBox" style="display: none; " th:fragment="orgSelectionBox">
+    <div class="ibox-content">
+        <!--bootsrap表格带分页 Start-->
+        <div class="table-responsive col-sm-12 box-border pd-lr-0 margin-top-20">
+            <div class="col-sm-10" id="tree">
+            </div>
+        </div>
+        <script th:inline="javascript">
+            var selectionOrgIds = [];
+            var selectionOrgNames = [];
+
+            function getOrgTree() {
+                let url = [[@{/sysorg/list
+            }]]
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    success: function (data) {
+                        data = eval('(' + data + ')');
+                        resolveA(data)
+                    },
+                    error: function (data) {
+                    }
+                });
+            }
+
+            function resolveA(data) {
+                $('#tree').treeview({
+                    collapseIcon: "fa fa-minus",
+                    nodeIcon: "fa fa-building-o",
+                    emptyIcon: "",
+                    showIcon: true,
+                    levels: 2,
+                    expandIcon: "fa fa-plus",
+                    data: data,
+                    showTags: true,
+                    onNodeSelected: function (event, data) {
+                        selectionOrgIds = data.uuid;
+                        selectionOrgNames = data.name;
+                    }, onNodeUnselected: function (event, data) {
+                        selectionOrgIds = [];
+                        selectionOrgNames = [];
+                    }
+                });
+
+            }
+        </script>
+        <!--bootsrap表格带分页 Start-->
+    </div>
+</div><!--Describe：选择合同-Start-->
+
+<!--<div id="deviceSelectionBox" style="display: none; " th:fragment="deviceSelectionBox">
+    <div class="ibox-content">
+        <div class="col-sm-12 pd-lr-0  mb-1 mt-1">
+            <div class="input-group col-sm-7">
+                <input type="text" id="materialName" name="materialName" th:placeholder="设备名称" class="input-sm form-control">
+                <a class="btn btn-sm btn-primary badge-pill ml-1" href="javascript:createDeviceTable()"><i
+                        class="fa fa-search"> </i>
+                    [[#{message.search}]]</a>
+            </div>
+
+        </div>
+
+        &lt;!&ndash;bootsrap表格带分页 Start&ndash;&gt;
+        <div class="table-responsive col-sm-12 box-border pd-lr-0 margin-top-20">
+            <table id="tableDevice">
+            </table>
+        </div>
+        <script th:inline="javascript">
+            var selectionDeviceIds = [];
+            var selectionDeviceNames = [];
+            var selectionDeviceCode = [];
+            var selectionDeviceModel = [];
+            var selectionDeviceCategory = [];
+            var selectionDeviceFuncPositionNow = [];
+            var selectionDeviceFuncPositionTarget = [];
+            var selectionDeviceStatusNow = [];
+            var selectionDeviceStatusTarget = [];
+            var selectionDevicestartDate = [];
+
+            function createDeviceTable() {
+                let url = [[@{/device/list
+            }]]
+                $("#tableDevice").bootstrapTable('destroy');
+                $("#tableDevice").bootstrapTable({
+                    url: url,        //请求后台的URL（*）
+                    method: 'post',                      //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    pagination: true,                   //是否显示分页（*）
+                    cache: false,
+                    pageSize: 10,//每页一条数据
+                    striped: true,  //表格显示条纹
+                    dataField: "list",
+                    queryParamsType: "undefined",
+                    singleSelect : false,
+                    responseHandler: responseHandler,
+                    queryParams: function queryParams(params) {   //设置查询参数
+                        var param = {
+                            pageNumber: params.pageNumber,
+                            pageSize: params.pageSize,
+                            materialName: $('#materialName').val(),
+                        };
+                        return param;
+                    },
+                    sidePagination: 'server',
+                    pageNumber: 1,
+                    columns: [{
+                        field: "uuid",
+                        visible: false
+                    }, {
+                        field: "checkStatus",
+                        checkbox: true,
+                    }, {
+                        width: "10%",
+                        field: "createdDate",
+                        title: [[#{message.created.date}]],
+                        formatter: function (val, row, index) {
+                            return formatter.formatDate(val);
+                        }
+                    }, {
+                        field: "materialName",
+                        title: "设备名称"
+                    }, {
+                        field: "materialNumber",
+                        title: "设备编码"
+                    }, {
+                        field: "model",
+                        title: "规格型号"
+                    }, {
+                        field: "categoryNumberName",
+                        title: "设备类别"
+                    }, {
+                        field: "locationNumberName",
+                        title: "现功能位置"
+                    }, {
+                        field: "funcPositionTarget",
+                        title: "目标功能位置"
+                    }, {
+                        field: "bizStatus",
+                        title: "现设备状态"
+                    }, {
+                        field: "deviceStatusTarget",
+                        title: "目标设备状态"
+                    }, {
+                        field: "effectDate",
+                        title: "启用日期"
+                    }]
+                });
+
+                $("#tableDevice").on('check.bs.table check-all.bs.table uncheck.bs.table uncheck-all.bs.table', function (e, list) {
+                    selectionDeviceIds = list.uuid;
+                    selectionDeviceNames = list.materialName;
+                    selectionDeviceCode = list.materialNumber;
+                    selectionDeviceModel = list.model;
+                    selectionDeviceCategory = list.categoryNumberName;
+                    selectionDeviceFuncPositionNow = list.locationNumberName;
+                    selectionDeviceFuncPositionTarget = list.funcPositionTarget;
+                    selectionDeviceStatusNow = list.bizStatus;
+                    selectionDeviceStatusTarget = list.deviceStatusTarget;
+                    selectionDevicestartDate = list.effectDate;
+                });
+
+                //表格分页之前处理多选框数据
+                function responseHandler(res) {
+                    $.each(res.list, function (i, list) {
+                        list.checkStatus = $.inArray(list.uuid, selectionDeviceIds) != -1;  //判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
+                    });
+                    return res;
+                }
+            }
+
+        </script>
+        &lt;!&ndash;bootsrap表格带分页 Start&ndash;&gt;
+    </div>
+</div>-->
+<!--th:fragment将其定义为公共模块-->
+<nav class="col-md-2 d-none d-md-block bg-light sidebar" th:fragment="leftbar">
+    <br/>
+    <br/>
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:class="${active=='dashboardActive'?'nav-link active':'nav-link'}"
+                   th:href="@{/go/dashboard}">
+                    <i class="fa fa-home w-18"></i>
+                    [[#{message.dashboard}]]
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+
+            <shiro:hasPermission name="授权委托">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"
+                       th:class="${active=='authorizationActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/authorization/go}">
+                        <i class="fa fa-hand-paper-o w-18"></i>
+                        [[#{message.authorization}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="合同送审">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"
+                       th:class="${active=='contractActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/contractReview/go}">
+                        <i class="fa fa-files-o  w-18"></i>
+                        [[#{message.review.contract}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="合同变更">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"
+                       th:class="${active=='contractChangeActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/contractChange/go}">
+                        <i class="fa fa-pencil-square-o w-18"></i>
+                        [[#{message.change.contract}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="合同解除">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"
+                       th:class="${active=='contractRelieveActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/contractRelieve/go}">
+                        <i class="fa fa-trash w-18"></i>
+                        [[#{message.relieve.contract}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="客商管理">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:class="${active=='dealerActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/dealer/go}">
+                        <i class="fa fa-grav w-18"></i>
+                        [[#{message.manage.dealer}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="重要决策文档">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:class="${active=='vidActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/vidoc/go}">
+                        <i class="fa fa-cloud-download w-18"></i>
+                        [[#{message.very.important.doc}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+        </ul>
+
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>[[#{message.manage.flow}]]</span>
+        </h6>
+        <ul class="nav flex-column mb-2">
+            <shiro:hasPermission name="初始化流程">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:class="${active=='initFlowActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/process/goinit}">
+                        <i class="fa fa-eraser w-18"></i>
+                        [[#{message.init.flow}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="待审流程">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:class="${active=='pendingFlowActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/process/gopending}">
+                        <i class="fa  fa-bell-o w-18"></i>
+                        [[#{message.pending.flow}]]<span class="badge badge-danger ml-1 pendingCount"></span>
+                    </a>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="我的流程">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:class="${active=='myFlowActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/process/gomyflow}">
+                        <i class="fa fa-arrow-circle-right w-18"></i>
+                        [[#{message.my.flow}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="已审流程">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:class="${active=='auditedFlowActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/process/goauditedflow}">
+                        <i class="fa fa-hand-peace-o w-18"></i>
+                        [[#{message.reviewed.flow}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+        </ul>
+
+
+        <shiro:hasAnyPermissions name="组织结构,岗位,角色,操作人员,操作日志,修改密码">
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>[[#{message.manage.system}]]</span>
+            </h6>
+        </shiro:hasAnyPermissions>
+
+
+        <ul class="nav flex-column mb-2">
+            <shiro:hasPermission name="组织结构">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:class="${active=='orgSystemActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/sysorg/go}">
+                        <i class="fa fa-sitemap w-18"></i>
+                        [[#{message.organization.structure}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="岗位">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"
+                       th:class="${active=='systemAuditRoleActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/sysaudit/go}">
+                        <i class="fa fa-id-badge w-18"></i>
+                        [[#{message.post}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="角色">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:class="${active=='systemRoleActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/sysrole/go}">
+                        <i class="fa fa-address-card w-18"></i>
+                        [[#{message.role}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+
+            <shiro:hasPermission name="操作人员">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:class="${active=='userSystemActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/sysuser/go}">
+                        <i class="fa fa-user-circle w-18"></i>
+                        [[#{message.operator}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="操作日志">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:class="${active=='systemLogActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/syslog/go}">
+                        <i class="fa fa-paper-plane w-18"></i>
+                        [[#{message.operate.log}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="修改密码">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"
+                       th:class="${active=='systemPasswordActive'?'nav-link active':'nav-link'}"
+                       th:href="@{/syspwd/go}">
+                        <i class="fa fa-user-secret w-18"></i>
+                        [[#{message.change.password}]]
+                    </a>
+                </li>
+            </shiro:hasPermission>
+        </ul>
+
+
+        <div class="row">
+
+            <!--<span class="col-sm-3 ml-2 text-center"><i class="fa fa-desktop"></i></span>-->
+            <!--<div class="col-sm-8">-->
+            <!--<div class="progress mr-2">-->
+            <!--<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" class="progress-bar progress-bar-striped bg-info  progress-bar-animated" role="progressbar" style="width: 50%">50%</div>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--<span class="col-sm-3 ml-2 text-center"><i class="fa fa-hdd-o"></i></span>-->
+            <!--<div class="col-sm-8">-->
+            <!--<div class="progress  mr-2">-->
+            <!--<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="10" class="progress-bar progress-bar-striped  progress-bar-animated" role="progressbar" style="width: 10%">10%</div>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--<span class="col-sm-3 ml-2 text-center"><i class="fa fa-thermometer-three-quarters"></i></span>-->
+            <!--<div class="col-sm-8">-->
+            <!--<div class="progress  mr-2">-->
+            <!--<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" class="progress-bar progress-bar-striped bg-success  progress-bar-animated" role="progressbar" style="width: 25%">25%</div>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <span class="col-sm-2  ml-4  "><a class="btn badge-pill "
+                                              th:class="${session.lang=='zh_CN'?'btn btn-sm btn-danger badge-pill':'btn btn-sm'}"
+                                              th:href="@{/user/lan(l='zh_CN')}" style="color: #fff;"><i
+                    aria-hidden="true"
+                    class="fa fa-language"></i>中文</a></span>
+            <span class="col-sm-4  ml-4  " style=""><a class="btn badge-pill "
+                                                       th:class="${session.lang=='en_US'?'btn btn-sm btn-danger badge-pill':'btn btn-sm'}"
+                                                       th:href="@{/user/lan(l='en_US')}" style="color: #fff;"><i
+                    aria-hidden="true"
+                    class="fa fa-language"></i>English</a></span>
+        </div>
+    </div>
+</nav>
+
+
+<!--时间查询组件 Hjs 20200609-->
+<div th:fragment="commonDateBar">
+    <label class="col-sm-1 my-font-bold">创建时间</label>
+    <div class="col-sm-2">
+        <input type="text" name="dateRange" class="form-control form-control-sm search dateRange"
+               th:placeholder="#{message.created.date}">
+    </div>
+</div>
+
+<!--附件列表 Hjs -->
+<div th:fragment="fileDetail">
+    <div class="col-sm-2" style="padding-right: 0px;padding-left: 0px;">
+        <div class="wrapper wrapper-content  animated fadeInRight">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <div class="row">
+                                <label class="col-sm-12 my-font-bold ">附件</label>
+                                <p class="col-sm-4" th:if="${data==null || data.fileUploads.isEmpty()}">
+                                    [[#{message.tip.empty}]] </p><br/>
+                                <span class="col-sm-12 " th:if="${data!=null}">
+                                    <span th:each="files:${data.fileUploads}">
+                                    <a th:href="@{/file/download(uuid=${files.uuid},showMark=false,uuid2=${uuid},type2=${type},processInstanceId2=${processInstanceId},taskId2=${taskId})}"
+                                       th:text="${files.fileName}"></a><br/>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:fragment="fileDetail2">
+    <div class="row">
+        <label class="col-sm-2 col-form-label ">附件</label>
+        <div class="col-sm-10">
+            <p th:if="${data==null || data.fileUploads.isEmpty()}">
+                [[#{message.tip.empty}]] </p><br/>
+            <span th:if="${data!=null}">
+                <span th:each="files:${data.fileUploads}">
+                <a th:href="@{/file/download(uuid=${files.uuid},showMark=false,uuid2=${uuid},type2=${type},processInstanceId2=${processInstanceId},taskId2=${taskId})}"
+                   th:text="${files.fileName}"></a><br/>
+                </span>
+            </span>
+        </div>
+    </div>
+</div>
+

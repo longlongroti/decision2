@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.SysUserMapper">
+    <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.SysUser">
+        <id column="uuid" jdbcType="CHAR" property="uuid"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="org_id" jdbcType="VARCHAR" property="orgId"/>
+        <result column="user_identity" jdbcType="VARCHAR" property="userIdentity"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="fax" jdbcType="VARCHAR" property="fax"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="company_id" jdbcType="VARCHAR" property="companyId"/>
+        <result column="parent_company_id" jdbcType="VARCHAR" property="parentCompanyId"/>
+        <result column="rent_company_id" jdbcType="VARCHAR" property="rentCompanyId"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.shanxi.coal.domain.SysUser">
+        <id column="uuid" jdbcType="CHAR" property="uuid"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="org_id" jdbcType="VARCHAR" property="orgId"/>
+        <result column="user_identity" jdbcType="VARCHAR" property="userIdentity"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="fax" jdbcType="VARCHAR" property="fax"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="company_id" jdbcType="VARCHAR" property="companyId"/>
+        <result column="parent_company_id" jdbcType="VARCHAR" property="parentCompanyId"/>
+        <result column="rent_company_id" jdbcType="VARCHAR" property="rentCompanyId"/>
+        <association property="userCompany" column="company_id"
+                     select="com.shanxi.coal.dao.SysOrgMapper.selectByPrimaryKey"></association>
+        <association property="userParentCompany" column="parent_company_id"
+                     select="com.shanxi.coal.dao.SysOrgMapper.selectByPrimaryKey"></association>
+        <association property="userRentCompany" column="rent_company_id"
+                     select="com.shanxi.coal.dao.SysOrgMapper.selectByPrimaryKey"></association>
+
+        <association property="userOrg" column="org_id"
+                     select="com.shanxi.coal.dao.SysOrgMapper.selectByPrimaryKey"></association>
+        <collection property="sysUserRoles" column="uuid"
+                    select="com.shanxi.coal.dao.SysUserRoleMapper.listByUserId"></collection>
+        <collection property="sysUserDataRoles" column="uuid"
+                    select="com.shanxi.coal.dao.SysUserDataRoleMapper.listByUserId"></collection>
+        <collection property="sysUserAuditRoles" column="uuid"
+                    select="com.shanxi.coal.dao.SysUserAuditRoleMapper.listByUserId"></collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del,
+    status, user_name, password, name, org_id, user_identity, email, address, phone,
+    fax, code,company_id,parent_company_id,rent_company_id
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="com.shanxi.coal.domain.SysUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where uuid = #{uuid,jdbcType=CHAR}
+    </select>
+
+    <select id="selectUserNameById" resultType="java.lang.String">
+    select `name`
+    from sys_user
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+    <select id="selectBy" parameterType="java.lang.String" resultMap="BaseResultMap">
+       select *
+    from sys_user
+    where user_name = #{userName,jdbcType=CHAR} and password  = #{password,jdbcType=CHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_user
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+    <insert id="insert" parameterType="com.shanxi.coal.domain.SysUser">
+    insert into sys_user (uuid, created_date, created_by,
+      created_by_org, modified_by, modified_date,
+      is_del, status, user_name,
+      password, name, org_id,
+      user_identity, email, address,
+      phone, fax, code)
+    values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR},
+      #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP},
+      #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{userName,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR},
+      #{userIdentity,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+      #{phone,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.shanxi.coal.domain.SysUser">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null">
+                uuid,
+            </if>
+            <if test="createdDate != null">
+                created_date,
+            </if>
+            <if test="createdBy != null">
+                created_by,
+            </if>
+            <if test="createdByOrg != null">
+                created_by_org,
+            </if>
+            <if test="modifiedBy != null">
+                modified_by,
+            </if>
+            <if test="modifiedDate != null">
+                modified_date,
+            </if>
+            <if test="isDel != null">
+                is_del,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="userIdentity != null">
+                user_identity,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="fax != null">
+                fax,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="companyId != null">
+                company_id,
+            </if>
+            <if test="parentCompanyId != null">
+                parent_company_id,
+            </if>
+            <if test="rentCompanyId != null">
+                rent_company_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null">
+                #{uuid,jdbcType=CHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdByOrg != null">
+                #{createdByOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedBy != null">
+                #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedDate != null">
+                #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="userIdentity != null">
+                #{userIdentity,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null">
+                #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="companyId != null">
+                #{companyId,jdbcType=VARCHAR},
+            </if>
+            <if test="parentCompanyId != null">
+                #{parentCompanyId,jdbcType=VARCHAR},
+            </if>
+            <if test="rentCompanyId != null">
+                #{rentCompanyId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.SysUser">
+        update sys_user
+        <set>
+            <if test="createdDate != null">
+                created_date = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdByOrg != null">
+                created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedDate != null">
+                modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                org_id = #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="userIdentity != null">
+                user_identity = #{userIdentity,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null">
+                fax = #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+
+            <if test="companyId != null">
+                company_id = #{companyId,jdbcType=VARCHAR},
+            </if>
+            <if test="parentCompanyId != null">
+                parent_company_id = #{parentCompanyId,jdbcType=VARCHAR},
+            </if>
+            <if test="rentCompanyId != null">
+                rent_company_id = #{rentCompanyId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where uuid = #{uuid,jdbcType=CHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.SysUser">
+    update sys_user
+    set created_date = #{createdDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=VARCHAR},
+      user_identity = #{userIdentity,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+
+    <select id="selectByUserName" resultMap="BaseResultMap2" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where user_name = #{userName,jdbcType=CHAR} and is_del=0
+    </select>
+
+    <select id="listUser" resultMap="BaseResultMap2">
+        select * from sys_user
+        <where>
+            is_del = 0
+            <if test="orgId != null">
+                AND org_id LIKE concat(#{orgId,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="name != null">
+                AND name LIKE concat(concat('%',#{name,jdbcType=VARCHAR}),'%')
+            </if>
+            <include refid="Common.condition_sql"/>
+        </where>
+        order by created_date desc
+    </select>
+
+
+    <select id="selectUserExtra" parameterType="com.shanxi.coal.domain.SysUser" resultMap="BaseResultMap2">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where uuid = #{uuid,jdbcType=CHAR}
+    </select>
+
+    <select id="listAuditor" resultType="com.shanxi.coal.domain.SysAuditor">
+        select b.name as userName ,a.created_date as createdDate,
+        a.audit_role_name as auditName ,b.uuid as userId,c.name as orgName, c.uuid as orgUUid
+        from sys_user b right join sys_user_audit_role a
+        on b.uuid = a.user_id
+        left join sys_org c
+        on c.uuid=b.org_id
+        <where>
+            <if test="name != null">
+                AND b.name LIKE concat(concat('%',#{name,jdbcType=VARCHAR}),'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="listAuditors" resultType="com.shanxi.coal.domain.SysAuditor" >
+        select b.name as userName ,a.created_date as createdDate,
+        a.audit_role_name as auditName ,b.uuid as userId,c.name as orgName, c.uuid as orgUUid, a.audit_role_id as roleId
+        from sys_user b right join sys_user_audit_role a
+        on b.uuid = a.user_id
+        left join sys_org c
+        on c.uuid=b.org_id
+        where a.audit_role_id = #{roleId,jdbcType=VARCHAR} and
+        b.company_id in
+        <foreach collection="list" item="a" index="index"
+                           open="(" close=")" separator=",">
+        #{a}
+    </foreach>
+    </select>
+
+    <select id="listAuditorByRoleId" resultType="com.shanxi.coal.domain.SysAuditor" >
+        select b.name as userName ,a.created_date as createdDate,
+        a.audit_role_name as auditName ,b.uuid as userId, a.audit_role_id as roleId
+        from sys_user b right join sys_user_audit_role a
+        on b.uuid = a.user_id
+        where a.audit_role_id = #{roleId,jdbcType=VARCHAR}
+
+    </select>
+</mapper>

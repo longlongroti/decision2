@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 后台主题UI框架 - FooTable</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/asserts/css/bootstrap-tree-view-badge.css}">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>产权组织树</h5>
+                </div>
+                <div class="ibox-content table-responsive">
+                    <div class="col-sm-4 " id="tree">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="common/pop/confirm::showConfirm"></div>
+
+<script th:src="@{/asserts/js/jquery.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap.min.js}"></script>
+<script th:src="@{/asserts/js/plugins/footable/footable.all.min.js}"></script>
+<script th:src="@{/asserts/js/content.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/bootstrap-table.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}"></script>
+<script th:src="@{/asserts/js/tree-view/js/bootstrap-treeview-cl.js?v=1.1}" type="text/javascript"></script>
+
+<script th:replace="common/myJs::myCommonJs"></script>
+<script>
+    $(function () {
+        getTree();
+    });
+
+    function getTree() {
+        let url = '[[@{/sysstorageorg/list}]]'
+        $.ajax({
+            url: url,
+            type: "get",
+            success: function (data) {
+                data = eval('(' + data + ')');
+                resolve(data)
+            },
+            error: function (data) {
+            }
+        });
+    }
+
+    function resolve(data) {
+        var nodeCheckedSilent = false;
+        var nodeUncheckedSilent = false;
+        $('#tree').treeview({
+            collapseIcon: "fa fa-minus",
+            nodeIcon: "fa fa-building-o",
+            emptyIcon: "",
+            showIcon: true,
+            levels: 4,
+            showCheckbox: true,
+            multiSelect: true,
+            expandIcon: "fa fa-plus",
+            data: data,
+            showTags: true,
+            onNodeChecked: nodeChecked,
+            onNodeUnchecked: nodeUnchecked
+        });
+    }
+
+
+    var nodeCheckedSilent = false;
+
+    function nodeChecked(event, node) {
+        if (nodeCheckedSilent) {
+            return;
+        }
+        nodeCheckedSilent = true;
+        checkAllParent(node);
+        checkAllSon(node);
+        nodeCheckedSilent = false;
+    }
+
+    let nodeUncheckedSilent = false;
+
+    function nodeUnchecked(event, node) {
+        if (nodeUncheckedSilent)
+            return;
+        nodeUncheckedSilent = true;
+        uncheckAllParent(node);
+        uncheckAllSon(node);
+        nodeUncheckedSilent = false;
+    }
+
+    //选中全部父节点
+    function checkAllParent(node) {
+        $('#tree').treeview('checkNode', node.nodeId, {
+            silent: true
+        });
+        let parentNode = $('#tree').treeview('getParent', node.nodeId);
+        if (!("nodeId" in parentNode)) {
+            return;
+        } else {
+            checkAllParent(parentNode);
+        }
+    }
+
+    //取消全部父节点
+    function uncheckAllParent(node) {
+        $('#tree').treeview('uncheckNode', node.nodeId, {
+            silent: true
+        });
+        let siblings = $('#tree').treeview('getSiblings', node.nodeId);
+        let parentNode = $('#tree').treeview('getParent', node.nodeId);
+        if (!("nodeId" in parentNode)) {
+            return;
+        }
+        let isAllUnchecked = true; //是否全部没选中
+        for (let i in siblings) {
+            if (siblings[i].state.checked) {
+                isAllUnchecked = false;
+                break;
+            }
+        }
+        if (isAllUnchecked) {
+            uncheckAllParent(parentNode);
+        }
+
+    }
+
+    //级联选中所有子节点
+    function checkAllSon(node) {
+        $('#tree').treeview('checkNode', node.nodeId, {
+            silent: true
+        });
+        if (node.nodes != null && node.nodes.length > 0) {
+            for (let i in node.nodes) {
+                checkAllSon(node.nodes[i]);
+            }
+        }
+    }
+
+    //级联取消所有子节点
+    function uncheckAllSon(node) {
+        $('#tree').treeview('uncheckNode', node.nodeId, {
+            silent: true
+        });
+        if (node.nodes != null && node.nodes.length > 0) {
+            for (let i in node.nodes) {
+                uncheckAllSon(node.nodes[i]);
+            }
+        }
+    }
+</script>
+</body>
+
+</html>

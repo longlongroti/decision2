@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信息填报-领导班子管理</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
+
+    <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <!--<div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>搜索</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" id="query-search-div">
+                    <div class="row">
+                        <div class="col-sm-12 mt-4">
+                            <div class="form-group row">
+                                <label class="col-sm-1 my-font-bold">领用单编码</label>
+                                <div class="col-sm-2"><input id="useId" name="useId" type="text" class="form-control required"></div>
+                                <label class="col-sm-1 my-font-bold">领用日期</label>
+                                <div class="col-sm-2"> <input id="useDate" name="useDate" type="text" class="form-control required"></div>
+                                <label class="col-sm-1 my-font-bold">单据状态</label>
+                                <div class="col-sm-2"><input id="useStatus" name="useStatus" type="text" class="form-control required"></div>
+                            </div>
+                            <div class="form-group row">
+                                <div class= "col-sm-3" th:replace="common/bar::commonDateBar"></div>
+                                <div class="col-sm-2">
+                                    <div class="form-group text-right">
+                                        <button  class="btn btn-sm btn-success" type="button" onclick="createTable()">查询</button>
+                                        <button class="btn btn-sm btn-info" onclick="refreshQuery()">重置</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div class="text-right">
+                        <shiro:hasPermission name="领导班子管理_新增">
+                        <a class="btn btn-warning pull-right btn-sm badge-pill mb-1" th:href="@{/manageLeader/goadd}"><i
+                                class="fa fa-plus"> </i>新增</a>
+                        </shiro:hasPermission>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table id="table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="common/pop/confirm::showConfirm"></div>
+
+<script th:src="@{/asserts/js/jquery.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap.min.js}"></script>
+<!--<script th:src="@{/asserts/js/layer/layer.min.js}" type="text/javascript"></script>-->
+<script th:src="@{/asserts/js/plugins/footable/footable.all.min.js}"></script>
+<script th:src="@{/asserts/js/content.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/bootstrap-table.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}" ></script>
+<script th:src="@{/asserts/js/layer/layer.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/laydate/laydate.js}"></script>
+<script th:replace="common/myJs::myCommonJs"></script>
+<script>
+    $(function () {
+        createTable();
+        lay('.dateRange').each(function () {
+            laydate.render({
+                elem: this
+                , range: '~'
+            });
+        });
+    });
+
+    function createTable() {
+        let url = '[[@{/manageLeader/list}]]'
+        $("#table").bootstrapTable('destroy');
+        $("#table").bootstrapTable({
+            url: url,        //请求后台的URL（*）
+            method: 'post',
+            contentType: "application/x-www-form-urlencoded",
+            pagination: true,                   //是否显示分页（*）
+            cache: false,
+            pageSize: 10,//每页一条数据
+            striped: true,  //表格显示条纹
+            dataField: "list",
+            queryParamsType: "undefined",
+            queryParams: function queryParams(params) {   //设置查询参数
+                let param = {
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize/*,
+                    useId: $('#useId').val(),
+                    status: $('#status').val()*/
+                };
+                return param;
+            },
+            sidePagination: 'server',
+            pageNumber: 1,
+            columns: [
+                {field: "uuid",visible: false},
+                /*{field: "createdDate",title: "创建时间",
+                    formatter: function (val, row, index) {
+                        return formatter.formatDate(val);
+                    }
+                },*/
+                {field: "leaderSort",title: "序号"},
+                {field: "leaderName",title: "领导姓名"},
+                /*{field: "aa",title: "职位"},
+                {field: "aa",title: "任职开始时间"},
+                {field: "aa",title: "任职结束时间"},*/
+                {field: "cz",title: '操作',width: "23%",
+                    formatter: function (value, row) {
+                        let editHtml = '';
+                        let delHtml = '';
+                        if (row.status == 0 || row.status == 3) {
+                            if (checkAuthorization('领导班子管理_编辑'))
+                                editHtml = '<a href="javascript:;" class="btn btn-sm btn-success edit badge-pill mb-2" ><i class="fa fa-pencil"> </i>' + '编辑' + '</a>&nbsp;';
+                            if (checkAuthorization('领导班子管理_删除'))
+                                delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
+                        }
+                        let buttonhtml = editHtml + delHtml;
+                        return buttonhtml;
+                    },
+                    events: {
+                        'click .edit': function (e, value, row, index) {
+                            let id = row.uuid;
+                            location.href = '[[@{'/manageLeader/goedit'}]]' + '?uuid=' + id;
+                        },
+                        'click .del': function (e, value, row, index) {
+                            let id = row.uuid;
+                            let url = '[[@{'/manageLeader/delete'}]]';
+                            let redirectUrl = '[[@{'/manageLeader/go'}]]';
+                            commonAction.delAction(id, url, redirectUrl, 'confirmModal')
+                        },
+                    }
+                }
+            ]
+        });
+
+    }
+
+</script>
+</body>
+
+</html>

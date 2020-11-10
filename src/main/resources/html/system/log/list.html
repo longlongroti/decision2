@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 后台主题UI框架 - FooTable</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
+
+    <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>搜索</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content ">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-sm-10 mt-4">
+                                <label class="col-sm-3 my-font-bold">用户名</label>
+                                <div class="col-sm-6">
+                                    <input id="name" name="name" type="text" class="form-control required">
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group text-right">
+                                    <button  class="btn btn-success" type="button" onclick="createTable()">查询</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>日志管理</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table id="table">
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/asserts/js/jquery.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap.min.js}"></script>
+<script th:src="@{/asserts/js/plugins/footable/footable.all.min.js}"></script>
+<script th:src="@{/asserts/js/content.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/bootstrap-table.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}"></script>
+
+<script th:replace="common/myJs::myCommonJs"></script>
+<script>
+    $(function () {
+        createTable();
+    });
+
+    function resetTable() {
+        createTable()
+    }
+
+    function createTable() {
+        let url = '[[@{/syslog/list}]]'
+        $("#table").bootstrapTable('destroy');
+        $("#table").bootstrapTable({
+            url: url,        //请求后台的URL（*）
+            method: 'post',                      //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            pagination: true,                   //是否显示分页（*）
+            cache: false,
+            pageSize: 10,//每页一条数据
+            striped: true,  //表格显示条纹
+            dataField: "list",
+            queryParamsType: "undefined",
+            queryParams: function queryParams(params) {   //设置查询参数
+                var param = {
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize,
+                    name: $('#name').val(),
+                };
+                return param;
+            },
+            sidePagination: 'server',
+            pageNumber: 1,
+            columns: [{
+                field: "uuid",
+                visible: false
+            }, {
+                width: "10%",
+                field: "createdDate",
+                title: "创建时间",
+                formatter: function (val, row, index) {
+                    return formatter.formatDate(val);
+                }
+            }, {
+                field: "userName",
+                title: "用户名"
+            }, {
+                field: "ip",
+                title: "用户地址"
+            }, {
+                field: "requestMethod",
+                title: "请求方法"
+            }, {
+                field: "requestUrl",
+                title: "请求地址"
+            }]
+        });
+    }
+</script>
+</body>
+
+</html>

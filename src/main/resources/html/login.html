@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+
+    <title>山西焦煤"三重一大"决策和运行监管系统</title>
+    <meta content="平台" name="keywords">
+    <meta content="平台" name="description">
+
+    <link href="favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" th:href="@{/asserts/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/asserts/css/font-awesome.min.css}">
+
+    <link rel="stylesheet" th:href="@{/asserts/css/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/asserts/css/style.min.css}">
+    <link rel="stylesheet" th:href="@{/asserts/css/style.min.css}">
+    <link rel="stylesheet" th:href="@{/asserts/css/login.min.css?v=1.1}">
+    <base target="_blank">
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <script>if (window.top !== window.self) {
+        window.top.location = window.location;
+    }</script>
+
+</head>
+
+<body class="signin">
+<div class="signinpanel">
+    <div class="row">
+        <div class="col-sm-12 text-center m-b-lg">
+            <h1><img th:src="@{/asserts/img/logo1.png}"/></h1>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6  m-b-lg" style="background: rgba(255,255,255,.2);padding: 15px;border-radius: 10px;">
+            <form method="post" target="_self" th:action="@{/user/login}" th:method="post">
+                <h4 class="no-margins" style="color:#676a6c;font-size:14px;">登录</h4>
+                <p class="m-t-md"></p>
+                <input class="form-control uname" name="userName" placeholder="用户名" type="text"/>
+                <input class="form-control pword m-b" name="password" placeholder="密码" type="password"/>
+                <a href=""> </a>
+                <div class="input-group">
+                    <div>
+                        <img th:src="@{/user/captcha}" id="basic-addon1" onclick="refreshCaptcha()"/>
+                    </div>
+                    <input class="form-control captcha" name="captcha"
+                            th:placeholder="#{message.login.captcha}" type="text" />
+                </div>
+
+                <p style="color: red" th:if="${#bools.isTrue(error_invalid_user)}" th:text="#{message.err.login}"></p>
+                <p style="color: #fd7f7f" th:if="${#bools.isTrue(error_invalid_captcha)}" th:text="验证码错误"></p>
+
+                <button class="btn btn-success btn-block">登录</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="signup-footer">
+        技术支持：山西云数据科技有限公司
+    </div>
+</div>
+<script th:src="@{/asserts/js/jquery.min.js}" type="text/javascript"></script>
+
+<script th:inline="javascript">
+    function refreshCaptcha() {
+        let s = [[@{/user/captcha}]]+'?d=' + new Date().getTime();
+        $("#basic-addon1").attr("src", s);
+    }
+</script>
+</body>
+
+</html>
