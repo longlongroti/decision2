@@ -33,8 +33,19 @@
                     <div class="row">
                         <div class="col-sm-12 mt-4">
                             <div class="form-group row">
-                                <label class="col-sm-1 my-font-bold">制度类型</label>
-                                <div class="col-sm-2"><input id="useId" name="useId" type="text" class="form-control required"></div>
+                                <label class="col-sm-1 col-form-label my-font-bold" >制度类型</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="systemType" name="systemType" >
+                                        <option></option>
+                                        <option value="0">议事规则</option>
+                                        <option value="1">公司章程</option>
+                                        <option value="2">授权管理办法</option>
+                                        <option value="3">董事会议事规则</option>
+                                        <option value="4">党委(党组)议事规则</option>
+                                        <option value="5">实施办法</option>
+                                        <option value="6">经理层办公室会议事规则</option>
+                                    </select>
+                                </div>
                                 <div class="col-sm-2">
                                     <div class="form-group text-right">
                                         <button  class="btn btn-sm btn-success" type="button" onclick="createTable()">查询</button>
@@ -108,8 +119,8 @@
             queryParams: function queryParams(params) {   //设置查询参数
                 let param = {
                     pageNumber: params.pageNumber,
-                    pageSize: params.pageSize/*,
-                    useId: $('#useId').val(),
+                    pageSize: params.pageSize,
+                    systemType: $('#systemType').val()/*,
                     status: $('#status').val()*/
                 };
                 return param;
@@ -126,7 +137,11 @@
                 {field: "systemName",title: "序号"},
                 {field: "systemName",title: "制度名称"},
                 {field: "aa",title: "上报状态"},
-                {field: "systemType",title: "制度类型"},
+                {field: "systemType",title: "制度类型",
+                    formatter: function (value, row) {
+                        return formatter.formatSystemType(value);
+                    }
+                },
                 {field: "systemName",title: "状态"},
                 {field: "systemName",title: "操作类型"},
                 {field: "approveDate",title: "审批日期"},

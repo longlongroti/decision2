@@ -4,19 +4,21 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class ManageSystem extends CommonBean implements Serializable {
-    private String systemName;//制度名称
+    private String systemName;
 
-    private String systemType;//制度类型
+    private String systemType;
 
     private String systemTypeId;
 
-    private String approveDate;//审批日期
+    private String approveDate;
 
-    private String effectiveDate;//生效
+    private String effectiveDate;
 
-    private String expiryDate;//失效
+    private String expiryDate;
 
-    private Byte isLegalApprove;//是否经过合法审查
+    private String isLegalApprove;
+
+    private String meetingType;
 
     private static final long serialVersionUID = 1L;
 
@@ -68,11 +70,19 @@ public class ManageSystem extends CommonBean implements Serializable {
         this.expiryDate = expiryDate == null ? null : expiryDate.trim();
     }
 
-    public Byte getIsLegalApprove() {
+    public String getIsLegalApprove() {
         return isLegalApprove;
     }
 
-    public void setIsLegalApprove(Byte isLegalApprove) {
+    public void setIsLegalApprove(String isLegalApprove) {
         this.isLegalApprove = isLegalApprove;
+    }
+
+    public String getMeetingType() {
+        return meetingType;
+    }
+
+    public void setMeetingType(String meetingType) {
+        this.meetingType = meetingType;
     }
 }

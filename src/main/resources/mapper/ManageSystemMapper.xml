@@ -17,12 +17,13 @@
     <result column="approve_date" jdbcType="VARCHAR" property="approveDate" />
     <result column="effective_date" jdbcType="VARCHAR" property="effectiveDate" />
     <result column="expiry_date" jdbcType="VARCHAR" property="expiryDate" />
-    <result column="is_legal_approve" jdbcType="TINYINT" property="isLegalApprove" />
+    <result column="is_legal_approve" jdbcType="VARCHAR" property="isLegalApprove" />
+    <result column="meeting_type" jdbcType="VARCHAR" property="meetingType" />
   </resultMap>
   <sql id="Base_Column_List">
     uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 
     status, remark, system_name, system_type, system_type_id, approve_date, effective_date, 
-    expiry_date, is_legal_approve
+    expiry_date, is_legal_approve, meeting_type
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -40,13 +41,13 @@
       is_del, status, remark, 
       system_name, system_type, system_type_id, 
       approve_date, effective_date, expiry_date, 
-      is_legal_approve)
+      is_legal_approve, meeting_type)
     values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
       #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
       #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
       #{systemName,jdbcType=VARCHAR}, #{systemType,jdbcType=VARCHAR}, #{systemTypeId,jdbcType=VARCHAR}, 
       #{approveDate,jdbcType=VARCHAR}, #{effectiveDate,jdbcType=VARCHAR}, #{expiryDate,jdbcType=VARCHAR}, 
-      #{isLegalApprove,jdbcType=TINYINT})
+      #{isLegalApprove,jdbcType=VARCHAR}, #{meetingType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageSystem">
     insert into manage_system
@@ -99,6 +100,9 @@
       <if test="isLegalApprove != null">
         is_legal_approve,
       </if>
+      <if test="meetingType != null">
+        meeting_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="uuid != null">
@@ -147,7 +151,10 @@
         #{expiryDate,jdbcType=VARCHAR},
       </if>
       <if test="isLegalApprove != null">
-        #{isLegalApprove,jdbcType=TINYINT},
+        #{isLegalApprove,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingType != null">
+        #{meetingType,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -197,7 +204,10 @@
         expiry_date = #{expiryDate,jdbcType=VARCHAR},
       </if>
       <if test="isLegalApprove != null">
-        is_legal_approve = #{isLegalApprove,jdbcType=TINYINT},
+        is_legal_approve = #{isLegalApprove,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingType != null">
+        meeting_type = #{meetingType,jdbcType=VARCHAR},
       </if>
     </set>
     where uuid = #{uuid,jdbcType=CHAR}
@@ -218,7 +228,8 @@
       approve_date = #{approveDate,jdbcType=VARCHAR},
       effective_date = #{effectiveDate,jdbcType=VARCHAR},
       expiry_date = #{expiryDate,jdbcType=VARCHAR},
-      is_legal_approve = #{isLegalApprove,jdbcType=TINYINT}
+      is_legal_approve = #{isLegalApprove,jdbcType=VARCHAR},
+      meeting_type = #{meetingType,jdbcType=VARCHAR}
     where uuid = #{uuid,jdbcType=CHAR}
   </update>
 
@@ -226,8 +237,18 @@
     select * from manage_system
     <where>
       is_del=0
+      <if test = "systemType != null">
+        AND system_type LIKE concat(concat('%',#{systemType,jdbcType=VARCHAR}),'%')
+      </if>
       <!--<include refid="Common.condition_sql"/>-->
     </where>
     order by created_date desc
+  </select>
+
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from manage_system
+    where uuid = #{uuid,jdbcType=CHAR}
   </select>
 </mapper>

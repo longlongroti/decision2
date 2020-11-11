@@ -56,13 +56,13 @@
                                 <div class="col-sm-5">
                                     <select class="form-control" id="systemType" name="systemType" >
                                         <option></option>
-                                        <option value="0" th:selected="${deviceSel!=null}?${deviceSel.systemType == '0'}">议事规则</option>
-                                        <option value="1" th:selected="${deviceSel!=null}?${deviceSel.systemType == '1'}">公司章程</option>
-                                        <option value="2" th:selected="${deviceSel!=null}?${deviceSel.systemType == '2'}">授权管理办法</option>
-                                        <option value="3" th:selected="${deviceSel!=null}?${deviceSel.systemType == '3'}">董事会议事规则</option>
-                                        <option value="4" th:selected="${deviceSel!=null}?${deviceSel.systemType == '4'}">党委(党组)议事规则</option>
-                                        <option value="5" th:selected="${deviceSel!=null}?${deviceSel.systemType == '5'}">实施办法</option>
-                                        <option value="6" th:selected="${deviceSel!=null}?${deviceSel.systemType == '6'}">经理层办公室会议事规则</option>
+                                        <option value="0" th:selected="${manageSystemSel!=null}?${manageSystemSel.systemType == '0'}">议事规则</option>
+                                        <option value="1" th:selected="${manageSystemSel!=null}?${manageSystemSel.systemType == '1'}">公司章程</option>
+                                        <option value="2" th:selected="${manageSystemSel!=null}?${manageSystemSel.systemType == '2'}">授权管理办法</option>
+                                        <option value="3" th:selected="${manageSystemSel!=null}?${manageSystemSel.systemType == '3'}">董事会议事规则</option>
+                                        <option value="4" th:selected="${manageSystemSel!=null}?${manageSystemSel.systemType == '4'}">党委(党组)议事规则</option>
+                                        <option value="5" th:selected="${manageSystemSel!=null}?${manageSystemSel.systemType == '5'}">实施办法</option>
+                                        <option value="6" th:selected="${manageSystemSel!=null}?${manageSystemSel.systemType == '6'}">经理层办公室会议事规则</option>
                                     </select>
                                 </div>
                             </div>
@@ -73,9 +73,9 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label my-font-bold">审批日期</label>
                                 <div class="col-sm-5">
-                                    <input class="laydate-icon form-control layer-date" id="financeEqmDate" name="financeEqmDate" th:placeholder="请选择时间"
+                                    <input class="laydate-icon form-control layer-date" id="approveDate" name="approveDate" th:placeholder="请选择时间"
                                            onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
-                                           th:value="${deviceSel!=null}?${deviceSel.financeEqmDate}" >
+                                           th:value="${manageSystemSel!=null}?${manageSystemSel.approveDate}" >
                                 </div>
                             </div>
                         </fieldset>
@@ -85,9 +85,9 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label my-font-bold">生效日期</label>
                                 <div class="col-sm-5">
-                                    <input class="laydate-icon form-control layer-date" id="financeEqmDate" name="financeEqmDate" th:placeholder="请选择时间"
+                                    <input class="laydate-icon form-control layer-date" id="effectiveDate" name="effectiveDate" th:placeholder="请选择时间"
                                            onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
-                                           th:value="${deviceSel!=null}?${deviceSel.financeEqmDate}" >
+                                           th:value="${manageSystemSel!=null}?${manageSystemSel.effectiveDate}" >
                                 </div>
                             </div>
                         </fieldset>
@@ -97,9 +97,9 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label my-font-bold">失效日期</label>
                                 <div class="col-sm-5">
-                                    <input class="laydate-icon form-control layer-date" id="financeEqmDate" name="financeEqmDate" th:placeholder="请选择时间"
+                                    <input class="laydate-icon form-control layer-date" id="expiryDate" name="expiryDate" th:placeholder="请选择时间"
                                            onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
-                                           th:value="${deviceSel!=null}?${deviceSel.financeEqmDate}" >
+                                           th:value="${manageSystemSel!=null}?${manageSystemSel.expiryDate}" >
                                 </div>
                             </div>
                         </fieldset>
@@ -109,10 +109,10 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label my-font-bold" >经过合法审查</label>
                                 <div class="col-sm-5">
-                                    <select class="form-control" id="sourceWayType" name="sourceWayType" >
+                                    <select class="form-control" id="isLegalApprove" name="isLegalApprove" >
                                         <option></option>
-                                        <option value="0" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '0'}">是</option>
-                                        <option value="1" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '1'}">否</option>
+                                        <option value="7" th:selected="${manageSystemSel!=null}?${manageSystemSel.isLegalApprove == '7'}">是</option>
+                                        <option value="8" th:selected="${manageSystemSel!=null}?${manageSystemSel.isLegalApprove == '8'}">否</option>
                                     </select>
                                 </div>
                             </div>
@@ -123,17 +123,17 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label my-font-bold" >会议类型</label>
                                 <div class="col-sm-5">
-                                    <select class="form-control" id="sourceWayType" name="sourceWayType" >
+                                    <select class="form-control" id="meetingType" name="meetingType" >
                                         <option></option>
-                                        <option value="0" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '0'}">党委会</option>
-                                        <option value="1" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '1'}">职代会</option>
-                                        <option value="2" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '2'}">党组会</option>
-                                        <option value="3" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">董事会</option>
-                                        <option value="4" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">经理层办公会</option>
-                                        <option value="5" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">股东会</option>
-                                        <option value="6" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">党委(党组)会</option>
-                                        <option value="7" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">其他</option>
-                                        <option value="8" th:selected="${deviceSel!=null}?${deviceSel.sourceWayType == '3'}">总经理办公会</option>
+                                        <option value="9" th:selected="${manageSystemSel!=null}?${manageSystemSel.meetingType == '9'}">党委会</option>
+                                        <option value="10" th:selected="${manageSystemSel!=null}?${manageSystemSel.meetingType == '10'}">职代会</option>
+                                        <option value="11" th:selected="${manageSystemSel!=null}?${manageSystemSel.meetingType == '11'}">党组会</option>
+                                        <option value="12" th:selected="${manageSystemSel!=null}?${manageSystemSel.meetingType == '12'}">董事会</option>
+                                        <option value="13" th:selected="${manageSystemSel!=null}?${manageSystemSel.meetingType == '13'}">经理层办公会</option>
+                                        <option value="14" th:selected="${manageSystemSel!=null}?${manageSystemSel.meetingType == '14'}">股东会</option>
+                                        <option value="15" th:selected="${manageSystemSel!=null}?${manageSystemSel.meetingType == '15'}">党委(党组)会</option>
+                                        <option value="16" th:selected="${manageSystemSel!=null}?${manageSystemSel.meetingType == '16'}">其他</option>
+                                        <option value="17" th:selected="${manageSystemSel!=null}?${manageSystemSel.meetingType == '17'}">总经理办公会</option>
                                     </select>
                                 </div>
                             </div>
@@ -142,21 +142,31 @@
                         <div class="hr-line-dashed"></div>
                         <h4>事项表决列表(*允许存在一条默认事项的表决方式，默认事项名称为空)</h4>
                         <div class="form-group row input-dyna-add">
-                            <span class="col-sm-12" th:each="dat:${manageLeaderGrpoupSel}"
-                                  th:if="${manageLeaderGrpoupSel!=null}">
+                            <span class="col-sm-12" th:each="dat:${manageSystemItemsSel}"
+                                  th:if="${manageSystemItemsSel!=null}">
                                 <div>
                                     <div class='col-sm-2'>
-                                        <input type='text' required name='leaderGroup' class='form-control m-t-sm col-sm-2'
-                                               placeholder='事项名称' th:value="${dat.leaderGroup}">
+                                        <input type='text'  name='itemsName' class='form-control m-t-sm col-sm-2'
+                                               placeholder='事项名称' th:value="${dat.itemsName}">
                                     </div>
                                     <div class='col-sm-2'>
-                                        <input type='text' required name='jobTitle' class='form-control m-t-sm col-sm-2'
-                                               placeholder='表决方式' th:value="${dat.jobTitle}">
+                                        <select class="form-control" id="votingFormula" name="votingFormula" >
+                                            <option>表决方式</option>
+                                            <option value="0" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '0'}">赞成票超过应到会成员人数的4/5</option>
+                                            <option value="1" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '1'}">赞成票超过应到会成员人数的1/2</option>
+                                            <option value="2" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '2'}">赞成票超过应到会成员人数的2/3</option>
+                                            <option value="3" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '3'}">赞成票超过到会成员人数的1/2</option>
+                                            <option value="4" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '4'}">赞成票超过应到会成员人数的4/5</option>
+                                            <option value="5" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '5'}">赞成票超过应到会成员人数的3/4</option>
+                                            <option value="6" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '6'}">赞成票超过到会成员人数的4/5</option>
+                                            <option value="7" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '7'}">赞成票超过到会成员人数的2/3</option>
+                                            <option value="8" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '8'}">全票通过</option>
+                                        </select>
                                     </div>
                                     <div class='col-sm-2'>
-                                        <input type='text' required name='officeStartDate'
+                                        <input type='text'  name='peopleCount'
                                                class='form-control m-t-sm col-sm-2' placeholder='人数占比'
-                                               th:value="${dat.officeStartDate}">
+                                               th:value="${dat.peopleCount}">
                                     </div>
 
                                     <div class='col-sm-3'>
@@ -216,21 +226,21 @@
 
     function addInput() {
         let input = $(
-            "<div><div class='col-sm-2'><!--<input type required name='leaderGroup' class='form-control m-t-sm col-sm-2'   placeholder='所属领导班子'>--> " +
-            "<div class='col-sm-2'><input type='text'  name='jobTitle'  class='form-control m-t-sm col-sm-2'  placeholder='事项名称'></div>" +
-            "<select class=\"form-control\" id=\"leaderGroup\" name=\"leaderGroup\" >\n" +
-            "       <option></option>\n" +
-            "       <option value=\"0\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '0'}\">赞成票超过应到会成员人数的4/5</option>\n" +
-            "       <option value=\"1\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '1'}\">赞成票超过应到会成员人数的1/2</option>\n" +
-            "       <option value=\"2\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '2'}\">赞成票超过应到会成员人数的2/3</option>\n" +
-            "       <option value=\"3\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '3'}\">赞成票超过到会成员人数的1/2</option>\n" +
-            "       <option value=\"4\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '4'}\">赞成票超过应到会成员人数的4/5</option>\n" +
-            "       <option value=\"5\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '5'}\">赞成票超过应到会成员人数的3/4</option>\n" +
-            "       <option value=\"6\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '6'}\">赞成票超过到会成员人数的4/5</option>\n" +
-            "       <option value=\"7\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '7'}\">赞成票超过到会成员人数的2/3</option>\n" +
-            "       <option value=\"8\" th:selected=\"${deviceSel!=null}?${deviceSel.sourceWayType == '8'}\">全票通过</option>\n" +
+            "<div><div class='col-sm-2'>" +
+            "<div class='col-sm-2'><input type='text'  name='itemsName'  class='form-control m-t-sm col-sm-2'  placeholder='事项名称'></div>" +
+            "<select class=\"form-control\" id=\"votingFormula\" name=\"votingFormula\" >\n" +
+            "<option>表决方式</option>\n" +
+            "<option value=\"0\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '0'}\">赞成票超过应到会成员人数的4/5</option>\n" +
+            "<option value=\"1\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '1'}\">赞成票超过应到会成员人数的1/2</option>\n" +
+            "<option value=\"2\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '2'}\">赞成票超过应到会成员人数的2/3</option>\n" +
+            "<option value=\"3\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '3'}\">赞成票超过到会成员人数的1/2</option>\n" +
+            "<option value=\"4\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '4'}\">赞成票超过应到会成员人数的4/5</option>\n" +
+            "<option value=\"5\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '5'}\">赞成票超过应到会成员人数的3/4</option>\n" +
+            "<option value=\"6\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '6'}\">赞成票超过到会成员人数的4/5</option>\n" +
+            "<option value=\"7\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '7'}\">赞成票超过到会成员人数的2/3</option>\n" +
+            "<option value=\"8\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '8'}\">全票通过</option>\n" +
             "</select></div>" +
-            "<div class='col-sm-2'><input type='text'  name='officeStartDate'  class='form-control m-t-sm col-sm-2'  placeholder='人数占比'></div>" +
+            "<div class='col-sm-2'><input type='text'  name='peopleCount'  class='form-control m-t-sm col-sm-2'  placeholder='人数占比'></div>" +
             "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
             "<span class='glyphicon glyphicon-minus'></span>" +
             "</button></div></div>");

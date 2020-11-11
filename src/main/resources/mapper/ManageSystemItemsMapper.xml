@@ -12,7 +12,7 @@
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="items_name" jdbcType="VARCHAR" property="itemsName" />
-    <result column="voting_formula" jdbcType="TINYINT" property="votingFormula" />
+    <result column="voting_formula" jdbcType="VARCHAR" property="votingFormula" />
     <result column="people_count" jdbcType="VARCHAR" property="peopleCount" />
     <result column="system_parent_id" jdbcType="VARCHAR" property="systemParentId" />
   </resultMap>
@@ -39,7 +39,7 @@
     values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
       #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
       #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
-      #{itemsName,jdbcType=VARCHAR}, #{votingFormula,jdbcType=TINYINT}, #{peopleCount,jdbcType=VARCHAR}, 
+      #{itemsName,jdbcType=VARCHAR}, #{votingFormula,jdbcType=VARCHAR}, #{peopleCount,jdbcType=VARCHAR},
       #{systemParentId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageSystemItems">
@@ -117,7 +117,7 @@
         #{itemsName,jdbcType=VARCHAR},
       </if>
       <if test="votingFormula != null">
-        #{votingFormula,jdbcType=TINYINT},
+        #{votingFormula,jdbcType=VARCHAR},
       </if>
       <if test="peopleCount != null">
         #{peopleCount,jdbcType=VARCHAR},
@@ -158,7 +158,7 @@
         items_name = #{itemsName,jdbcType=VARCHAR},
       </if>
       <if test="votingFormula != null">
-        voting_formula = #{votingFormula,jdbcType=TINYINT},
+        voting_formula = #{votingFormula,jdbcType=VARCHAR},
       </if>
       <if test="peopleCount != null">
         people_count = #{peopleCount,jdbcType=VARCHAR},
@@ -180,9 +180,22 @@
       status = #{status,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR},
       items_name = #{itemsName,jdbcType=VARCHAR},
-      voting_formula = #{votingFormula,jdbcType=TINYINT},
+      voting_formula = #{votingFormula,jdbcType=VARCHAR},
       people_count = #{peopleCount,jdbcType=VARCHAR},
       system_parent_id = #{systemParentId,jdbcType=VARCHAR}
     where uuid = #{uuid,jdbcType=CHAR}
   </update>
+
+  <select id="listByUseId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_system_items
+    where system_parent_id = #{uuid,jdbcType=CHAR}
+  </select>
+
+  <select id="listByParentId" resultType="java.lang.String">
+      select *
+      from manage_system_items
+      where system_parent_id = #{uuid,jdbcType=CHAR}
+    </select>
 </mapper>

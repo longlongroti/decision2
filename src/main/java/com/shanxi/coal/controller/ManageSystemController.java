@@ -38,98 +38,98 @@ public class ManageSystemController {
         return "manageSystem/add";
     }
 
-//    @GetMapping("/goedit")
-//    public String goEdit(@PathParam("uuid") String uuid, Model model) {
-//        if (StringUtils.isEmpty(uuid)) {
-//            return "redirect:/manageLeader/go";
-//        }
-//        ManageLeader manageLeader = manageLeaderMapper.selectById(uuid);
-//        if (manageLeader == null) {
-//            return "redirect:/manageLeader/go";
-//        }
-//        model.addAttribute("manageLeaderSel", manageLeader);
-//        List<ManageLeaderGroup> list = manageLeaderGroupMapper.listByUseId(uuid);
-//        model.addAttribute("manageLeaderGrpoupSel", list);
-//        return "manageLeader/add";
-//    }
-
-    @PostMapping("/add")
-    public String add(ManageSystem manageSystem, @RequestParam("leaderGroup") String leaderGroup,
-                         @RequestParam("jobTitle") String jobTitle, @RequestParam("officeStartDate") String officeStartDate,
-                         @RequestParam("officeEndDate") String officeEndDate, Model model1) {
-        String[] leaderGroups = leaderGroup.split(",");
-        String[] jobTitles = jobTitle.split(",");
-        String[] officeStartDates = officeStartDate.split(",");
-        String[] officeEndDates = officeEndDate.split(",");
-        MyUtils.setCommonBean(manageSystem);
-        manageSystemMapper.insertSelective(manageSystem);
-        return insertDetail(leaderGroups, jobTitles, officeStartDates, officeEndDates, manageSystem.getUuid());
+    @GetMapping("/goedit")
+    public String goEdit(@PathParam("uuid") String uuid, Model model) {
+        if (StringUtils.isEmpty(uuid)) {
+            return "redirect:/manageSystem/go";
+        }
+        ManageSystem manageSystem = manageSystemMapper.selectById(uuid);
+        if (manageSystem == null) {
+            return "redirect:/manageSystem/go";
+        }
+        model.addAttribute("manageSystemSel", manageSystem);
+        List<ManageSystemItems> list = manageSystemItemsMapper.listByUseId(uuid);
+        model.addAttribute("manageSystemItemsSel", list);
+        return "manageSystem/add";
     }
 
-//    @PutMapping("/add")
-//    public String update(ManageLeader manageLeader, @RequestParam("leaderGroup") String leaderGroup,
-//                         @RequestParam("jobTitle") String jobTitle, @RequestParam("officeStartDate") String officeStartDate,
-//                         @RequestParam("officeEndDate") String officeEndDate) {
-//        String[] leaderGroups = leaderGroup.split(",");
-//        String[] jobTitles = jobTitle.split(",");
-//        String[] officeStartDates = officeStartDate.split(",");
-//        String[] officeEndDates = officeEndDate.split(",");
-//        manageLeaderMapper.updateByPrimaryKeySelective(manageLeader);
-//        String mainUUid = manageLeader.getUuid();
-//        return insertDetail(leaderGroups, jobTitles, officeStartDates, officeEndDates, manageLeader.getUuid());
-//    }
+    @PostMapping("/add")
+    public String add(ManageSystem manageSystem, @RequestParam("itemsName") String itemsName,
+                         @RequestParam("votingFormula") String votingFormula,
+                      @RequestParam("peopleCount") String peopleCount, Model model) {
+        System.out.println(itemsName);
+        String[] itemsNames = itemsName.split(",");
+        String[] votingFormulas = votingFormula.split(",");
+        String[] peopleCounts = peopleCount.split(",");
+        MyUtils.setCommonBean(manageSystem);
+        manageSystemMapper.insertSelective(manageSystem);
+        return insertDetail(itemsNames, votingFormulas, peopleCounts, manageSystem.getUuid());
+    }
 
-    private String insertDetail(String[] leaderGroups, String[] jobTitles, String[] officeStartDates,
-                                String[] officeEndDates, String mainUUid) {
-        for (int i = 0; i < leaderGroups.length; i++) {
+    @PutMapping("/add")
+    public String update(ManageSystem manageSystem, @RequestParam("itemsName") String itemsName,
+                         @RequestParam("votingFormula") String votingFormula,
+                         @RequestParam("peopleCount") String peopleCount) {
+        System.out.println(itemsName);
+        String[] itemsNames = itemsName.split(",");
+        String[] votingFormulas = votingFormula.split(",");
+        String[] peopleCounts = peopleCount.split(",");
+        manageSystemMapper.updateByPrimaryKeySelective(manageSystem);
+        String mainUUid = manageSystem.getUuid();
+        return insertDetail(itemsNames, votingFormulas, peopleCounts, manageSystem.getUuid());
+    }
+
+    private String insertDetail(String[] itemsNames, String[] votingFormulas, String[] peopleCounts,String mainUUid) {
+        for (int i = 0; i < itemsNames.length; i++) {
             ManageSystemItems manageSystemItems = new ManageSystemItems();
             manageSystemItems.setUuid(UUID.randomUUID().toString());
-//            manageSystemItems.setLeaderId(mainUUid);
-//            manageSystemItems.setLeaderGroup(checkNullAndReturn(leaderGroups, i));
-//            manageSystemItems.setJobTitle(checkNullAndReturn(jobTitles, i));
-//            manageSystemItems.setOfficeStartDate(checkNullAndReturn(officeStartDates, i));
-//            manageSystemItems.setOfficeEndDate(checkNullAndReturn(officeEndDates, i));
+            manageSystemItems.setSystemParentId(mainUUid);
+            manageSystemItems.setItemsName(checkNullAndReturn(itemsNames, i));
+            manageSystemItems.setVotingFormula(checkNullAndReturn(votingFormulas, i));
+            manageSystemItems.setPeopleCount(checkNullAndReturn(peopleCounts, i));
             manageSystemItemsMapper.insertSelective(manageSystemItems);
         }
         return "redirect:/manageSystem/go";
     }
 
-//    public String checkNullAndReturn(String[] array, int idx) {
-//        String result = "";
-//        if (array.length != 0 && array.length >= idx + 1) {
-//            if (array[idx] != null && array[idx] != "") {
-//                result = array[idx];
-//            }
-//        }
-//        return result;
-//    }
+    public String checkNullAndReturn(String[] array, int idx) {
+        String result = "";
+        if (array.length != 0 && array.length >= idx + 1) {
+            if (array[idx] != null && array[idx] != "") {
+                result = array[idx];
+            }
+        }
+        return result;
+    }
 
     @PostMapping("/list")
     @ResponseBody
     public String list(@RequestParam("pageNumber") Integer pageNumber,
-                       @RequestParam("pageSize") Integer pageSize) throws ParseException {
+                       @RequestParam("pageSize") Integer pageSize,
+                       @RequestParam(value = "systemType", required = false) String systemType) throws ParseException {
         PageHelper.startPage(pageNumber, pageSize);
         ManageSystem where = new ManageSystem();
         MyUtils.buildCommonWhere(where);
         where.setStatus(0);
+        where.setSystemType(systemType);
         List<ManageSystem> manageSystems = manageSystemMapper.getList(where);
         PageInfo<ManageSystem> pageInfo = new PageInfo<ManageSystem>(manageSystems);
         return MyUtils.pageInfoToJson(pageInfo);
     }
 
-//    @PostMapping("/delete")
-//    @ResponseBody
-//    public String delete(@PathParam("uuid") String uuid) {
-//        ManageLeader manageLeader = manageLeaderMapper.selectByPrimaryKey(uuid);
-//        List<String> list = manageLeaderGroupMapper.listByParentId(uuid);
-//        for (int i = 0; i < list.size(); i++) {
-//            ManageLeaderGroup manageLeaderGroup = manageLeaderGroupMapper.selectByPrimaryKey(list.get(i));
-//            manageLeaderGroup.setIsDel(1);
-//            manageLeaderGroupMapper.updateByPrimaryKey(manageLeaderGroup);
-//        }
-//        manageLeader.setIsDel(1);
-//        manageLeaderMapper.updateByPrimaryKeySelective(manageLeader);
-//        return "ok";
-//    }
+    @PostMapping("/delete")
+    @ResponseBody
+    public String delete(@PathParam("uuid") String uuid) {
+        ManageSystem manageSystem = manageSystemMapper.selectByPrimaryKey(uuid);
+        List<String> list = manageSystemItemsMapper.listByParentId(uuid);
+        for (int i = 0; i < list.size(); i++) {
+            ManageSystemItems manageSystemItems = manageSystemItemsMapper.selectByPrimaryKey(list.get(i));
+            manageSystemItems.setIsDel(1);
+            manageSystemItemsMapper.updateByPrimaryKey(manageSystemItems);
+        }
+        manageSystem.setIsDel(1);
+        manageSystemMapper.updateByPrimaryKeySelective(manageSystem);
+        return "ok";
+    }
 
 }

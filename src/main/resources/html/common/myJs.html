@@ -184,6 +184,23 @@
                 return '<font color="red"><i class="fa  fa-wrench"></i>小修</font>'
             }
             return val;
+        }, formatSystemType: function (val) {
+            if (val == 0) {
+                return '议事规则'
+            } else if (val == 1) {
+                return '公司章程'
+            } else if (val == 2) {
+                return '授权管理办法'
+            } else if (val == 3) {
+                return '董事会议事规则'
+            } else if (val == 4) {
+                return '党委(党组)议事规则'
+            } else if (val == 5) {
+                return '实施办法'
+            } else if (val == 6) {
+                return '经理层办公室会议事规则'
+            }
+            return val;
         }
     };
 
