@@ -209,4 +209,9 @@
       from manage_leader_group
       where leader_id = #{uuid,jdbcType=CHAR}
     </select>
+
+  <delete id="deleteByParentId" parameterType="java.lang.String">
+    delete from manage_leader_group
+    where leader_id = #{uuid,jdbcType=CHAR}
+  </delete>
 </mapper>

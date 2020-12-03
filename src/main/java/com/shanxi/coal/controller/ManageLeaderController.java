@@ -69,8 +69,10 @@ public class ManageLeaderController {
     }
 
     @PutMapping("/add")
-    public String update(ManageLeader manageLeader, @RequestParam("leaderGroup") String leaderGroup,
-                         @RequestParam("jobTitle") String jobTitle, @RequestParam("officeStartDate") String officeStartDate,
+    public String update(ManageLeader manageLeader,
+                         @RequestParam("leaderGroup") String leaderGroup,
+                         @RequestParam("jobTitle") String jobTitle,
+                         @RequestParam("officeStartDate") String officeStartDate,
                          @RequestParam("officeEndDate") String officeEndDate) {
         String[] leaderGroups = leaderGroup.split(",");
         String[] jobTitles = jobTitle.split(",");
@@ -78,6 +80,7 @@ public class ManageLeaderController {
         String[] officeEndDates = officeEndDate.split(",");
         manageLeaderMapper.updateByPrimaryKeySelective(manageLeader);
         String mainUUid = manageLeader.getUuid();
+        manageLeaderGroupMapper.deleteByParentId(mainUUid);
         return insertDetail(leaderGroups, jobTitles, officeStartDates, officeEndDates, manageLeader.getUuid());
     }
 

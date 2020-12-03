@@ -145,11 +145,11 @@
                             <span class="col-sm-12" th:each="dat:${manageSystemItemsSel}"
                                   th:if="${manageSystemItemsSel!=null}">
                                 <div>
-                                    <div class='col-sm-2'>
-                                        <input type='text'  name='itemsName' class='form-control m-t-sm col-sm-2'
+                                    <div class='col-sm-3'>
+                                        <input type='text'  name='itemsName' class='form-control m-t-sm col-sm-3'
                                                placeholder='事项名称' th:value="${dat.itemsName}">
                                     </div>
-                                    <div class='col-sm-2'>
+                                    <div class='col-sm-3'>
                                         <select class="form-control" id="votingFormula" name="votingFormula" >
                                             <option>表决方式</option>
                                             <option value="0" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '0'}">赞成票超过应到会成员人数的4/5</option>
@@ -163,9 +163,9 @@
                                             <option value="8" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '8'}">全票通过</option>
                                         </select>
                                     </div>
-                                    <div class='col-sm-2'>
+                                    <div class='col-sm-3'>
                                         <input type='text'  name='peopleCount'
-                                               class='form-control m-t-sm col-sm-2' placeholder='人数占比'
+                                               class='form-control m-t-sm col-sm-3' placeholder='人数占比'
                                                th:value="${dat.peopleCount}">
                                     </div>
 
@@ -219,15 +219,10 @@
 <script th:src="@{/asserts/js/jquery-file-upload.min.js?v=1.1}" type="text/javascript"></script>
 
 <script th:inline="javascript">
-    /*$(function () {
-        let ret = [[${manageSystemSel!=null}?${manageSystemSel.fileUploads}]];
-        myFileAction.do("fileuploader", "fileIds", "deviceReceiveFile", ret);
-    })*/
-
     function addInput() {
         let input = $(
-            "<div><div class='col-sm-2'>" +
-            "<div class='col-sm-2'><input type='text'  name='itemsName'  class='form-control m-t-sm col-sm-2'  placeholder='事项名称'></div>" +
+            "<div><div class='col-sm-3'>" +
+            "<div class='col-sm-3'><input type='text'  name='itemsName'  class='form-control m-t-sm col-sm-3'  placeholder='事项名称'></div>" +
             "<select class=\"form-control\" id=\"votingFormula\" name=\"votingFormula\" >\n" +
             "<option>表决方式</option>\n" +
             "<option value=\"0\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '0'}\">赞成票超过应到会成员人数的4/5</option>\n" +
@@ -240,7 +235,7 @@
             "<option value=\"7\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '7'}\">赞成票超过到会成员人数的2/3</option>\n" +
             "<option value=\"8\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '8'}\">全票通过</option>\n" +
             "</select></div>" +
-            "<div class='col-sm-2'><input type='text'  name='peopleCount'  class='form-control m-t-sm col-sm-2'  placeholder='人数占比'></div>" +
+            "<div class='col-sm-3'><input type='text'  name='peopleCount'  class='form-control m-t-sm col-sm-3'  placeholder='人数占比'></div>" +
             "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
             "<span class='glyphicon glyphicon-minus'></span>" +
             "</button></div></div>");

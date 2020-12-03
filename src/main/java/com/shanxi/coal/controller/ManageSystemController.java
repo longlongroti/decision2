@@ -70,12 +70,12 @@ public class ManageSystemController {
     public String update(ManageSystem manageSystem, @RequestParam("itemsName") String itemsName,
                          @RequestParam("votingFormula") String votingFormula,
                          @RequestParam("peopleCount") String peopleCount) {
-        System.out.println(itemsName);
         String[] itemsNames = itemsName.split(",");
         String[] votingFormulas = votingFormula.split(",");
         String[] peopleCounts = peopleCount.split(",");
         manageSystemMapper.updateByPrimaryKeySelective(manageSystem);
         String mainUUid = manageSystem.getUuid();
+        manageSystemItemsMapper.deleteByParentId(mainUUid);
         return insertDetail(itemsNames, votingFormulas, peopleCounts, manageSystem.getUuid());
     }
 

@@ -1,0 +1,150 @@
+<!--设备档案弹出窗口-->
+<div th:fragment="showConfirmEquipment1" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="modal fade" id="confirmEquipmentShow1" tabindex="-2" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" style="width:100%;margin-top:-1%;">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <h4 class="modal-title"><i class="fa fa-map-marker"></i> 事项目录</h4>
+                    <button type="button" class="close" style="margin-top: -20px" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+
+                <div class="ibox-content " id="query-search-equipment-div">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <label class="col-sm-1 my-font-bold" >事项目录A</label>
+                                <div class="col-sm-2" ><input id="catalogA" name="catalogA" type="text" class="form-control"></div>
+                                <label class="col-sm-1 my-font-bold" >事项目录B</label>
+                                <div class="col-sm-2" ><input id="catalogB" name="catalogB" type="text" class="form-control "></div>
+                                <label class="col-sm-1 my-font-bold" >事项目录C</label>
+                                <div class="col-sm-2" ><input id="catalogC" name="catalogC" type="text" class="form-control "></div>
+                                <div clalass="col-sm-1 my-font-bold" >事项编码</label>
+                                <div class="col-sm-2" ><input id="catalogCode" name="catalogCode" type="text" class="form-control "></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <button  class="btn btn-sm btn-success" type="button" onclick="createTable()">查询</button>
+                                    <button class="btn btn-sm btn-info" onclick="refresh()">重置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ibox-content" style="padding-bottom: 0px;">
+                    <div class="table-responsive">
+                        <table id="table_equipment_four">
+                        </table>
+                    </div>
+                </div>
+                <div class="hr-line-dashed" style="margin: 0px 0px 13px 0px;"></div>
+                <div class="form-group row">
+                    <div class="col-sm-7 col-sm-offset-2">
+                        <button type="button" class="btn btn-primary del" onclick="setValue()">确认</button>
+                        <button type="button" class="btn btn-default cancel" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        let selectionIds=[];
+        $(function () {
+            createTable();
+        });
+
+        function createTable() {
+            let url = '[[@{/manageEventsList/eventsList}]]'
+            $("#table_equipment_four").bootstrapTable('destroy');
+            $("#table_equipment_four").bootstrapTable({
+                url: url,        //请求后台的URL（*）
+                method: 'post',                      //请求方式（*）
+                contentType: "application/x-www-form-urlencoded",
+                pagination: true,                   //是否显示分页（*）
+                cache: false,
+                pageSize: 20,//每页一条数据
+                striped: true,  //表格显示条纹
+                dataField: "list",
+                queryParamsType: "undefined",
+                responseHandler:responseHandler,
+                queryParams: function queryParams(params) {   //设置查询参数
+                    let param = {
+                        pageNumber: params.pageNumber,
+                        pageSize: params.pageSize/*,
+                        materialName: $('#materialName').val(),*/
+                    };
+                    return param;
+                },
+                sidePagination: 'server',
+                pageNumber: 1,
+                columns: [
+                    {field :"uuid",width:1,formatter: function (value, row,idx) {
+                            return [ idx+1 ].join("");
+                        }
+                    },
+                    {field :'checkStatus',checkbox : true},
+                    /*{field :"createdDate",title: "创建时间",
+                        formatter: function (val) {
+                            return formatter.formatDate(val);
+                        }
+                    },*/
+                    {field: "catalogA",title: "事项目录A"},
+                    {field: "catalogB",title: "事项目录B"},
+                    {field: "catalogC",title: "事项目录C"},
+                    {field: "catalogCode",title: "事项编码"}
+                ]
+            });
+
+            let union = function(array,ids){
+                $.each(ids, function (i, id) {
+                    if($.inArray(id,array)==-1){
+                        array[array.length] = id;
+                    }
+                });
+                return array;
+            };
+
+            //取消选中事件操作数组
+            let difference = function(array,ids){
+                $.each(ids, function (i, id) {
+                    let index = $.inArray(id,array);
+                    if(index!=-1){
+                        array.splice(index, 1);
+                    }
+                });
+                return array;
+            };
+
+            let _ = {"union":union,"difference":difference};
+            //绑定选中事件、取消事件、全部选中、全部取消
+            $("#table_equipment_four").on('check.bs.table check-all.bs.table uncheck.bs.table uncheck-all.bs.table', function (e, list) {
+                let ids = $.map(!$.isArray(list) ? [list] : list, function (list) {
+                    return list.uuid;
+                });
+                func = $.inArray(e.type, ['check', 'check-all']) > -1 ? 'union' : 'difference';
+                selectionIds = _[func](selectionIds, ids);
+            });
+
+            //表格分页之前处理多选框数据
+            function responseHandler(res) {
+                $.each(res.list, function (i, list) {
+                    list.checkStatus = $.inArray(list.uuid, selectionIds) != -1;  //判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
+                });
+                return res;
+            }
+        }
+
+        function setValue(){
+            $('#confirmEquipmentShow1').modal("hide");
+            rollBackFnc_equipment(selectionIds.join(','));
+        }
+
+        function refresh(){
+            $("#query-search-equipment-div :input").val('');
+        }
+
+    </script>
+</div>
+
+

@@ -20,4 +20,6 @@ public interface ManageSystemItemsMapper {
     List<ManageSystemItems> listByUseId(String uuid);
 
     List<String> listByParentId(String uuid);
+
+    void deleteByParentId(String mainUUid);
 }

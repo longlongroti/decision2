@@ -39,26 +39,26 @@
                         <a href="#"><i class="fa fa-cog"></i> <span class="nav-label">信息填报</span><span
                                 class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <shiro:hasPermission name="会议信息管理_列表">
+                            <!--<shiro:hasPermission name="会议信息管理_列表">
                                 <li><a class="J_menuItem" th:href="@{/sysuser/go}">会议信息管理</a>
                                 </li>
-                            </shiro:hasPermission>
+                            </shiro:hasPermission>-->
                             <shiro:hasPermission name="制度信息管理_列表">
                                 <li><a class="J_menuItem" th:href="@{/manageSystem/go}">制度信息管理</a>
                                 </li>
                             </shiro:hasPermission>
                             <shiro:hasPermission name="事项清单管理_列表">
-                                <li><a class="J_menuItem" th:href="@{/sysstorageorg/go}">事项清单管理</a>
+                                <li><a class="J_menuItem" th:href="@{/manageEventsList/go}">事项清单管理</a>
                                 </li>
                             </shiro:hasPermission>
                             <shiro:hasPermission name="领导班子管理_列表">
                                 <li><a class="J_menuItem" th:href="@{/manageLeader/go}">领导班子管理</a>
                                 </li>
                             </shiro:hasPermission>
-                            <shiro:hasPermission name="上报库_列表">
+                            <!--<shiro:hasPermission name="上报库_列表">
                                 <li><a class="J_menuItem" th:href="@{/sysdatarole/go}">上报库</a>
                                 </li>
-                            </shiro:hasPermission>
+                            </shiro:hasPermission>-->
                         </ul>
                     </li>
                 </shiro:hasAnyPermissions>

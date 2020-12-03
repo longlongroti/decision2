@@ -163,7 +163,7 @@
 
     function addInput() {
         let input = $(
-            "<div><div class='col-sm-2'><!--<input type required name='leaderGroup' class='form-control m-t-sm col-sm-2'   placeholder='所属领导班子'>--> " +
+            "<div><div class='col-sm-2'>" +
             "<select class=\"form-control\" id=\"leaderGroup\" name=\"leaderGroup\" >\n" +
             "<option></option>\n" +
             "<option value=\"0\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '0'}\">党委(党组)成员(党委会)</option>\n" +

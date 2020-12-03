@@ -198,4 +198,9 @@
       from manage_system_items
       where system_parent_id = #{uuid,jdbcType=CHAR}
     </select>
+
+  <delete id="deleteByParentId" parameterType="java.lang.String">
+    delete from manage_system_items
+    where system_parent_id = #{uuid,jdbcType=CHAR}
+  </delete>
 </mapper>
