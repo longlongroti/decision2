@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.DicEventsCatalogMapper">
+  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.DicEventsCatalog">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="catalog_a" jdbcType="VARCHAR" property="catalogA" />
+    <result column="catalog_b" jdbcType="VARCHAR" property="catalogB" />
+    <result column="catalog_c" jdbcType="VARCHAR" property="catalogC" />
+    <result column="catalog_code" jdbcType="VARCHAR" property="catalogCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 
+    status, remark, catalog_a, catalog_b, catalog_c, catalog_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dic_events_catalog
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from dic_events_catalog
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shanxi.coal.domain.DicEventsCatalog">
+    insert into dic_events_catalog (uuid, created_date, created_by, 
+      created_by_org, modified_by, modified_date, 
+      is_del, status, remark, 
+      catalog_a, catalog_b, catalog_c, 
+      catalog_code)
+    values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
+      #{catalogA,jdbcType=VARCHAR}, #{catalogB,jdbcType=VARCHAR}, #{catalogC,jdbcType=VARCHAR}, 
+      #{catalogCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.DicEventsCatalog">
+    insert into dic_events_catalog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="createdDate != null">
+        created_date,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdByOrg != null">
+        created_by_org,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="catalogA != null">
+        catalog_a,
+      </if>
+      <if test="catalogB != null">
+        catalog_b,
+      </if>
+      <if test="catalogC != null">
+        catalog_c,
+      </if>
+      <if test="catalogCode != null">
+        catalog_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdByOrg != null">
+        #{createdByOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogA != null">
+        #{catalogA,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogB != null">
+        #{catalogB,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogC != null">
+        #{catalogC,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogCode != null">
+        #{catalogCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.DicEventsCatalog">
+    update dic_events_catalog
+    <set>
+      <if test="createdDate != null">
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdByOrg != null">
+        created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogA != null">
+        catalog_a = #{catalogA,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogB != null">
+        catalog_b = #{catalogB,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogC != null">
+        catalog_c = #{catalogC,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogCode != null">
+        catalog_code = #{catalogCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.DicEventsCatalog">
+    update dic_events_catalog
+    set created_date = #{createdDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      catalog_a = #{catalogA,jdbcType=VARCHAR},
+      catalog_b = #{catalogB,jdbcType=VARCHAR},
+      catalog_c = #{catalogC,jdbcType=VARCHAR},
+      catalog_code = #{catalogCode,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+
+  <select id="getEventsList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dic_events_catalog
+  </select>
+
+  <select id="listInIds" resultMap="BaseResultMap">
+  select * from dic_events_catalog where
+  uuid in
+  <foreach collection="list" item="employeeId" index="index"
+           open="(" close=")" separator=",">
+    #{employeeId}
+  </foreach>
+</select>
+
+  <select id="listAll"  parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from dic_events_catalog
+  </select>
+</mapper>

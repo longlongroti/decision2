@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.ManageEventsDetailsMapper">
+  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.ManageEventsDetails">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="event_id" jdbcType="VARCHAR" property="eventId" />
+    <result column="event_name" jdbcType="VARCHAR" property="eventName" />
+    <result column="event_code" jdbcType="VARCHAR" property="eventCode" />
+    <result column="decision_sequence" jdbcType="VARCHAR" property="decisionSequence" />
+    <result column="is_legal_review" jdbcType="VARCHAR" property="isLegalReview" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap2" type="com.shanxi.coal.domain.ManageEventsDetails">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="event_id" jdbcType="VARCHAR" property="eventId" />
+    <result column="event_name" jdbcType="VARCHAR" property="eventName" />
+    <result column="event_code" jdbcType="VARCHAR" property="eventCode" />
+    <result column="decision_sequence" jdbcType="VARCHAR" property="decisionSequence" />
+    <result column="is_legal_review" jdbcType="VARCHAR" property="isLegalReview" />
+
+    <collection property="dicEventsCatalogs" ofType="com.shanxi.coal.domain.DicEventsCatalog">
+      <id column="uuid" property="uuid" />
+      <result column="catalog_a" property="catalogA" />
+      <result column="catalog_b" property="catalogB" />
+      <result column="catalog_c" property="catalogC" />
+      <result column="catalog_code" property="catalogCode" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 
+    status, remark, parent_id, event_id, event_name, event_code, decision_sequence, is_legal_review
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_events_details
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from manage_events_details
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shanxi.coal.domain.ManageEventsDetails">
+    insert into manage_events_details (uuid, created_date, created_by, 
+      created_by_org, modified_by, modified_date, 
+      is_del, status, remark, 
+      parent_id, event_id, event_name, 
+      event_code, decision_sequence, is_legal_review)
+    values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=VARCHAR}, #{eventId,jdbcType=VARCHAR}, #{eventName,jdbcType=VARCHAR}, 
+      #{eventCode,jdbcType=VARCHAR}, #{decisionSequence,jdbcType=VARCHAR}, #{isLegalReview,jdbcType=VARCHAR}
+  </insert>
+  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageEventsDetails">
+    insert into manage_events_details
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="createdDate != null">
+        created_date,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdByOrg != null">
+        created_by_org,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="eventId != null">
+        event_id,
+      </if>
+      <if test="eventName != null">
+        event_name,
+      </if>
+      <if test="eventCode != null">
+        event_code,
+      </if>
+      <if test="decisionSequence != null">
+        decision_sequence,
+      </if>
+      <if test="isLegalReview != null">
+        is_legal_review,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdByOrg != null">
+        #{createdByOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="eventId != null">
+        #{eventId,jdbcType=VARCHAR},
+      </if>
+      <if test="eventName != null">
+        #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="eventCode != null">
+        #{eventCode,jdbcType=VARCHAR},
+      </if>
+      <if test="decisionSequence != null">
+        #{decisionSequence,jdbcType=VARCHAR},
+      </if>
+      <if test="isLegalReview != null">
+        #{isLegalReview,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageEventsDetails">
+    update manage_events_details
+    <set>
+      <if test="createdDate != null">
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdByOrg != null">
+        created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="eventId != null">
+        event_id = #{eventId,jdbcType=VARCHAR},
+      </if>
+      <if test="eventName != null">
+        event_name = #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="eventCode != null">
+        event_code = #{eventCode,jdbcType=VARCHAR},
+      </if>
+      <if test="decisionSequence != null">
+        decision_sequence = #{decisionSequence,jdbcType=VARCHAR},
+      </if>
+      <if test="isLegalReview != null">
+        is_legal_review = #{isLegalReview,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.ManageEventsDetails">
+    update manage_events_details
+    set created_date = #{createdDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      event_id = #{eventId,jdbcType=VARCHAR},
+      event_name = #{eventName,jdbcType=VARCHAR},
+      event_code = #{eventCode,jdbcType=VARCHAR},
+      decision_sequence = #{decisionSequence,jdbcType=VARCHAR},
+      is_legal_review = #{isLegalReview,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+
+  <select id="listByUseId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_events_details
+    where parent_id = #{uuid,jdbcType=CHAR}
+  </select>
+
+  <delete id="deleteByMainId" parameterType="java.lang.String">
+    delete from manage_events_details
+    where parent_id = #{uuid,jdbcType=CHAR}
+  </delete>
+
+  <select id="listByParentId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from manage_events_details
+    where parent_id = #{uuid,jdbcType=VARCHAR}
+  </select>
+
+  <select id="listEquipByMainId" resultMap="BaseResultMap2">
+    select * from manage_events_details d
+    LEFT JOIN dic_events_catalog ca on d.event_id = ca.uuid
+    WHERE ca.is_del = 0 and d.is_del = 0
+    and d.parent_id =#{uuid,jdbcType=VARCHAR}
+  </select>
+
+  <select id="listEquipIdByMain" resultMap="BaseResultMap">
+    select * from manage_events_details
+    WHERE parent_id =#{uuid,jdbcType=VARCHAR}
+  </select>
+
+</mapper>
