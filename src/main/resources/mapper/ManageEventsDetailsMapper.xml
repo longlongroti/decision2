@@ -13,10 +13,6 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
     <result column="event_id" jdbcType="VARCHAR" property="eventId" />
-    <result column="event_name" jdbcType="VARCHAR" property="eventName" />
-    <result column="event_code" jdbcType="VARCHAR" property="eventCode" />
-    <result column="decision_sequence" jdbcType="VARCHAR" property="decisionSequence" />
-    <result column="is_legal_review" jdbcType="VARCHAR" property="isLegalReview" />
   </resultMap>
 
   <resultMap id="BaseResultMap2" type="com.shanxi.coal.domain.ManageEventsDetails">
@@ -31,22 +27,15 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
     <result column="event_id" jdbcType="VARCHAR" property="eventId" />
-    <result column="event_name" jdbcType="VARCHAR" property="eventName" />
-    <result column="event_code" jdbcType="VARCHAR" property="eventCode" />
-    <result column="decision_sequence" jdbcType="VARCHAR" property="decisionSequence" />
-    <result column="is_legal_review" jdbcType="VARCHAR" property="isLegalReview" />
 
-    <collection property="dicEventsCatalogs" ofType="com.shanxi.coal.domain.DicEventsCatalog">
-      <id column="uuid" property="uuid" />
-      <result column="catalog_a" property="catalogA" />
-      <result column="catalog_b" property="catalogB" />
-      <result column="catalog_c" property="catalogC" />
-      <result column="catalog_code" property="catalogCode" />
-    </collection>
+    <association property="dicEventsCatalogs" column="event_id"
+                select="com.shanxi.coal.dao.DicEventsCatalogMapper.selectByPrimaryKey"></association>
+    <collection property="manageEventsDetailItems" column="uuid"
+                select="com.shanxi.coal.dao.ManageEventsDetailsItemMapper.listByItemId"></collection>
   </resultMap>
   <sql id="Base_Column_List">
     uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 
-    status, remark, parent_id, event_id, event_name, event_code, decision_sequence, is_legal_review
+    status, remark, parent_id, event_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -62,13 +51,11 @@
     insert into manage_events_details (uuid, created_date, created_by, 
       created_by_org, modified_by, modified_date, 
       is_del, status, remark, 
-      parent_id, event_id, event_name, 
-      event_code, decision_sequence, is_legal_review)
+      parent_id, event_id)
     values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
       #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
       #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
-      #{parentId,jdbcType=VARCHAR}, #{eventId,jdbcType=VARCHAR}, #{eventName,jdbcType=VARCHAR}, 
-      #{eventCode,jdbcType=VARCHAR}, #{decisionSequence,jdbcType=VARCHAR}, #{isLegalReview,jdbcType=VARCHAR}
+      #{parentId,jdbcType=VARCHAR}, #{eventId,jdbcType=VARCHAR}
   </insert>
   <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageEventsDetails">
     insert into manage_events_details
@@ -106,18 +93,6 @@
       <if test="eventId != null">
         event_id,
       </if>
-      <if test="eventName != null">
-        event_name,
-      </if>
-      <if test="eventCode != null">
-        event_code,
-      </if>
-      <if test="decisionSequence != null">
-        decision_sequence,
-      </if>
-      <if test="isLegalReview != null">
-        is_legal_review,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="uuid != null">
@@ -152,18 +127,6 @@
       </if>
       <if test="eventId != null">
         #{eventId,jdbcType=VARCHAR},
-      </if>
-      <if test="eventName != null">
-        #{eventName,jdbcType=VARCHAR},
-      </if>
-      <if test="eventCode != null">
-        #{eventCode,jdbcType=VARCHAR},
-      </if>
-      <if test="decisionSequence != null">
-        #{decisionSequence,jdbcType=VARCHAR},
-      </if>
-      <if test="isLegalReview != null">
-        #{isLegalReview,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -200,18 +163,6 @@
       <if test="eventId != null">
         event_id = #{eventId,jdbcType=VARCHAR},
       </if>
-      <if test="eventName != null">
-        event_name = #{eventName,jdbcType=VARCHAR},
-      </if>
-      <if test="eventCode != null">
-        event_code = #{eventCode,jdbcType=VARCHAR},
-      </if>
-      <if test="decisionSequence != null">
-        decision_sequence = #{decisionSequence,jdbcType=VARCHAR},
-      </if>
-      <if test="isLegalReview != null">
-        is_legal_review = #{isLegalReview,jdbcType=VARCHAR},
-      </if>
     </set>
     where uuid = #{uuid,jdbcType=CHAR}
   </update>
@@ -226,11 +177,7 @@
       status = #{status,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR},
       parent_id = #{parentId,jdbcType=VARCHAR},
-      event_id = #{eventId,jdbcType=VARCHAR},
-      event_name = #{eventName,jdbcType=VARCHAR},
-      event_code = #{eventCode,jdbcType=VARCHAR},
-      decision_sequence = #{decisionSequence,jdbcType=VARCHAR},
-      is_legal_review = #{isLegalReview,jdbcType=VARCHAR}
+      event_id = #{eventId,jdbcType=VARCHAR}
     where uuid = #{uuid,jdbcType=CHAR}
   </update>
 
@@ -246,7 +193,7 @@
     where parent_id = #{uuid,jdbcType=CHAR}
   </delete>
 
-  <select id="listByParentId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="listByParentId" parameterType="java.lang.String" resultMap="BaseResultMap2">
     select
     <include refid="Base_Column_List"/>
     from manage_events_details

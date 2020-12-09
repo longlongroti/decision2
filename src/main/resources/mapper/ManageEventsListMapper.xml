@@ -16,6 +16,23 @@
     <result column="start_time" jdbcType="VARCHAR" property="startTime" />
     <result column="end_time" jdbcType="VARCHAR" property="endTime" />
   </resultMap>
+  <resultMap id="BaseResultMap2" type="com.shanxi.coal.domain.ManageEventsList">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="list_name" jdbcType="VARCHAR" property="listName" />
+    <result column="version_number" jdbcType="VARCHAR" property="versionNumber" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <collection property="item" column="uuid"
+                select="com.shanxi.coal.dao.ManageEventsDetailsMapper.listByParentId"></collection>
+  </resultMap>
   <sql id="Base_Column_List">
     uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 
     status, remark, list_name, version_number, start_time, end_time
@@ -186,11 +203,10 @@
     where uuid = #{uuid,jdbcType=CHAR}
   </update>
 
-  <select id="getList" parameterType="com.shanxi.coal.domain.ManageEventsList" resultMap="BaseResultMap">
+  <select id="getList" parameterType="com.shanxi.coal.domain.ManageEventsList" resultMap="BaseResultMap2">
     select * from manage_events_list
     <where>
       is_del=0
-      <!--<include refid="Common.condition_sql"/>-->
     </where>
     order by created_date desc
   </select>

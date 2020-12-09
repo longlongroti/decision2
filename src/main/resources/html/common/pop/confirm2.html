@@ -1,0 +1,112 @@
+<div th:fragment="showConfirm" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="modal fade "  id="confirmModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">确认添加</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="ibox-content">
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label my-font-bold">所属类别</label>
+                            <select class="form-control" id="itemid" name="itemid">
+
+                            </select>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label my-font-bold">事项名称</label>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="eventName" name="eventName"
+                                       th:placeholder="事项名称">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!--第二行-->
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label my-font-bold">事项编码</label>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="eventCode" name="eventCode"
+                                       th:placeholder="事项编码">
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label my-font-bold">决策会议及顺序</label>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="seq1" name="seq1">
+                                    <option value="无">无</option>
+                                    <option value="党委会">党委会</option>
+                                    <option value="党组会">党组会</option>
+                                    <option value="总经理办公会">总经理办公会</option>
+                                    <option value="党委（党组）会">党委（党组）会</option>
+                                    <option value="股东会">股东会</option>
+                                    <option value="董事会">董事会</option>
+                                    <option value="经理层办公会">经理层办公会</option>
+                                    <option value="职代会">职代会</option>
+                                    <option value="其他">其他</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="seq2" name="seq2">
+                                    <option value="无">无</option>
+                                    <option value="党委会">党委会</option>
+                                    <option value="党组会">党组会</option>
+                                    <option value="总经理办公会">总经理办公会</option>
+                                    <option value="党委（党组）会">党委（党组）会</option>
+                                    <option value="股东会">股东会</option>
+                                    <option value="董事会">董事会</option>
+                                    <option value="经理层办公会">经理层办公会</option>
+                                    <option value="职代会">职代会</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="seq3" name="seq3">
+                                    <option value="无">无</option>
+                                    <option value="党委会">党委会</option>
+                                    <option value="党组会">党组会</option>
+                                    <option value="总经理办公会">总经理办公会</option>
+                                    <option value="党委（党组）会">党委（党组）会</option>
+                                    <option value="股东会">股东会</option>
+                                    <option value="董事会">董事会</option>
+                                    <option value="经理层办公会">经理层办公会</option>
+                                    <option value="职代会">职代会</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label my-font-bold">是否需经法律审核</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="islegal" name="islegal">
+                                    <option value="否">否</option>
+                                    <option value="是">是</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-default cancel" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary del" id="confirmAdd">确认添加</button>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table id="tabledetails"></table>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>

@@ -3,12 +3,10 @@ package com.shanxi.coal.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shanxi.coal.dao.DicEventsCatalogMapper;
+import com.shanxi.coal.dao.ManageEventsDetailsItemMapper;
 import com.shanxi.coal.dao.ManageEventsDetailsMapper;
 import com.shanxi.coal.dao.ManageEventsListMapper;
-import com.shanxi.coal.domain.DicEventsCatalog;
-import com.shanxi.coal.domain.ManageEventsDetails;
-import com.shanxi.coal.domain.ManageEventsList;
-import com.shanxi.coal.domain.ManageSystemItems;
+import com.shanxi.coal.domain.*;
 import com.shanxi.coal.utils.MyUtils;
 import liquibase.util.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -31,6 +29,8 @@ public class ManageEventsListController {
     ManageEventsDetailsMapper manageEventsDetailsMapper;
     @Resource
     DicEventsCatalogMapper dicEventsCatalogMapper;
+    @Resource
+    ManageEventsDetailsItemMapper manageEventsDetailsItemMapper;
 
     @GetMapping("/go")
     public String go() {
@@ -59,9 +59,9 @@ public class ManageEventsListController {
     }
 
     @PostMapping("/add")
-    public String add(ManageEventsList manageEventsList,@RequestParam("eventId") String eventId,@RequestParam("listName") String listName,
-                      @RequestParam("versionNumber") String versionNumber,@RequestParam("startTime") String startTime,
-                      @RequestParam("endTime") String endTime,@RequestParam("remark") String remark) {
+    public String add(ManageEventsList manageEventsList, @RequestParam("eventId") String eventId, @RequestParam("listName") String listName,
+                      @RequestParam("versionNumber") String versionNumber, @RequestParam("startTime") String startTime,
+                      @RequestParam("endTime") String endTime, @RequestParam("remark") String remark) {
         manageEventsList.setListName(listName);
         manageEventsList.setVersionNumber(versionNumber);
         manageEventsList.setStartTime(startTime);
@@ -74,8 +74,8 @@ public class ManageEventsListController {
 
     @PutMapping("/add")
     public String update(ManageEventsList manageEventsList,
-                         @RequestParam(value="mainUuid",required=false) String mainUuid,
-                         @RequestParam(value="eventId",required=false) String eventId,
+                         @RequestParam(value = "mainUuid", required = false) String mainUuid,
+                         @RequestParam(value = "eventId", required = false) String eventId,
                          @RequestParam("listName") String listName,
                          @RequestParam("versionNumber") String versionNumber,
                          @RequestParam("startTime") String startTime,
@@ -93,7 +93,7 @@ public class ManageEventsListController {
         return insertDetail(manageEventsList.getUuid(), eventId);
     }
 
-    private String insertDetail(String parentId,String eventId) {
+    private String insertDetail(String parentId, String eventId) {
         String[] parentIds = parentId.split(",");
         String[] eventIds = eventId.split(",");
         for (int i = 0; i < eventIds.length; i++) {
@@ -143,10 +143,22 @@ public class ManageEventsListController {
     @PostMapping("/eventsList")
     @ResponseBody
     public String eventsList(@RequestParam("pageNumber") Integer pageNumber,
-                       @RequestParam("pageSize") Integer pageSize) throws ParseException {
+                             @RequestParam("pageSize") Integer pageSize) throws ParseException {
         PageHelper.startPage(pageNumber, pageSize);
         List<DicEventsCatalog> dicEventsCatalog = dicEventsCatalogMapper.getEventsList();
         PageInfo<DicEventsCatalog> pageInfo = new PageInfo<DicEventsCatalog>(dicEventsCatalog);
+        return MyUtils.pageInfoToJson(pageInfo);
+    }
+
+
+    @PostMapping("/listDetailItems")
+    @ResponseBody
+    public String listDetailItems(@RequestParam("pageNumber") Integer pageNumber,
+                             @RequestParam("pageSize") Integer pageSize,
+                                  @RequestParam("id") String id) throws ParseException {
+        PageHelper.startPage(pageNumber, pageSize);
+        List<ManageEventsDetailItem> manageEventsDetailItems = manageEventsDetailsItemMapper.listByParentId(id);
+        PageInfo<ManageEventsDetailItem> pageInfo = new PageInfo<ManageEventsDetailItem>(manageEventsDetailItems);
         return MyUtils.pageInfoToJson(pageInfo);
     }
 
@@ -170,6 +182,37 @@ public class ManageEventsListController {
         }
         manageEventsList.setIsDel(1);
         manageEventsListMapper.updateByPrimaryKeySelective(manageEventsList);
+        return "ok";
+    }
+
+    @PostMapping("/deleteDetailItem")
+    @ResponseBody
+    public String deleteDetailItem(@PathParam("uuid") String uuid) {
+        manageEventsDetailsItemMapper.deleteByPrimaryKey(uuid);
+        return "ok";
+    }
+
+    @PostMapping("/addDetailItem")
+    @ResponseBody
+    public String addDetailItem(@PathParam("itemid") String itemid,
+                                @PathParam("eventName") String eventName,
+                                @PathParam("eventCode") String eventCode,
+                                @PathParam("seq1") String seq1,
+                                @PathParam("seq2") String seq2,
+                                @PathParam("seq3") String seq3,
+                                @PathParam("parentId") String parentId,
+                                @PathParam("islegal") String islegal) {
+        ManageEventsDetailItem manageEventsDetailItem = new ManageEventsDetailItem();
+        manageEventsDetailItem.setUuid(UUID.randomUUID().toString());
+        manageEventsDetailItem.setDecisionSequence(seq1);
+        manageEventsDetailItem.setDecisionSequence2(seq2);
+        manageEventsDetailItem.setDecisionSequence3(seq3);
+        manageEventsDetailItem.setEventId(itemid);
+        manageEventsDetailItem.setEventCode(eventCode);
+        manageEventsDetailItem.setEventName(eventName);
+        manageEventsDetailItem.setIsLegalReview(islegal);
+        manageEventsDetailItem.setParentId(parentId);
+        manageEventsDetailsItemMapper.insertSelective(manageEventsDetailItem);
         return "ok";
     }
 

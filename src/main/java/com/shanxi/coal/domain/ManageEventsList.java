@@ -2,6 +2,7 @@ package com.shanxi.coal.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ManageEventsList extends CommonBean implements Serializable {
     private String listName;
@@ -11,6 +12,16 @@ public class ManageEventsList extends CommonBean implements Serializable {
     private String startTime;
 
     private String endTime;
+
+    private List<ManageEventsDetails> item;
+
+    public List<ManageEventsDetails> getItem() {
+        return item;
+    }
+
+    public void setItem(List<ManageEventsDetails> item) {
+        this.item = item;
+    }
 
     private static final long serialVersionUID = 1L;
 

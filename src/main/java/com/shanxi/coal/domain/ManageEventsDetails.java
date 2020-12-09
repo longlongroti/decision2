@@ -9,13 +9,15 @@ public class ManageEventsDetails extends CommonBean implements Serializable {
 
     private String eventId;
 
-    private String eventName;
+    private List<ManageEventsDetailItem> manageEventsDetailItems;
 
-    private String eventCode;
+    public List<ManageEventsDetailItem> getManageEventsDetailItems() {
+        return manageEventsDetailItems;
+    }
 
-    private String decisionSequence;
-
-    private String isLegalReview;
+    public void setManageEventsDetailItems(List<ManageEventsDetailItem> manageEventsDetailItems) {
+        this.manageEventsDetailItems = manageEventsDetailItems;
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -35,45 +37,13 @@ public class ManageEventsDetails extends CommonBean implements Serializable {
         this.eventId = eventId == null ? null : eventId.trim();
     }
 
-    public String getEventName() {
-        return eventName;
-    }
+    DicEventsCatalog dicEventsCatalogs;
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName == null ? null : eventName.trim();
-    }
-
-    public String getEventCode() {
-        return eventCode;
-    }
-
-    public void setEventCode(String eventCode) {
-        this.eventCode = eventCode == null ? null : eventCode.trim();
-    }
-
-    public String getDecisionSequence() {
-        return decisionSequence;
-    }
-
-    public void setDecisionSequence(String decisionSequence) {
-        this.decisionSequence = decisionSequence == null ? null : decisionSequence.trim();
-    }
-
-    public String getIsLegalReview() {
-        return isLegalReview;
-    }
-
-    public void setIsLegalReview(String isLegalReview) {
-        this.isLegalReview = isLegalReview == null ? null : isLegalReview.trim();
-    }
-
-    private List<DicEventsCatalog> dicEventsCatalogs;
-
-    public List<DicEventsCatalog> getDicEventsCatalogs() {
+    public DicEventsCatalog getDicEventsCatalogs() {
         return dicEventsCatalogs;
     }
 
-    public void setDicEventsCatalogs(List<DicEventsCatalog> dicEventsCatalogs) {
+    public void setDicEventsCatalogs(DicEventsCatalog dicEventsCatalogs) {
         this.dicEventsCatalogs = dicEventsCatalogs;
     }
 }
