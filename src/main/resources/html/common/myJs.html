@@ -201,6 +201,38 @@
                 return '经理层办公室会议事规则'
             }
             return val;
+        }, formatMeetingType: function (val) {
+            if (val == 0) {
+                return '党委会'
+            } else if (val == 1) {
+                return '职代会'
+            } else if (val == 2) {
+                return '党组会'
+            } else if (val == 3) {
+                return '董事会'
+            } else if (val == 4) {
+                return '经理层办公室会'
+            } else if (val == 5) {
+                return '股东会'
+            } else if (val == 6) {
+                return '党委(党组)会'
+            } else if (val == 7) {
+                return '其他'
+            } else if (val == 8) {
+                return '总经理办公会'
+            }
+            return val;
+        }, formatMeetingForm: function (val) {
+            if (val == 0) {
+                return '传签会议'
+            } else if (val == 1) {
+                return '电视电话会议'
+            } else if (val == 2) {
+                return '现场会议'
+            } else if (val == 3) {
+                return '学习会议'
+            }
+            return val;
         }
     };
 

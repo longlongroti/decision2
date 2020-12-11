@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.ManageMeetingMapper">
+  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.ManageMeeting">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="meeting_type" jdbcType="VARCHAR" property="meetingType" />
+    <result column="meeting_name" jdbcType="VARCHAR" property="meetingName" />
+    <result column="version_num" jdbcType="VARCHAR" property="versionNum" />
+    <result column="serial_num" jdbcType="VARCHAR" property="serialNum" />
+    <result column="meeting_form" jdbcType="VARCHAR" property="meetingForm" />
+    <result column="meeting_time" jdbcType="VARCHAR" property="meetingTime" />
+    <result column="summary_time" jdbcType="VARCHAR" property="summaryTime" />
+    <result column="meeting_site" jdbcType="VARCHAR" property="meetingSite" />
+    <result column="compere_id" jdbcType="VARCHAR" property="compereId" />
+    <result column="compere_name" jdbcType="VARCHAR" property="compereName" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap2" type="com.shanxi.coal.domain.ManageMeeting">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="meeting_type" jdbcType="VARCHAR" property="meetingType" />
+    <result column="meeting_name" jdbcType="VARCHAR" property="meetingName" />
+    <result column="version_num" jdbcType="VARCHAR" property="versionNum" />
+    <result column="serial_num" jdbcType="VARCHAR" property="serialNum" />
+    <result column="meeting_form" jdbcType="VARCHAR" property="meetingForm" />
+    <result column="meeting_time" jdbcType="VARCHAR" property="meetingTime" />
+    <result column="summary_time" jdbcType="VARCHAR" property="summaryTime" />
+    <result column="meeting_site" jdbcType="VARCHAR" property="meetingSite" />
+    <result column="compere_id" jdbcType="VARCHAR" property="compereId" />
+    <result column="compere_name" jdbcType="VARCHAR" property="compereName" />
+
+    <collection property="manageMeetingAttendee" column="uuid"
+                select="com.shanxi.coal.dao.ManageMeetingAttendeeMapper.listByMeetingId"></collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 
+    status, remark, meeting_type, meeting_name, version_num, serial_num, meeting_form, 
+    meeting_time, summary_time, meeting_site, compere_id, compere_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_meeting
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from manage_meeting
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shanxi.coal.domain.ManageMeeting">
+    insert into manage_meeting (uuid, created_date, created_by, 
+      created_by_org, modified_by, modified_date, 
+      is_del, status, remark, 
+      meeting_type, meeting_name, version_num, 
+      serial_num, meeting_form, meeting_time, 
+      summary_time, meeting_site, compere_id, 
+      compere_name)
+    values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
+      #{meetingType,jdbcType=VARCHAR}, #{meetingName,jdbcType=VARCHAR}, #{versionNum,jdbcType=VARCHAR}, 
+      #{serialNum,jdbcType=VARCHAR}, #{meetingForm,jdbcType=VARCHAR}, #{meetingTime,jdbcType=VARCHAR}, 
+      #{summaryTime,jdbcType=VARCHAR}, #{meetingSite,jdbcType=VARCHAR}, #{compereId,jdbcType=VARCHAR}, 
+      #{compereName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageMeeting">
+    insert into manage_meeting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="createdDate != null">
+        created_date,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdByOrg != null">
+        created_by_org,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="meetingType != null">
+        meeting_type,
+      </if>
+      <if test="meetingName != null">
+        meeting_name,
+      </if>
+      <if test="versionNum != null">
+        version_num,
+      </if>
+      <if test="serialNum != null">
+        serial_num,
+      </if>
+      <if test="meetingForm != null">
+        meeting_form,
+      </if>
+      <if test="meetingTime != null">
+        meeting_time,
+      </if>
+      <if test="summaryTime != null">
+        summary_time,
+      </if>
+      <if test="meetingSite != null">
+        meeting_site,
+      </if>
+      <if test="compereId != null">
+        compere_id,
+      </if>
+      <if test="compereName != null">
+        compere_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdByOrg != null">
+        #{createdByOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingType != null">
+        #{meetingType,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingName != null">
+        #{meetingName,jdbcType=VARCHAR},
+      </if>
+      <if test="versionNum != null">
+        #{versionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null">
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingForm != null">
+        #{meetingForm,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingTime != null">
+        #{meetingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryTime != null">
+        #{summaryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingSite != null">
+        #{meetingSite,jdbcType=VARCHAR},
+      </if>
+      <if test="compereId != null">
+        #{compereId,jdbcType=VARCHAR},
+      </if>
+      <if test="compereName != null">
+        #{compereName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageMeeting">
+    update manage_meeting
+    <set>
+      <if test="createdDate != null">
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdByOrg != null">
+        created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingType != null">
+        meeting_type = #{meetingType,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingName != null">
+        meeting_name = #{meetingName,jdbcType=VARCHAR},
+      </if>
+      <if test="versionNum != null">
+        version_num = #{versionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null">
+        serial_num = #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingForm != null">
+        meeting_form = #{meetingForm,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingTime != null">
+        meeting_time = #{meetingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryTime != null">
+        summary_time = #{summaryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingSite != null">
+        meeting_site = #{meetingSite,jdbcType=VARCHAR},
+      </if>
+      <if test="compereId != null">
+        compere_id = #{compereId,jdbcType=VARCHAR},
+      </if>
+      <if test="compereName != null">
+        compere_name = #{compereName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.ManageMeeting">
+    update manage_meeting
+    set created_date = #{createdDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      meeting_type = #{meetingType,jdbcType=VARCHAR},
+      meeting_name = #{meetingName,jdbcType=VARCHAR},
+      version_num = #{versionNum,jdbcType=VARCHAR},
+      serial_num = #{serialNum,jdbcType=VARCHAR},
+      meeting_form = #{meetingForm,jdbcType=VARCHAR},
+      meeting_time = #{meetingTime,jdbcType=VARCHAR},
+      summary_time = #{summaryTime,jdbcType=VARCHAR},
+      meeting_site = #{meetingSite,jdbcType=VARCHAR},
+      compere_id = #{compereId,jdbcType=VARCHAR},
+      compere_name = #{compereName,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+
+  <select id="getList" parameterType="com.shanxi.coal.domain.ManageMeeting" resultMap="BaseResultMap">
+    select * from manage_meeting
+    <where>
+      is_del=0
+    </where>
+    order by created_date desc
+  </select>
+
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from manage_meeting
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+
+  <select id="selectAttendeesExtra" parameterType="com.shanxi.coal.domain.ManageMeeting" resultMap="BaseResultMap2">
+    select
+    <include refid="Base_Column_List"/>
+    from manage_meeting
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+</mapper>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.shanxi.coal.dao.ManageLeaderMapper">
-  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.ManageLeader">
+<mapper namespace="com.shanxi.coal.dao.ManageMeetingAttendeeMapper">
+  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.ManageMeetingAttendee">
     <id column="uuid" jdbcType="CHAR" property="uuid" />
     <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
     <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
@@ -11,35 +11,35 @@
     <result column="is_del" jdbcType="TINYINT" property="isDel" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="leader_name" jdbcType="VARCHAR" property="leaderName" />
-    <result column="leader_sort" jdbcType="VARCHAR" property="leaderSort" />
+    <result column="meeting_id" jdbcType="CHAR" property="meetingId" />
+    <result column="leader_id" jdbcType="CHAR" property="leaderId" />
   </resultMap>
   <sql id="Base_Column_List">
     uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 
-    status, remark, leader_name, leader_sort
+    status, remark, meeting_id, leader_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from manage_leader
+    from manage_meeting_attendee
     where uuid = #{uuid,jdbcType=CHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from manage_leader
+    delete from manage_meeting_attendee
     where uuid = #{uuid,jdbcType=CHAR}
   </delete>
-  <insert id="insert" parameterType="com.shanxi.coal.domain.ManageLeader">
-    insert into manage_leader (uuid, created_date, created_by, 
+  <insert id="insert" parameterType="com.shanxi.coal.domain.ManageMeetingAttendee">
+    insert into manage_meeting_attendee (uuid, created_date, created_by, 
       created_by_org, modified_by, modified_date, 
       is_del, status, remark, 
-      leader_name, leader_sort)
+      meeting_id, leader_id)
     values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
       #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
       #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
-      #{leaderName,jdbcType=VARCHAR}, #{leaderSort,jdbcType=VARCHAR})
+      #{meetingId,jdbcType=CHAR}, #{leaderId,jdbcType=CHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageLeader">
-    insert into manage_leader
+  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageMeetingAttendee">
+    insert into manage_meeting_attendee
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="uuid != null">
         uuid,
@@ -68,11 +68,11 @@
       <if test="remark != null">
         remark,
       </if>
-      <if test="leaderName != null">
-        leader_name,
+      <if test="meetingId != null">
+        meeting_id,
       </if>
-      <if test="leaderSort != null">
-        leader_sort,
+      <if test="leaderId != null">
+        leader_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -103,16 +103,16 @@
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="leaderName != null">
-        #{leaderName,jdbcType=VARCHAR},
+      <if test="meetingId != null">
+        #{meetingId,jdbcType=CHAR},
       </if>
-      <if test="leaderSort != null">
-        #{leaderSort,jdbcType=VARCHAR},
+      <if test="leaderId != null">
+        #{leaderId,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageLeader">
-    update manage_leader
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageMeetingAttendee">
+    update manage_meeting_attendee
     <set>
       <if test="createdDate != null">
         created_date = #{createdDate,jdbcType=TIMESTAMP},
@@ -138,17 +138,17 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="leaderName != null">
-        leader_name = #{leaderName,jdbcType=VARCHAR},
+      <if test="meetingId != null">
+        meeting_id = #{meetingId,jdbcType=CHAR},
       </if>
-      <if test="leaderSort != null">
-        leader_sort = #{leaderSort,jdbcType=VARCHAR},
+      <if test="leaderId != null">
+        leader_id = #{leaderId,jdbcType=CHAR},
       </if>
     </set>
     where uuid = #{uuid,jdbcType=CHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.ManageLeader">
-    update manage_leader
+  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.ManageMeetingAttendee">
+    update manage_meeting_attendee
     set created_date = #{createdDate,jdbcType=TIMESTAMP},
       created_by = #{createdBy,jdbcType=VARCHAR},
       created_by_org = #{createdByOrg,jdbcType=VARCHAR},
@@ -157,31 +157,27 @@
       is_del = #{isDel,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR},
-      leader_name = #{leaderName,jdbcType=VARCHAR},
-      leader_sort = #{leaderSort,jdbcType=VARCHAR}
+      meeting_id = #{meetingId,jdbcType=CHAR},
+      leader_id = #{leaderId,jdbcType=CHAR}
     where uuid = #{uuid,jdbcType=CHAR}
   </update>
 
-  <select id="getList" parameterType="com.shanxi.coal.domain.ManageLeader" resultMap="BaseResultMap">
-    select * from manage_leader
-    <where>
-      is_del=0
-      <!--<include refid="Common.condition_sql"/>-->
-    </where>
-    order by created_date desc
-  </select>
+  <insert id="insertBatch">
+    INSERT INTO manage_meeting_attendee(uuid,meeting_id, leader_id) values
+    <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+      ( #{item.uuid}, #{item.meetingId} , #{item.leaderId} )
+    </foreach>
+  </insert>
 
-  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="listByMeetingId" parameterType="java.lang.String"  resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
-    from manage_leader
-    where uuid = #{uuid,jdbcType=CHAR}
+    <include refid="Base_Column_List" />
+    from manage_meeting_attendee
+    where meeting_id = #{meetingId,jdbcType=VARCHAR}
   </select>
 
-  <select id="getLeaders" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from manage_leader where is_del=0
-  </select>
-
+  <delete id="deleteByMeetingId"  parameterType="java.lang.String">
+    delete from manage_meeting_attendee
+    where meeting_id = #{meetingId,jdbcType=VARCHAR}
+  </delete>
 </mapper>

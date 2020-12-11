@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+
+    <title>会议信息-</title>
+    <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
+    <link href="asserts/css/bootstrap-select.min.css" rel="stylesheet"
+          th:href="@{/asserts/css/bootstrap-select.min.css}">
+    <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/asserts/js/layer/laydate/skins/default/laydate.css}" rel="stylesheet">
+    <link th:href="@{/asserts/js/layer/laydate/need/laydate.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/jquery-file-upload.min.css}" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 class="col-sm-10 padding-top-10">[[${manageMeetingSel!=null}?编辑会议:新增会议]]</h5>
+                    <div class="col-sm-2 text-right"><a href="javascript:history.back(-1)">返回</a></div>
+                </div>
+
+                <div class="ibox-content">
+                    <form  th:action="@{/manageMeeting/add}" th:method="post">
+                        <input name="_method" th:if="${manageMeetingSel!=null}" type="hidden" value="PUT"/>
+                        <input id="uuid" name="uuid" th:value="${manageMeetingSel!=null}?${manageMeetingSel.uuid}" type="hidden"/>
+                        <!--第一行-->
+                        <div class="form-group row">
+                            <label class="col-sm-1 col-form-label my-font-bold">会议名称</label>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="meetingName" name="meetingName"
+                                       th:placeholder="会议名称"
+                                       th:value="${manageMeetingSel!=null}?${manageMeetingSel.meetingName}">
+                            </div>
+                            <label class="col-sm-1 col-form-label my-font-bold">会议类型</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="meetingType" name="meetingType" >
+                                    <option></option>
+                                    <option value="0" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingType == '0'}">党委会</option>
+                                    <option value="1" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingType == '1'}">职代会</option>
+                                    <option value="2" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingType == '2'}">党组会</option>
+                                    <option value="3" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingType == '3'}">董事会</option>
+                                    <option value="4" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingType == '4'}">经理层办公室会</option>
+                                    <option value="5" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingType == '5'}">股东会</option>
+                                    <option value="6" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingType == '6'}">党委(党组)会</option>
+                                    <option value="7" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingType == '7'}">其他</option>
+                                    <option value="8" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingType == '8'}">总经理办公会</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!--第二行-->
+                        <div class="form-group row">
+                            <label class="col-sm-1 col-form-label my-font-bold" >版本号(年份)</label>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="versionNum" name="versionNum"
+                                       th:placeholder="版本号"
+                                       th:value="${manageMeetingSel!=null}?${manageMeetingSel.versionNum}">
+                            </div>
+                            <label class="col-sm-1 col-form-label my-font-bold" >流水号</label>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="serialNum" name="serialNum"
+                                       th:placeholder="流水号"
+                                       th:value="${manageMeetingSel!=null}?${manageMeetingSel.serialNum}">
+                            </div>
+                        </div>
+
+                        <!--第三行-->
+                        <div class="form-group row">
+                            <label class="col-sm-1 col-form-label my-font-bold">会议时间</label>
+                            <div class="col-sm-5">
+                                <input class="laydate-icon form-control layer-date" id="meetingTime" name="meetingTime" th:placeholder="请选择时间"
+                                       onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
+                                       th:value="${manageMeetingSel!=null}?${manageMeetingSel.meetingTime}" >
+                            </div>
+                            <label class="col-sm-1 col-form-label my-font-bold">纪要印发时间</label>
+                            <div class="col-sm-5">
+                                <input class="laydate-icon form-control layer-date" id="summaryTime" name="summaryTime" th:placeholder="请选择时间"
+                                       onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
+                                       th:value="${manageMeetingSel!=null}?${manageMeetingSel.summaryTime}" >
+                            </div>
+                        </div>
+
+                        <!--第四行-->
+                        <div class="form-group row">
+                            <label class="col-sm-1 col-form-label my-font-bold" >主持人</label>
+                            <div class="col-sm-5">
+                                <select class="form-control m-b" name="compereId">
+                                    <option th:each="f:${leadersSelection}" th:text="${f.leaderName}" th:value="${f.uuid}"
+                                            th:selected="${manageMeetingSel!=null}?${manageMeetingSel.compereId}==${f.uuid}">
+                                </select>
+                            </div>
+                            <label class="col-sm-1 col-form-label my-font-bold" >参会人员</label>
+                            <div class="col-sm-5">
+                                <select class="selectpicker attendeeSelectpicker" data-live-search="false" multiple
+                                        name="attendees">
+                                    <option th:each="f:${attendeesSelection}" th:text="${f.leaderName}" th:value="${f.uuid}">
+                                        Choose...
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!--第五行-->
+                        <div class="form-group row">
+                            <label class="col-sm-1 col-form-label my-font-bold" >会议形式</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="meetingForm" name="meetingForm" >
+                                    <option></option>
+                                    <option value="0" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingForm == '0'}">传签会议</option>
+                                    <option value="1" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingForm == '1'}">电视电话会议</option>
+                                    <option value="2" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingForm == '2'}">现场会议</option>
+                                    <option value="3" th:selected="${manageMeetingSel!=null}?${manageMeetingSel.meetingForm == '3'}">学习会议</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-1 col-form-label my-font-bold" >会议地点</label>
+                            <div class="col-sm-5">
+                                <input class="form-control" id="meetingSite" name="meetingSite"
+                                       th:placeholder="会议地点"
+                                       th:value="${manageMeetingSel!=null}?${manageMeetingSel.meetingSite}">
+                            </div>
+                        </div>
+
+                        <!--第六行-->
+                            <div class="form-group row">
+                                <label class="col-sm-1 col-form-label my-font-bold" >备注</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" id="remark" name="remark"
+                                           th:placeholder="备注"
+                                           th:value="${manageMeetingSel!=null}?${manageMeetingSel.remark}">
+                                </div>
+                            </div>
+
+                        <div class="clr"></div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary btn-sm badge-pill fa fa-save" type="submit">
+                                    [[${manageMeetingSel!=null}?保存编辑:保存新增]]
+                                </button>
+                                <a class="btn btn-white btn-sm " href="javascript:history.back(-1)">[[#{message.cancel}]]</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/asserts/js/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/layer/layer.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap-table/bootstrap-table.min.js?v=1.1}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/tree-view/js/bootstrap-treeview-cl.js}" type="text/javascript"></script>
+<!--<script th:src="@{/asserts/js/plugins/iCheck/icheck.min.js}" type="text/javascript"></script>-->
+<script th:src="@{/asserts/js/layer/laydate/laydate.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/plugins/validate/jquery.validate.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/plugins/validate/messages_zh.min.js}" type="text/javascript"></script>
+<script th:replace="common/myJs::myCommonJs"></script>
+<script th:src="@{/asserts/js/jquery-file-upload.min.js?v=1.1}" type="text/javascript"></script>
+<script src="asserts/js/bootstrap-select.min.js" th:src="@{/asserts/js/bootstrap-select.min.js}"
+        type="text/javascript"></script>
+<script th:inline="javascript">
+    $(function () {
+        let attendeeSel = [[${manageMeetingSel} ? ${manageMeetingSel.manageMeetingAttendee}]];
+        if (attendeeSel) {
+            let arr = [];
+            for (var a = 0, length = attendeeSel.length; a < length; a++) {
+                arr.push(attendeeSel[a].leaderId);
+            }
+            $('.attendeeSelectpicker').selectpicker('val', arr);
+        }
+    })
+
+</script>
+
+</body>
+</html>

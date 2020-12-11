@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信息填报-会议信息管理</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
+
+    <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <!--<div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>搜索</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" id="query-search-div">
+                    <div class="row">
+                        <div class="col-sm-12 mt-4">
+                            <div class="form-group row">
+                                <label class="col-sm-1 col-form-label my-font-bold">版本年限</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="checkYear" name="checkYear">
+                                        <option>选择年限</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2017">2017</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group text-right">
+                                        <button class="btn btn-sm btn-success" type="button" onclick="createTable()">
+                                            查询
+                                        </button>
+                                        <button class="btn btn-sm btn-info" onclick="refreshQuery()">重置</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div class="text-right">
+                        <shiro:hasPermission name="会议信息管理_新增">
+                            <a class="btn btn-warning pull-right btn-sm badge-pill mb-1"
+                               th:href="@{/manageMeeting/goadd}"><i
+                                    class="fa fa-plus"> </i>新增</a>
+                        </shiro:hasPermission>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table id="table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="common/pop/confirm::showConfirm"></div>
+<div th:replace="common/pop/confirm2::showConfirm"></div>
+
+<script th:src="@{/asserts/js/jquery.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap.min.js}"></script>
+<!--<script th:src="@{/asserts/js/layer/layer.min.js}" type="text/javascript"></script>-->
+<script th:src="@{/asserts/js/plugins/footable/footable.all.min.js}"></script>
+<script th:src="@{/asserts/js/content.min.js}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/bootstrap-table.min.js?v=1.1}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}"></script>
+<script th:src="@{/asserts/js/layer/layer.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/laydate/laydate.js}"></script>
+<script th:replace="common/myJs::myCommonJs"></script>
+<script>
+    $(function () {
+        createTable();
+        lay('.dateRange').each(function () {
+            laydate.render({
+                elem: this
+                , range: '~'
+            });
+        });
+    });
+
+    function onExpand(data) {
+        for (var i = 0; i < data.total; i++)
+            $('#table').bootstrapTable('toggleDetailView', i);//展开详情行
+    }
+
+    function createTable() {
+        let url = '[[@{/manageMeeting/list}]]';
+        $("#table").bootstrapTable('destroy');
+        $("#table").bootstrapTable({
+            url: url,        //请求后台的URL（*）
+            method: 'post',
+            contentType: "application/x-www-form-urlencoded",
+            pagination: true,                   //是否显示分页（*）
+            cache: false,
+            pageSize: 10,//每页一条数据
+            striped: true,  //表格显示条纹
+            dataField: "list",
+            queryParamsType: "undefined",
+            queryParams: function queryParams(params) {   //设置查询参数
+                let param = {
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize,
+                };
+                return param;
+            },
+            onLoadSuccess: function (data) {
+                onExpand(data);
+            },
+            sidePagination: 'server',
+            pageNumber: 1,
+            columns: [
+                {field: "uuid", visible: false},
+                {field: "meetingName", title: "会议名称"},
+                {field: "meetingType", title: "会议类型",
+                    formatter: function (value, row) {
+                        return formatter.formatMeetingType(value);
+                    }
+                },
+                {field: "versionNum", title: "版本号(年号)"},
+                {field: "meetingForm", title: "会议形式",
+                    formatter: function (value, row) {
+                        return formatter.formatMeetingForm(value);
+                    }
+                },
+                {field: "meetingTime", title: "会议时间"},
+                {
+                    field: "cz", title: '操作',
+                    formatter: function (value, row) {
+                        let editHtml = '';
+                        let delHtml = '';
+                        let addHtml = '';
+                        if (row.status == 0 || row.status == 3) {
+                            if (checkAuthorization('会议信息管理_编辑'))
+                                editHtml = '<a href="javascript:;" class="btn btn-sm btn-success edit badge-pill mb-2" ><i class="fa fa-pencil"> </i>' + '编辑' + '</a>&nbsp;';
+                            if (checkAuthorization('会议信息管理_删除'))
+                                delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
+                        }
+                        let buttonhtml = editHtml + delHtml + addHtml;
+                        return buttonhtml;
+                    },
+                    events: {
+                        'click .edit': function (e, value, row, index) {
+                            let id = row.uuid;
+                            location.href = '[[@{'/manageMeeting/goedit'}]]' + '?uuid=' + id;
+                        },
+                        'click .del': function (e, value, row, index) {
+                            let id = row.uuid;
+                            let url = '[[@{'/manageMeeting/delete'}]]';
+                            let redirectUrl = '[[@{'/manageMeeting/go'}]]';
+                            commonAction.delAction(id, url, redirectUrl, 'confirmModal')
+                        }
+                    }
+                }
+            ]
+        });
+
+    }
+
+</script>
+</body>
+
+</html>

@@ -20,4 +20,6 @@ public interface ManageLeaderMapper {
     List<ManageLeader> getList(ManageLeader manageLeader);
 
     ManageLeader selectById(String uuid);
+
+    List<ManageLeader> getLeaders();
 }
