@@ -221,8 +221,8 @@
 <script th:inline="javascript">
     function addInput() {
         let input = $(
-            "<div><div class='col-sm-3'>" +
-            "<div class='col-sm-3'><input type='text'  name='itemsName'  class='form-control m-t-sm col-sm-3'  placeholder='事项名称'></div>" +
+            "<div><div class='col-sm-3'><input type='text'  name='itemsName'  class='form-control m-t-sm col-sm-3'  placeholder='事项名称'></div>" +
+            "<div class='col-sm-3'>" +
             "<select class=\"form-control\" id=\"votingFormula\" name=\"votingFormula\" >\n" +
             "<option>表决方式</option>\n" +
             "<option value=\"0\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '0'}\">赞成票超过应到会成员人数的4/5</option>\n" +
