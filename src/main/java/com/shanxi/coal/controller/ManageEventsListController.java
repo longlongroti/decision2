@@ -162,6 +162,14 @@ public class ManageEventsListController {
         return MyUtils.pageInfoToJson(pageInfo);
     }
 
+
+    @PostMapping("/listAllDetailItems")
+    @ResponseBody
+    public String listAllDetailItems() throws ParseException {
+        List<ManageEventsDetailItem> manageEventsDetailItems = manageEventsDetailsItemMapper.listAllPending();
+        return MyUtils.objectToJson(manageEventsDetailItems);
+    }
+
     @PostMapping("/listAll")
     @ResponseBody
     public String listAll() throws ParseException {

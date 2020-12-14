@@ -28,6 +28,16 @@ public class ManageMeeting extends CommonBean implements Serializable {
 
     private List<ManageMeetingAttendee> manageMeetingAttendee;
 
+    private List<ManageMeetingItems> manageMeetingItems;
+
+    public List<ManageMeetingItems> getManageMeetingItems() {
+        return manageMeetingItems;
+    }
+
+    public void setManageMeetingItems(List<ManageMeetingItems> manageMeetingItems) {
+        this.manageMeetingItems = manageMeetingItems;
+    }
+
     public List<ManageMeetingAttendee> getManageMeetingAttendee() {
         return manageMeetingAttendee;
     }

@@ -29,4 +29,6 @@ public interface ManageEventsDetailsItemMapper {
     List<ManageEventsDetailItem> listEquipIdByMain(String uuid);
 
     List<ManageEventsDetailItem> listByItemId(String uuid);
+
+    List<ManageEventsDetailItem> listAllPending();
 }
