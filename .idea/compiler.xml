@@ -9,6 +9,7 @@
         <module name="asset" />
         <module name="assets" />
         <module name="data" />
+        <module name="decision2" />
         <module name="project" />
       </profile>
     </annotationProcessing>
@@ -18,6 +19,7 @@
       <module name="asset" options="-parameters" />
       <module name="assets" options="-parameters" />
       <module name="data" options="-parameters" />
+      <module name="decision2" options="-parameters" />
       <module name="project" options="-parameters" />
     </option>
   </component>

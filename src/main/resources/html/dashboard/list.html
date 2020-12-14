@@ -14,7 +14,7 @@
     <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
-
+    <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
@@ -25,150 +25,233 @@
 <div class="wrapper wrapper-content animated fadeInRight">
 
 
-    <!--<div class="col-sm-12">-->
-        <!--<div class="ibox float-e-margins">-->
-            <!--<div class="ibox-content" style="padding: 8px 10px 0px 10px;">-->
-                <!--<div class="row">-->
-                    <!--<div class="col-sm-3">-->
-                        <!--<div class="ibox float-e-margins">-->
-                            <!--<div class="ibox-title" style="border-color: #1c84c6;">-->
-                                <!--<span class="label label-success pull-right">今日新增</span>-->
-                                <!--<h5><i class="fa fa-info-circle"></i>系统接入</h5>-->
-                            <!--</div>-->
-                            <!--<div class="ibox-content">-->
-                                <!--<h1 class="no-margins"><span class="deviceArchivesTotalCount"/>7</h1>-->
-                                <!--<div class="stat-percent font-bold text-success">0<span-->
-                                        <!--class="deviceArchivesPercent"></span>-->
-                                <!--</div>-->
-                                <!--<small>个</small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="col-md-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-primary pull-right"><span class="fa fa-user-md"></span> </span>
+                        <h5>领导班子</h5>
+                    </div>
+                    <div class="ibox-content">
 
-                    <!--<div class="col-sm-3">-->
-                        <!--<div class="ibox float-e-margins">-->
-                            <!--<div class="ibox-title" style="border-color: #1ab394;">-->
-                                <!--<span class="label label-primary pull-right">今日新增</span>-->
-                                <!--<h5><i class="fa fa-paper-plane"></i>报表接入</h5>-->
-                            <!--</div>-->
-                            <!--<div class="ibox-content">-->
-                                <!--<h1 class="no-margins"><span class="deviceReceiveTotalCount"/>45</h1>-->
-                                <!--<div class="stat-percent font-bold text-navy">0<span-->
-                                        <!--class="deviceReceivePercent"></span>-->
-                                <!--</div>-->
-                                <!--<small>个</small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="col-sm-3">-->
-                        <!--<div class="ibox float-e-margins">-->
-                            <!--<div class="ibox-title" style="border-color: #ed5565;">-->
-                                <!--<span class="label label-danger pull-right">今日新增</span>-->
-                                <!--<h5><i class="fa fa-user"></i>用户个数</h5>-->
-                            <!--</div>-->
-                            <!--<div class="ibox-content">-->
-                                <!--<h1 class="no-margins"><span class="deviceRollbackTotalCount"/>8</h1>-->
-                                <!--<div class="stat-percent font-bold text-danger">0<span-->
-                                        <!--class="deviceRollbackPercent"></span>-->
-                                <!--</div>-->
-                                <!--<small>个</small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="col-sm-3">-->
-                        <!--<div class="ibox float-e-margins">-->
-                            <!--<div class="ibox-title" style="border-color: #23c6c8;">-->
-                                <!--<span class="label label-info pull-right">今日新增</span>-->
-                                <!--<h5><i class="fa fa-vimeo-square"></i>访问次数</h5>-->
-                            <!--</div>-->
-                            <!--<div class="ibox-content">-->
-                                <!--<h1 class="no-margins"><span class="countvisit"/></h1>-->
-                                <!--<div class="stat-percent font-bold text-info"><span-->
-                                        <!--class="countvisittoday"></span>-->
-                                <!--</div>-->
-                                <!--<small>次</small>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="col-sm-4">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title" style="border-color: #37b8ad;">
-                <h3><i class="fa fa-bar-chart"></i>服务器CPU使用率</h3>
-            </div>
-            <div class="ibox-content" style="padding: 8px 10px 0px 10px;">
-                <div class="ibox float-e-margins">
-                    <div id="a9" style="width: 100%;height:400%;"></div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <h1 class="no-margins" id="aa">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>党委会成员</small>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <h1 class="no-margins" id="ab">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>党组会成员</small>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <h1 class="no-margins" id="ac">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>总经理办公室成员</small>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <h1 class="no-margins" id="ad">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>党委(党组)会成员</small>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <h1 class="no-margins" id="ae">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>股东会成员</small>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <h1 class="no-margins" id="af">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>董事会成员</small>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <h1 class="no-margins" id="ag">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>经理层办公会成员</small>
+                                </div>
+                            </div> <div class="col-md-2">
+                                <h1 class="no-margins" id="ah">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>职代会成员</small>
+                                </div>
+                            </div> <div class="col-md-2">
+                                <h1 class="no-margins" id="ai">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>其他</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title" style="border-color: #37b8ad;">
-                <h3><i class="fa fa-bar-chart"></i>服务器空间使用率</h3>
-            </div>
-            <div class="ibox-content" style="padding: 8px 10px 0px 10px;">
+
+
+            <div class="col-md-12">
                 <div class="ibox float-e-margins">
-                    <div id="a10" style="width: 100%;height:400%;"></div>
+                    <div class="ibox-title">
+                        <span class="label label-primary pull-right"><span class="fa fa-tint"></span> </span>
+                        <h5>事项清单</h5>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="ba">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>重大决策</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="bb">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>重要人事任免</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="bc">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>重大项目安排</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="bd">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>大额度资金运作</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-primary pull-right"><span class="fa fa-balance-scale"></span> </span>
+                        <h5>制度信息</h5>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="ca">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>议事规则</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="cb">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>公司章程</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="cc">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>授权管理办法</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="cd">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>董事会议事规则</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="ce">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>党委(党组)议事规则</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="cf">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>实施办法</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="cg">0</h1>
+                                <div class="font-bold text-navy">
+                                    <small>经理层办公室会议事规则</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-primary pull-right"><span class="fa fa-vimeo-square"></span> </span>
+                        <h5>会议信息</h5>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="da"></h1>
+                                <div class="font-bold text-navy">
+                                    <small>党委会</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="no-margins" id="db"></h1>
+                                <div class="font-bold text-navy">
+                                    <small>职代会</small>
+                                </div>
+                            </div> <div class="col-md-3">
+                                <h1 class="no-margins" id="dc"></h1>
+                                <div class="font-bold text-navy">
+                                    <small>党组会</small>
+                                </div>
+                            </div> <div class="col-md-3">
+                                <h1 class="no-margins" id="dd"></h1>
+                                <div class="font-bold text-navy">
+                                    <small>董事会</small>
+                                </div>
+                            </div> <div class="col-md-3">
+                                <h1 class="no-margins" id="de"></h1>
+                                <div class="font-bold text-navy">
+                                    <small>经理层办公室会</small>
+                                </div>
+                            </div> <div class="col-md-3">
+                                <h1 class="no-margins" id="df"></h1>
+                                <div class="font-bold text-navy">
+                                    <small>股东会</small>
+                                </div>
+                            </div> <div class="col-md-3">
+                                <h1 class="no-margins" id="dg"></h1>
+                                <div class="font-bold text-navy">
+                                    <small>党委(党组)会</small>
+                                </div>
+                            </div> <div class="col-md-3">
+                                <h1 class="no-margins" id="dh"></h1>
+                                <div class="font-bold text-navy">
+                                    <small>其他</small>
+                                </div>
+                            </div> <div class="col-md-3">
+                                <h1 class="no-margins" id="di"></h1>
+                                <div class="font-bold text-navy">
+                                    <small>总经理办公会</small>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-sm-4">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title" style="border-color: #37b8ad;">
-                <h3><i class="fa fa-bar-chart"></i>服务器内存使用率</h3>
-            </div>
-            <div class="ibox-content" style="padding: 8px 10px 0px 10px;">
-                <div class="ibox float-e-margins">
-                    <div id="a8" style="width: 100%;height:400%;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-sm-4">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title" style="border-color: #37b8ad;">
-                <h3><i class="fa fa-bar-chart"></i>实时CPU</h3>
-            </div>
-            <div class="ibox-content" style="padding: 8px 10px 0px 10px;">
-                <div class="ibox float-e-margins">
-                    <div id="a1" style="width: 100%;height:400%;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-4">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title" style="border-color: #37b8ad;">
-                <h3><i class="fa fa-bar-chart"></i>实时内存</h3>
-            </div>
-            <div class="ibox-content" style="padding: 8px 10px 0px 10px;">
-                <div class="ibox float-e-margins">
-                    <div id="a2" style="width: 100%;height:400%;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title" style="border-color: #37b8ad;">
-                <h3><i class="fa fa-bar-chart"></i>实时网络接包</h3>
-            </div>
-            <div class="ibox-content" style="padding: 8px 10px 0px 10px;">
-                <div class="ibox float-e-margins">
-                    <div id="a3" style="width: 100%;height:400%;"></div>
-                </div>
-            </div>
-        </div>
-    </div>-->
 </div>
 
 <div th:replace="common/pop/confirm::showConfirm"></div>
@@ -179,426 +262,59 @@
 <script th:src="@{/asserts/js/content.min.js}"></script>
 <script th:src="@{/asserts/js/echarts.min.js}" type="text/javascript"></script>
 
+<script th:src="@{/asserts/js/bootstrap-table/bootstrap-table.min.js?v=1}"></script>
+<script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}"></script>
 <script th:replace="common/myJs::myCommonJs"></script>
 
-<script th:inline="javascript">
+<script>
     $(function () {
-        a10();//服务器空间
-        a8();//产权树
-        a9();
-        a1();
-        a2();
-        a3();
 
+        a2();
+    });
+
+    function a2() {
         $.ajax({
-            url: [[@{'/home/counttotal'}]],
+            url: '[[@{/home/counttotal}]]',
             type: "post",
             success: function (data) {
                 data = eval('(' + data + ')');
-                $('.countvisit').text(data.countVisit);
-                $('.countvisittoday').text(data.countVisitToday);
-            }
-        });
-    });
+                $('#aa').text(data.aa);
+                $('#ab').text(data.ab);
+                $('#ac').text(data.ac);
+                $('#ad').text(data.ad);
+                $('#ae').text(data.ae);
+                $('#af').text(data.af);
+                $('#ag').text(data.ag);
+                $('#ah').text(data.ah);
+                $('#ai').text(data.ai);
 
-    function a1() {
-        var data = [];
-        let myChart = echarts.init(document.getElementById('a1'));
-        myChart.showLoading();
-        var option = {
-            tooltip: {
-                trigger: 'axis',
-                formatter: function (params) {
-                    params = params[0];
-                    var date = new Date(params.name);
-                    return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
+                $('#ba').text(data.ba);
+                $('#bb').text(data.bb);
+                $('#bc').text(data.bc);
+                $('#bd').text(data.bd);
+                $('#ca').text(data.ca);
+                $('#cb').text(data.cb);
+                $('#cc').text(data.cc);
+                $('#cd').text(data.cd);
+                $('#ce').text(data.ce);
+                $('#cf').text(data.cf);
+                $('#cg').text(data.cg);
 
-                },
-                axisPointer: {
-                    animation: false
-                }
-            },
-            xAxis: {
-                type: 'time',
-                splitLine: {
-                    show: false
-                }
-            },
-            yAxis: {
-                type: 'value',
-                boundaryGap: [0, '100%'],
-                splitLine: {
-                    show: false
-                },
-                max: 100,
-                min: 0
-            },
-            series: [{
-                name: '模拟数据',
-                type: 'line',
-                showSymbol: false,
-                hoverAnimation: false,
-                data: data
-            }]
-        };
+                $('#da').text(data.da);
+                $('#db').text(data.db);
+                $('#dc').text(data.dc);
+                $('#dd').text(data.dd);
+                $('#de').text(data.de);
+                $('#df').text(data.df);
+                $('#dg').text(data.dg);
+                $('#dh').text(data.dh);
+                $('#di').text(data.di);
 
-        myChart.hideLoading();
-        myChart.setOption(option);
-
-        setInterval(function () {
-            $.ajax({
-                url: [[@{'/home/countcpu'}]],
-                type: "POST",
-                success: function (datas) {
-                    datas = JSON.parse(datas);
-
-                    var a = {
-                        name: datas.serverCPUSyncTime,
-                        value: [
-                            datas.serverCPUSyncTime,
-                            datas.countCPUUsage]
-                    };
-                    data.push(a);
-                    if (data.length > 90) {
-                        data.shift()
-                    }
-                },
-                error: function (data) {
-                }
-            });
-
-            myChart.setOption({
-                series: [{
-                    data: data
-                }]
-            });
-        }, 2000);
-    }
-
-
-    function a2() {
-        var data = [];
-        let myChart = echarts.init(document.getElementById('a2'));
-        myChart.showLoading();
-        var option = {
-            tooltip: {
-                trigger: 'axis',
-                formatter: function (params) {
-                    params = params[0];
-                    var date = new Date(params.name);
-                    return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
-
-                },
-                axisPointer: {
-                    animation: false
-                }
-            },
-            xAxis: {
-                type: 'time',
-                splitLine: {
-                    show: false
-                }
-            },
-            yAxis: {
-                type: 'value',
-                boundaryGap: [0, '100%'],
-                splitLine: {
-                    show: false
-                },
-                max: 100,
-                min: 0
-            },
-            series: [{
-                name: '模拟数据',
-                type: 'line',
-                showSymbol: false,
-                hoverAnimation: false,
-                data: data
-            }]
-        };
-
-        myChart.hideLoading();
-        myChart.setOption(option);
-
-        setInterval(function () {
-            $.ajax({
-                url: [[@{'/home/countMemoryUsage'}]],
-                type: "POST",
-                success: function (datas) {
-                    datas = JSON.parse(datas);
-
-                    var a = {
-                        name: datas.serverMemorySyncTime,
-                        value: [
-                            datas.serverMemorySyncTime,
-                            datas.countServerMemory]
-                    };
-                    data.push(a);
-                    if (data.length > 90) {
-                        data.shift()
-                    }
-                },
-                error: function (data) {
-                }
-            });
-
-            myChart.setOption({
-                series: [{
-                    data: data
-                }]
-            });
-        }, 2000);
-    }
-
-    function a3() {
-        var data = [];
-        let myChart = echarts.init(document.getElementById('a3'));
-        myChart.showLoading();
-        var option = {
-            tooltip: {
-                trigger: 'axis',
-                formatter: function (params) {
-                    params = params[0];
-                    var date = new Date(params.name);
-                    return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
-
-                },
-                axisPointer: {
-                    animation: false
-                }
-            },
-            xAxis: {
-                type: 'time',
-                splitLine: {
-                    show: false
-                }
-            },
-            yAxis: {
-                type: 'value',
-                boundaryGap: [0, '100%'],
-                splitLine: {
-                    show: false
-                }
-            },
-            series: [{
-                name: '模拟数据',
-                type: 'line',
-                showSymbol: false,
-                hoverAnimation: false,
-                data: data
-            }]
-        };
-
-        myChart.hideLoading();
-        myChart.setOption(option);
-
-        setInterval(function () {
-            $.ajax({
-                url: [[@{'/home/countpackage'}]],
-                type: "POST",
-                success: function (datas) {
-                    datas = JSON.parse(datas);
-
-                    var a = {
-                        name: datas.serverPackageSyncTime,
-                        value: [
-                            datas.serverPackageSyncTime,
-                            datas.countPackage]
-                    };
-                    data.push(a);
-                    if (data.length > 90) {
-                        data.shift()
-                    }
-                },
-                error: function (data) {
-                }
-            });
-
-            myChart.setOption({
-                series: [{
-                    data: data
-                }]
-            });
-        }, 2500);
-    }
-
-
-    function a8() {
-        let myChart = echarts.init(document.getElementById('a8'));
-        myChart.showLoading();
-        a81(myChart);
-        setInterval(function () {
-            a81(myChart)
-        }, 2000);
-    }
-
-    function a81(myChart) {
-        $.ajax({
-            url: [[@{'/home/countMemoryUsage'}]],
-            type: "POST",
-            success: function (data) {
-                data = JSON.parse(data);
-                var option = {
-                    tooltip: {
-                        formatter: "{a} <br/>{b} : {c}%"
-                    },
-                    series: [
-                        {
-                            name: [[#{message.server.memory}]],
-                            type: 'gauge',
-                            detail: {formatter: '{value}%'},
-                            data: [{value: data.countServerMemory, name: [[#{message.memory}]]}],
-                            axisLine: {
-                                show: true,
-                                lineStyle: {
-                                    color: [
-                                        [1, new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                                            {
-                                                offset: 0.1,
-                                                color: "#FFC600"
-                                            },
-                                            {
-                                                offset: 0.6,
-                                                color: "#30D27C"
-                                            },
-                                            {
-                                                offset: 1,
-                                                color: "#0B95FF"
-                                            }
-                                        ])
-                                        ]
-                                    ]
-
-                                }
-                            }
-                        }
-                    ]
-                };
-                myChart.hideLoading();
-                myChart.setOption(option);
-            },
-            error: function (data) {
             }
         });
     }
 
-    function a9() {
-        let myChart = echarts.init(document.getElementById('a9'));
-        myChart.showLoading();
-        a91(myChart);
-        setInterval(function () {
-            a91(myChart)
-        }, 2000);
-    }
 
-    function a91(myChart) {
-        $.ajax({
-            url: [[@{'/home/countcpu'}]],
-            type: "POST",
-            success: function (data) {
-                data = JSON.parse(data);
-                var option = {
-                    tooltip: {
-                        formatter: "{a} <br/>{b} : {c}%"
-                    },
-                    series: [
-                        {
-                            name: 'CPU',
-                            type: 'gauge',
-                            detail: {formatter: '{value}%'},
-                            data: [{value: data.countCPUUsage, name: 'CPU'}],
-                            axisLine: {
-                                show: true,
-                                lineStyle: {
-                                    color: [
-                                        [1, new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                                            {
-                                                offset: 0.1,
-                                                color: "#FFC600"
-                                            },
-                                            {
-                                                offset: 0.6,
-                                                color: "#30D27C"
-                                            },
-                                            {
-                                                offset: 1,
-                                                color: "#0B95FF"
-                                            }
-                                        ])
-                                        ]
-                                    ]
-
-                                }
-                            }
-                        }
-                    ]
-                };
-                myChart.hideLoading();
-                myChart.setOption(option);
-            },
-            error: function (data) {
-            }
-        });
-    }
-
-    function a10() {
-        let myChart = echarts.init(document.getElementById('a10'));
-        myChart.showLoading();
-        a101(myChart);
-        setInterval(function () {
-            a101(myChart)
-        }, 100000);
-    }
-
-    function a101(myChart) {
-        $.ajax({
-            url: [[@{'/home/countDiskUsage'}]],
-            type: "POST",
-            success: function (data) {
-                data = JSON.parse(data);
-                var option = {
-                    tooltip: {
-                        formatter: "{a} <br/>{b} : {c}%"
-                    },
-                    series: [
-                        {
-                            name: [[#{message.server.disk}]],
-                            type: 'gauge',
-                            detail: {formatter: '{value}%'},
-                            data: [{value: data.countDiskUsage, name: [[#{message.disk}]]}],
-                            axisLine: {
-                                show: true,
-                                lineStyle: {
-                                    color: [
-                                        [1, new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                                            {
-                                                offset: 0.1,
-                                                color: "#FFC600"
-                                            },
-                                            {
-                                                offset: 0.6,
-                                                color: "#30D27C"
-                                            },
-                                            {
-                                                offset: 1,
-                                                color: "#0B95FF"
-                                            }
-                                        ])
-                                        ]
-                                    ]
-
-                                }
-                            }
-                        }
-                    ]
-                };
-                myChart.hideLoading();
-                myChart.setOption(option);
-            },
-            error: function (data) {
-            }
-        });
-    }
 </script>
 </body>
 
