@@ -5,33 +5,47 @@ import java.util.Date;
 import java.util.List;
 
 public class DicEventsCatalog implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private String id;
+    private String name;
+    private List<DicEventsCatalog> children;
     private String uuid;
-
     private Date createdDate;
-
     private String createdBy;
-
     private String createdByOrg;
-
     private String modifiedBy;
-
     private Date modifiedDate;
-
     private Byte isDel;
-
     private Byte status;
-
     private String remark;
-
     private String catalogA;
-
     private String catalogB;
-
     private String catalogC;
-
     private String catalogCode;
 
-    private static final long serialVersionUID = 1L;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<DicEventsCatalog> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<DicEventsCatalog> children) {
+        this.children = children;
+    }
 
     public String getUuid() {
         return uuid;

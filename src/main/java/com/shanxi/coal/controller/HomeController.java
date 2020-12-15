@@ -1,6 +1,8 @@
 package com.shanxi.coal.controller;
 
+import com.shanxi.coal.dao.DicEventsCatalogMapper;
 import com.shanxi.coal.dao.HomeMapper;
+import com.shanxi.coal.domain.DicEventsCatalog;
 import com.shanxi.coal.utils.MyUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,13 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping("/home")
 public class HomeController {
     @Resource
     HomeMapper homeMapper;
+    @Resource
+    DicEventsCatalogMapper dicEventsCatalogMapper;
 
     @PostMapping("/counttotal")
     @ResponseBody
@@ -79,6 +85,45 @@ public class HomeController {
         map.put("cf", cf);
         map.put("cg", cg);
         return MyUtils.objectToJson(map);
+    }
+
+    @PostMapping("eventlist")
+    @ResponseBody
+    public String eventlist() {
+        String json = getTreeJson();
+        return json;
+    }
+
+    private String getTreeJson() {
+        DicEventsCatalog p = new DicEventsCatalog();
+        p.setId("1");
+        p.setName("决策事项");
+        List<DicEventsCatalog> children = new ArrayList<>();
+        List<DicEventsCatalog> eventsList = dicEventsCatalogMapper.getEventsListA();
+        for (DicEventsCatalog e : eventsList) {
+            e.setId(e.getUuid());
+            e.setName(e.getCatalogA());
+            List<DicEventsCatalog> eventsList2 = dicEventsCatalogMapper.getEventsListB(e.getCatalogA());
+            List<DicEventsCatalog> children2 = new ArrayList<>();
+            for (DicEventsCatalog b : eventsList2) {
+                b.setId(b.getUuid());
+                b.setName(b.getCatalogB());
+                List<DicEventsCatalog> eventsList3 = dicEventsCatalogMapper.getEventsListC(b.getCatalogB());
+                List<DicEventsCatalog> children3 = new ArrayList<>();
+                for (DicEventsCatalog c : eventsList3) {
+                    c.setId(c.getUuid());
+                    c.setName(c.getCatalogC());
+                    c.setChildren(null);
+                    children3.add(c);
+                }
+                b.setChildren(children3);
+                children2.add(b);
+            }
+            e.setChildren(children2);
+            children.add(e);
+        }
+        p.setChildren(children);
+        return MyUtils.objectToJson(p);
     }
 
 }

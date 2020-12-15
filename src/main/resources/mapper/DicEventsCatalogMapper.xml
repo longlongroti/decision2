@@ -204,4 +204,13 @@
   <select id="listAll"  parameterType="java.lang.String" resultMap="BaseResultMap">
     select * from dic_events_catalog
   </select>
+    <select id="getEventsListA"  parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from dic_events_catalog group by catalog_a
+    </select>
+  <select id="getEventsListB"  parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from dic_events_catalog where catalog_a  = #{type,jdbcType=CHAR}  group by catalog_b
+  </select>
+  <select id="getEventsListC"  parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from dic_events_catalog where catalog_b  = #{type,jdbcType=CHAR}
+  </select>
 </mapper>

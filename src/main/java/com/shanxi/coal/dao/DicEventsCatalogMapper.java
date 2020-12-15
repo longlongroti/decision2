@@ -23,4 +23,10 @@ public interface DicEventsCatalogMapper {
     List<DicEventsCatalog> listInIds(@Param("list") String[] s);
 
     List<DicEventsCatalog> listAll();
+
+    List<DicEventsCatalog> getEventsListA();
+
+    List<DicEventsCatalog> getEventsListB(String catalogA);
+
+    List<DicEventsCatalog> getEventsListC(String catalogB);
 }
