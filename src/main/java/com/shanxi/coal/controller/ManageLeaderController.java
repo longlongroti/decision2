@@ -6,6 +6,7 @@ import com.shanxi.coal.dao.ManageLeaderGroupMapper;
 import com.shanxi.coal.dao.ManageLeaderMapper;
 import com.shanxi.coal.domain.ManageLeader;
 import com.shanxi.coal.domain.ManageLeaderGroup;
+import com.shanxi.coal.service.CommonService;
 import com.shanxi.coal.utils.MyUtils;
 import liquibase.util.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,8 @@ public class ManageLeaderController {
     ManageLeaderMapper manageLeaderMapper;
     @Resource
     ManageLeaderGroupMapper manageLeaderGroupMapper;
-
+    @Resource
+    CommonService commonService;
     @GetMapping("/go")
     public String go() {
         return "manageLeader/list";
@@ -65,6 +67,9 @@ public class ManageLeaderController {
         String[] officeEndDates = officeEndDate.split(",");
         MyUtils.setCommonBean(manageLeader);
         manageLeaderMapper.insertSelective(manageLeader);
+        if (StringUtils.isNotEmpty(manageLeader.getFileIds())) {
+            commonService.batchUpdateFileId(manageLeader.getFileIds(), manageLeader.getUuid());
+        }
         return insertDetail(leaderGroups, jobTitles, officeStartDates, officeEndDates, manageLeader.getUuid());
     }
 
@@ -79,6 +84,9 @@ public class ManageLeaderController {
         String[] officeStartDates = officeStartDate.split(",");
         String[] officeEndDates = officeEndDate.split(",");
         manageLeaderMapper.updateByPrimaryKeySelective(manageLeader);
+        if (StringUtils.isNotEmpty(manageLeader.getFileIds())) {
+            commonService.batchUpdateFileId(manageLeader.getFileIds(), manageLeader.getUuid());
+        }
         String mainUUid = manageLeader.getUuid();
         manageLeaderGroupMapper.deleteByParentId(mainUUid);
         return insertDetail(leaderGroups, jobTitles, officeStartDates, officeEndDates, manageLeader.getUuid());
@@ -96,6 +104,7 @@ public class ManageLeaderController {
             manageLeaderGroup.setOfficeEndDate(checkNullAndReturn(officeEndDates, i));
             manageLeaderGroupMapper.insertSelective(manageLeaderGroup);
         }
+
         return "redirect:/manageLeader/go";
     }
 

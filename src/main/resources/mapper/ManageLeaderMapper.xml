@@ -14,6 +14,21 @@
     <result column="leader_name" jdbcType="VARCHAR" property="leaderName" />
     <result column="leader_sort" jdbcType="VARCHAR" property="leaderSort" />
   </resultMap>
+  <resultMap id="BaseResultMap2" type="com.shanxi.coal.domain.ManageLeader">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="leader_name" jdbcType="VARCHAR" property="leaderName" />
+    <result column="leader_sort" jdbcType="VARCHAR" property="leaderSort" />
+    <collection property="fileUploads" column="uuid"
+                select="com.shanxi.coal.dao.FileUploadedMapper.listByCategoryId"></collection>
+  </resultMap>
   <sql id="Base_Column_List">
     uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 
     status, remark, leader_name, leader_sort
@@ -171,7 +186,7 @@
     order by created_date desc
   </select>
 
-  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap2">
     select
     <include refid="Base_Column_List"/>
     from manage_leader

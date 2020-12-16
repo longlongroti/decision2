@@ -11,23 +11,64 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.List;
 import java.util.*;
 
+import static jdk.nashorn.internal.objects.NativeError.getFileName;
+
 public class MyUtils {
+    public static FileUploaded buildFileUploaded(FileUploaded fileUploaded, String fileName, String filePath, Long fileSize, String contentType, String remark) {
+        fileUploaded.setUuid(UUID.randomUUID().toString());
+        fileUploaded.setFileName(fileName);
+        fileUploaded.setFilePath(filePath);
+        fileUploaded.setFileSize(fileSize);
+        fileUploaded.setFileType(contentType);
+        fileUploaded.setCreatedBy(MyUtils.getSessionUser().getUuid());
+        fileUploaded.setCreatedByOrg(MyUtils.getSessionUser().getOrgId());
+        fileUploaded.setRemark(remark);
+        return fileUploaded;
+    }
+
+    public static String uploadFile(HttpServletRequest request, MultipartFile file, String path) {
+        File destFile = makeDir(path);
+        File f = new File(destFile.getAbsoluteFile() + File.separator + getFileName(file.getOriginalFilename()));
+        try {
+            file.transferTo(f);
+            return f.getAbsolutePath();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static File makeDir(String path) {
+        String folder = MyDateTimeUtils.strNow("yyyyMMdd");
+        path = path + folder;
+        File destFile = new File(path);
+        if (!destFile.exists()) {
+            destFile.mkdirs();
+        }
+        return destFile;
+    }
+
+    public static String getFileName(String originalFileName) {
+        String newFileName = MyDateTimeUtils.strNow("yyyyMMddHHmmssSSS");
+        newFileName = newFileName + UUID.randomUUID().toString();
+        String suffix = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        String fileName = newFileName + "." + suffix;
+        return fileName;
+    }
 
     public static List<String> buildCommonDataPower() {
         List<SysUserDataRole> sysUserDataRoles = getSessionUser().getSysUserDataRoles();

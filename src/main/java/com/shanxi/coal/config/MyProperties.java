@@ -30,6 +30,8 @@ public class MyProperties {
     private Map<String,Map<String,String>> flow = new HashMap<>();
     private List<String> auditOrg = new ArrayList<>();
     private List<String> rentCompany = new ArrayList<>();
+    private String fileUploadedPath;
+
 
     public List<String> getRentCompany() {
         return rentCompany;
@@ -78,9 +80,6 @@ public class MyProperties {
     public void setPowerSpec(Map<String, List<String>> powerSpec) {
         this.powerSpec = powerSpec;
     }
-
-
-    private String fileUploadedPath;
 
     public String getFileUploadedPath() {
         return fileUploadedPath;

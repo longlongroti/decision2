@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.FileUploadedMapper">
+    <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.FileUploaded">
+        <id column="uuid" jdbcType="CHAR" property="uuid"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate"/>
+        <result column="is_del" jdbcType="TINYINT" property="isDel"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
+        <result column="file_path" jdbcType="VARCHAR" property="filePath"/>
+        <result column="file_type" jdbcType="VARCHAR" property="fileType"/>
+        <result column="file_size" jdbcType="BIGINT" property="fileSize"/>
+        <result column="file_category" jdbcType="VARCHAR" property="fileCategory"/>
+        <result column="file_category_id" jdbcType="VARCHAR" property="fileCategoryId"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del,
+    status, file_name, file_path, file_size, file_category, file_category_id,file_type,remark
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_file_uploaded
+        where uuid = #{uuid,jdbcType=CHAR}
+    </select>
+    <select id="listFile" resultMap="BaseResultMap">
+        select * from tbl_file_uploaded
+        <where>
+            <if test="fileName != null">
+                AND file_name LIKE concat(concat('%',#{fileName,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="fileCategory != null">
+                AND file_category  = #{fileCategory,jdbcType=VARCHAR}
+            </if>
+
+            <include refid="Common.condition_sql"/>
+        </where>
+        order by created_date desc
+    </select>
+
+    <select id="listRemarkedByCategoryId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from tbl_file_uploaded
+        where file_category_id = #{fileCategoryId,jdbcType=CHAR} and remark ='1' and is_del = 0 and file_category_id is not null and file_category_id !=''
+        order by created_date desc
+    </select>
+    <select id="listContractAuth" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from tbl_file_uploaded
+        where file_category_id = #{fileCategoryId,jdbcType=CHAR} and remark ='0' and is_del = 0 and file_category = '240' and file_category_id is not null and file_category_id !=''
+        order by created_date desc
+    </select>
+
+    <select id="listByCategoryId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from tbl_file_uploaded
+        where file_category_id = #{fileCategoryId,jdbcType=CHAR}
+        order by created_date desc
+    </select>
+
+    <select id="listSignature" parameterType="java.lang.String" resultMap="BaseResultMap">
+          select * from tbl_file_uploaded
+        where file_category_id = #{fileCategoryId,jdbcType=CHAR} and remark ='0' and is_del = 0 and file_category = '300' and file_category_id is not null and file_category_id !=''
+        order by created_date desc limit 1
+    </select>
+    <select id="listContractFile" parameterType="java.lang.String" resultMap="BaseResultMap">
+          select * from tbl_file_uploaded
+        where file_category_id = #{fileCategoryId,jdbcType=CHAR} and remark ='0' and is_del = 0 and file_category = '200' and file_category_id is not null and file_category_id !=''
+        order by created_date desc
+    </select>
+    <select id="listContractSignature" parameterType="java.lang.String" resultMap="BaseResultMap">
+          select * from tbl_file_uploaded
+        where file_category_id = #{fileCategoryId,jdbcType=CHAR} and remark ='0' and is_del = 0 and file_category = '210' and file_category_id is not null and file_category_id !=''
+        order by created_date desc
+    </select>
+    <select id="listContractQualification" parameterType="java.lang.String" resultMap="BaseResultMap">
+          select * from tbl_file_uploaded
+        where file_category_id = #{fileCategoryId,jdbcType=CHAR} and remark ='0' and is_del = 0 and file_category = '220' and file_category_id is not null and file_category_id !=''
+        order by created_date desc
+    </select>
+    <select id="listContractTech" parameterType="java.lang.String" resultMap="BaseResultMap">
+          select * from tbl_file_uploaded
+        where file_category_id = #{fileCategoryId,jdbcType=CHAR} and remark ='0' and is_del = 0 and file_category = '230' and file_category_id is not null and file_category_id !=''
+        order by created_date desc
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from tbl_file_uploaded
+        where uuid = #{uuid,jdbcType=CHAR}
+    </delete>
+    <insert id="insert" parameterType="com.shanxi.coal.domain.FileUploaded">
+    insert into tbl_file_uploaded (uuid, created_date, created_by,
+      created_by_org, modified_by, modified_date,
+      is_del, status, file_name,file_type,
+      file_path, file_size, file_category,
+      file_category_id,remark)
+    values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR},
+      #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP},
+      #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{fileName,jdbcType=VARCHAR},#{fileType,jdbcType=VARCHAR},
+      #{filePath,jdbcType=VARCHAR}, #{fileSize,jdbcType=BIGINT}, #{fileCategory,jdbcType=VARCHAR},
+      #{fileCategoryId,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.shanxi.coal.domain.FileUploaded">
+        insert into tbl_file_uploaded
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uuid != null">
+                uuid,
+            </if>
+            <if test="createdDate != null">
+                created_date,
+            </if>
+            <if test="createdBy != null">
+                created_by,
+            </if>
+            <if test="createdByOrg != null">
+                created_by_org,
+            </if>
+            <if test="modifiedBy != null">
+                modified_by,
+            </if>
+            <if test="modifiedDate != null">
+                modified_date,
+            </if>
+            <if test="isDel != null">
+                is_del,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="fileName != null">
+                file_name,
+            </if>
+            <if test="fileType != null">
+                file_type,
+            </if>
+            <if test="filePath != null">
+                file_path,
+            </if>
+            <if test="fileSize != null">
+                file_size,
+            </if>
+            <if test="fileCategory != null">
+                file_category,
+            </if>
+            <if test="fileCategoryId != null">
+                file_category_id,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uuid != null">
+                #{uuid,jdbcType=CHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdByOrg != null">
+                #{createdByOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedBy != null">
+                #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedDate != null">
+                #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null">
+                #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="fileName != null">
+                #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="fileType != null">
+                #{fileType,jdbcType=VARCHAR},
+            </if>
+            <if test="filePath != null">
+                #{filePath,jdbcType=VARCHAR},
+            </if>
+            <if test="fileSize != null">
+                #{fileSize,jdbcType=BIGINT},
+            </if>
+            <if test="fileCategory != null">
+                #{fileCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="fileCategoryId != null">
+                #{fileCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.FileUploaded">
+        update tbl_file_uploaded
+        <set>
+            <if test="createdDate != null">
+                created_date = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdByOrg != null">
+                created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedDate != null">
+                modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="fileName != null">
+                file_name = #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="fileType != null">
+                file_type = #{fileType,jdbcType=VARCHAR},
+            </if>
+            <if test="filePath != null">
+                file_path = #{filePath,jdbcType=VARCHAR},
+            </if>
+            <if test="fileSize != null">
+                file_size = #{fileSize,jdbcType=BIGINT},
+            </if>
+            <if test="fileCategory != null">
+                file_category = #{fileCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="fileCategoryId != null">
+                file_category_id = #{fileCategoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where uuid = #{uuid,jdbcType=CHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.FileUploaded">
+    update tbl_file_uploaded
+    set created_date = #{createdDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_name = #{fileType,jdbcType=VARCHAR},
+      file_path = #{filePath,jdbcType=VARCHAR},
+      file_size = #{fileSize,jdbcType=BIGINT},
+      file_category = #{fileCategory,jdbcType=VARCHAR},
+      file_category_id = #{fileCategoryId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+    <update id="updateSignatureBy" parameterType="java.lang.String">
+       update  tbl_file_uploaded set file_category_id = '', file_category = ''
+        where file_category= #{fileCategory,jdbcType=VARCHAR} and  file_category_id = #{fileCategoryId,jdbcType=VARCHAR}
+    </update>
+</mapper>
