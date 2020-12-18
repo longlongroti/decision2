@@ -6,6 +6,7 @@ import com.shanxi.coal.dao.ManageSystemItemsMapper;
 import com.shanxi.coal.dao.ManageSystemMapper;
 import com.shanxi.coal.domain.ManageSystem;
 import com.shanxi.coal.domain.ManageSystemItems;
+import com.shanxi.coal.service.CommonService;
 import com.shanxi.coal.utils.MyUtils;
 import liquibase.util.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,8 @@ public class ManageSystemController {
     ManageSystemMapper manageSystemMapper;
     @Resource
     ManageSystemItemsMapper manageSystemItemsMapper;
-
+    @Resource
+    CommonService commonService;
     @GetMapping("/go")
     public String go() {
         return "manageSystem/list";
@@ -63,6 +65,9 @@ public class ManageSystemController {
         String[] peopleCounts = peopleCount.split(",");
         MyUtils.setCommonBean(manageSystem);
         manageSystemMapper.insertSelective(manageSystem);
+        if (StringUtils.isNotEmpty(manageSystem.getFileIds())) {
+            commonService.batchUpdateFileId(manageSystem.getFileIds(), manageSystem.getUuid());
+        }
         return insertDetail(itemsNames, votingFormulas, peopleCounts, manageSystem.getUuid());
     }
 
@@ -74,8 +79,10 @@ public class ManageSystemController {
         String[] votingFormulas = votingFormula.split(",");
         String[] peopleCounts = peopleCount.split(",");
         manageSystemMapper.updateByPrimaryKeySelective(manageSystem);
-        String mainUUid = manageSystem.getUuid();
-        manageSystemItemsMapper.deleteByParentId(mainUUid);
+        if (StringUtils.isNotEmpty(manageSystem.getFileIds())) {
+            commonService.batchUpdateFileId(manageSystem.getFileIds(), manageSystem.getUuid());
+        }
+        manageSystemItemsMapper.deleteByParentId(manageSystem.getUuid());
         return insertDetail(itemsNames, votingFormulas, peopleCounts, manageSystem.getUuid());
     }
 

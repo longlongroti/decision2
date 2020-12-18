@@ -37,6 +37,8 @@
                     <form th:action="@{/manageSystem/add}" th:method="post">
                         <input name="_method" th:if="${manageSystemSel!=null}" type="hidden" value="PUT"/>
                         <input id="uuid" name="uuid" th:value="${manageSystemSel!=null}?${manageSystemSel.uuid}" type="hidden"/>
+                        <input id="fileIds" name="fileIds" type="hidden" value=""/>
+
                         <!--第一行-->
                         <fieldset>
                             <div class="form-group row">
@@ -178,15 +180,17 @@
                             </span>
                         </div>
                         <input type="button" class="btn btn-success" onclick="addInput()" value="添加" />
-
-                        <!--<div class="hr-line-dashed" style="margin: 0 0 15px 0;"></div>
+                        <div class="clr"></div>
+                        <div class="hr-line-dashed"></div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label   my-font-bold"
-                                   for="fileuploader">设备领用附件</label>
+                                   for="fileuploader">相关凭证</label>
+                        </div>
+                        <div class="form-group row">
                             <div class="col-sm-8 ">
-                                <div id="fileuploader">上传</div>
+                                <div id="fileuploader">Upload</div>
                             </div>
-                        </div>-->
+                        </div>
 
                         <div class="clr"></div>
                         <div class="hr-line-dashed"></div>
@@ -219,6 +223,13 @@
 <script th:src="@{/asserts/js/jquery-file-upload.min.js?v=1.1}" type="text/javascript"></script>
 
 <script th:inline="javascript">
+    $(function () {
+        let ret = [[${manageSystemSel!=null}?${manageSystemSel.fileUploads}]];
+        myFileAction.do("fileuploader", "fileIds", "managesystem", ret);
+
+
+    })
+
     function addInput() {
         let input = $(
             "<div><div class='col-sm-3'><input type='text'  name='itemsName'  class='form-control m-t-sm col-sm-3'  placeholder='事项名称'></div>" +
