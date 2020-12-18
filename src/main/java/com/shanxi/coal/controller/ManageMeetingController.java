@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shanxi.coal.dao.*;
 import com.shanxi.coal.domain.*;
+import com.shanxi.coal.service.CommonService;
 import com.shanxi.coal.utils.MyUtils;
 import liquibase.util.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,8 @@ public class ManageMeetingController {
     ManageMeetingAttendeeMapper manageMeetingAttendeeMapper;
     @Resource
     ManageMeetingItemsMapper manageMeetingItemsMapper;
-
+    @Resource
+    CommonService commonService;
     @GetMapping("/go")
     public String go() {
         return "manageMeeting/list";
@@ -62,6 +64,9 @@ public class ManageMeetingController {
     public String add(ManageMeeting manageMeeting) {
         MyUtils.setCommonBean(manageMeeting);
         manageMeetingMapper.insertSelective(manageMeeting);
+        if (StringUtils.isNotEmpty(manageMeeting.getFileIds())) {
+            commonService.batchUpdateFileId(manageMeeting.getFileIds(), manageMeeting.getUuid());
+        }
         batchInsertAttendee(manageMeeting);
         return "manageMeeting/list";
     }
@@ -87,6 +92,9 @@ public class ManageMeetingController {
     @PutMapping("/add")
     public String update(ManageMeeting manageMeeting) {
         manageMeetingMapper.updateByPrimaryKeySelective(manageMeeting);
+        if (StringUtils.isNotEmpty(manageMeeting.getFileIds())) {
+            commonService.batchUpdateFileId(manageMeeting.getFileIds(), manageMeeting.getUuid());
+        }
         manageMeetingAttendeeMapper.deleteByMeetingId(manageMeeting.getUuid());
         batchInsertAttendee(manageMeeting);
         return "manageMeeting/list";

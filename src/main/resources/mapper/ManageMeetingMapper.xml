@@ -43,7 +43,8 @@
     <result column="meeting_site" jdbcType="VARCHAR" property="meetingSite" />
     <result column="compere_id" jdbcType="VARCHAR" property="compereId" />
     <result column="compere_name" jdbcType="VARCHAR" property="compereName" />
-
+    <collection property="fileUploads" column="uuid"
+                select="com.shanxi.coal.dao.FileUploadedMapper.listByCategoryId"></collection>
     <collection property="manageMeetingAttendee" column="uuid"
                 select="com.shanxi.coal.dao.ManageMeetingAttendeeMapper.listByMeetingId"></collection>
   </resultMap>

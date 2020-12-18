@@ -26,6 +26,26 @@ public class ManageMeeting extends CommonBean implements Serializable {
 
     private String attendees;
 
+    private List<FileUploaded> fileUploads;
+
+    private String fileIds;
+
+    public String getFileIds() {
+        return fileIds;
+    }
+
+    public void setFileIds(String fileIds) {
+        this.fileIds = fileIds;
+    }
+
+    public List<FileUploaded> getFileUploads() {
+        return fileUploads;
+    }
+
+    public void setFileUploads(List<FileUploaded> fileUploads) {
+        this.fileUploads = fileUploads;
+    }
+
     private List<ManageMeetingAttendee> manageMeetingAttendee;
 
     private List<ManageMeetingItems> manageMeetingItems;
