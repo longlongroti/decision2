@@ -1,20 +1,33 @@
 package com.shanxi.coal.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelReader;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.read.metadata.ReadSheet;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shanxi.coal.dao.ManageSystemItemsMapper;
 import com.shanxi.coal.dao.ManageSystemMapper;
+import com.shanxi.coal.domain.ManageLeader;
+import com.shanxi.coal.domain.ManageLeaderGroup;
 import com.shanxi.coal.domain.ManageSystem;
 import com.shanxi.coal.domain.ManageSystemItems;
+import com.shanxi.coal.excel.*;
 import com.shanxi.coal.service.CommonService;
 import com.shanxi.coal.utils.MyUtils;
 import liquibase.util.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
@@ -139,4 +152,42 @@ public class ManageSystemController {
         return "ok";
     }
 
+
+    @GetMapping("/exportExcel.xlsx")
+    public void exportExcel(HttpServletResponse response) throws ParseException, IOException {
+        String fileName = "报表";
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        fileName = URLEncoder.encode(fileName, "UTF-8");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream()).build();
+        ManageSystem where = new ManageSystem();
+        where.setIsDel(0);
+        List<ManageSystem> manageSystems = manageSystemMapper.getList(where);
+        WriteSheet writeSheet = EasyExcel.writerSheet(0, "制度信息").registerWriteHandler(new ManageSystemHandler()).head(ManageSystem.class).build();
+        excelWriter.write(manageSystems, writeSheet);
+        List<ManageSystemItems> manageSystemItems = manageSystemItemsMapper.list();
+        writeSheet = EasyExcel.writerSheet(1, "所属类别").registerWriteHandler(new ManageSystemItemsHandler()).head(ManageSystemItems.class).build();
+        excelWriter.write(manageSystemItems, writeSheet);
+        excelWriter.finish();
+    }
+
+    @PostMapping(value = "/importExcel.xlsx")
+    public @ResponseBody
+    String importPicFile1(@RequestParam MultipartFile file, HttpServletRequest request) {
+        try {
+            ExcelReader excelReader = EasyExcel.read(file.getInputStream()).build();
+            ReadSheet readSheet0 =
+                    EasyExcel.readSheet(0).head(ManageSystem.class).registerReadListener(new ManageSystemListener(manageSystemMapper)).build();
+            ReadSheet readSheet2 =
+                    EasyExcel.readSheet(1).head(ManageSystemItems.class).registerReadListener(new ManageSystemItemsListener(manageSystemItemsMapper)).build();
+            excelReader.read(readSheet0,  readSheet2 );
+            // 这里千万别忘记关闭，读的时候会创建临时文件，到时磁盘会崩的
+            excelReader.finish();
+            return MyUtils.objectToJson("成功");
+        } catch (Exception e) {
+            return MyUtils.objectToJson("文件格式不正确，请参考导出的文件格式");
+        }
+    }
 }

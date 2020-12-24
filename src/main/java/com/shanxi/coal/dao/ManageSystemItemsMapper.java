@@ -23,4 +23,6 @@ public interface ManageSystemItemsMapper {
 
 
     void deleteByParentId(String mainUUid);
+
+    List<ManageSystemItems> list();
 }

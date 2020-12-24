@@ -9,7 +9,8 @@ import java.util.Date;
 
 public class ManageLeaderGroup extends CommonBean implements Serializable {
     private static final long serialVersionUID = 1L;
-    @ExcelIgnore
+    @ColumnWidth(40)
+    @ExcelProperty(value = {"唯一标识"}, index = 5)
     private String uuid;
     @ColumnWidth(20)
     @ExcelProperty(value = {"所属领导班子"}, index = 1)

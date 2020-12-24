@@ -1,8 +1,12 @@
 package com.shanxi.coal.domain;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
+
 import java.io.Serializable;
 
 public class ManageMeetingItems extends CommonBean implements Serializable {
+
     private String parentId;
 
     private String eventCode;

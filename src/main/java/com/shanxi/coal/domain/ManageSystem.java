@@ -1,29 +1,55 @@
 package com.shanxi.coal.domain;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 public class ManageSystem extends CommonBean implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @ColumnWidth(40)
+    @ExcelProperty(value = {"制度唯一标识"}, index = 0)
+    private String uuid;
+    @ColumnWidth(20)
+    @ExcelProperty(value = {"制度名称"}, index = 1)
     private String systemName;
-
+    @ColumnWidth(20)
+    @ExcelProperty(value = {"制度类型"}, index = 2)
     private String systemType;
-
+    @ExcelIgnore
     private String systemTypeId;
-
+    @ColumnWidth(20)
+    @ExcelProperty(value = {"审批日期"}, index = 7)
     private String approveDate;
-
+    @ColumnWidth(20)
+    @ExcelProperty(value = {"生效日期"}, index = 3)
     private String effectiveDate;
-
+    @ColumnWidth(20)
+    @ExcelProperty(value = {"失效日期"}, index = 4)
     private String expiryDate;
-
+    @ColumnWidth(20)
+    @ExcelProperty(value = {"经过合法审查"}, index = 5)
     private String isLegalApprove;
-
+    @ColumnWidth(20)
+    @ExcelProperty(value = {"会议类型"}, index = 6)
     private String meetingType;
-
+    @ExcelIgnore
     private List<FileUploaded> fileUploads;
-
+    @ExcelIgnore
     private String fileIds;
+
+    @Override
+    public String getUuid() {
+        return uuid;
+    }
+
+    @Override
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getFileIds() {
         return fileIds;
@@ -40,9 +66,6 @@ public class ManageSystem extends CommonBean implements Serializable {
     public void setFileUploads(List<FileUploaded> fileUploads) {
         this.fileUploads = fileUploads;
     }
-
-
-    private static final long serialVersionUID = 1L;
 
     public String getSystemName() {
         return systemName;

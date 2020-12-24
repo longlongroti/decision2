@@ -198,8 +198,12 @@
       from manage_system_items
       where system_parent_id = #{uuid,jdbcType=CHAR}
     </select>
+    <select id="list" resultMap="BaseResultMap">
+      select *
+      from manage_system_items
+    </select>
 
-  <delete id="deleteByParentId" parameterType="java.lang.String">
+    <delete id="deleteByParentId" parameterType="java.lang.String">
     delete from manage_system_items
     where system_parent_id = #{uuid,jdbcType=CHAR}
   </delete>

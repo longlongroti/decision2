@@ -17,6 +17,7 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
+    <input type ="file" id="importExcel" name= "file" style=" display: none" />
 
     <div class="row">
         <div class="col-sm-12">
@@ -64,12 +65,18 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <h5>制度管理</h5>
                     <div class="text-right">
+                        <a class="btn btn-success pull-right btn-sm badge-pill mb-1 m-1-sm" onclick="$('#importExcel').click();"><i
+                                class="fa fa-cloud-upload"> </i>导入</a>
+                        <a class="btn btn-success pull-right btn-sm badge-pill mb-1 m-1-sm" style="margin-right: 4px;" onclick="exportExcel()"><i
+                                class="fa fa-cloud-download"> </i>导出</a>
                         <shiro:hasPermission name="制度信息管理_新增">
-                        <a class="btn btn-warning pull-right btn-sm badge-pill mb-1" th:href="@{/manageSystem/goadd}"><i
-                                class="fa fa-plus"> </i>新增</a>
+                            <a class="btn btn-warning pull-right btn-sm badge-pill mb-1" th:href="@{/manageSystem/goadd}"><i
+                                    class="fa fa-plus"> </i>新增</a>
                         </shiro:hasPermission>
                     </div>
+
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
@@ -91,6 +98,8 @@
 <script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}" ></script>
 <script th:src="@{/asserts/js/layer/layer.min.js}" type="text/javascript"></script>
 <script th:src="@{/asserts/js/laydate/laydate.js}"></script>
+<script th:src="@{/asserts/js/ajaxfileupload.js}"></script>
+
 <script th:replace="common/myJs::myCommonJs"></script>
 <script>
     $(function () {
@@ -101,7 +110,56 @@
                 , range: '~'
             });
         });
+        var url = '[[@{/manageSystem/importExcel.xlsx}]]';
+        $('body').on('change','#importExcel',function(){
+            var importingExcelIndex=layer.load(1);
+            $.ajaxFileUpload({
+                type: "POST",
+                url: url,
+                // data:{picParams:text},//要传到后台的参数，没有可以不写
+                secureuri : false,//是否启用安全提交，默认为false
+                fileElementId:'importExcel',//文件选择框的id属性
+                dataType: 'text',//服务器返回的格式
+                async : false,
+                complete: function(data){
+                    $('#importExcel').val('');
+                    layer.close(importingExcelIndex);
+                },
+                success: function (text) {
+                    var resultData = JSON.parse(text);
+                    var message = '';
+                    if (!$.isArray(resultData)) {
+                        if(typeof resultData == 'string'){
+                            layer.alert(resultData, {title: '导入失败', icon: 2});
+                        }else{
+                            if(resultData['add']+resultData['update']>0){
+                                message = '新增' + resultData['add'] + '项, ' + '修改' + resultData['update'] + '项';
+                                layer.alert(message, {title: '导入成功', icon: 1}, function () {
+                                    location.reload();
+                                });
+                            }else{
+                                layer.alert('列表为空', {title: '未导入', icon: 0});
+                            }
+                        }
+                    } else {
+                        for (var i = 0; i < resultData.length; i++) {
+                            message += resultData[i] + '<br/>';
+                        }
+                        layer.alert(message, {title: '导入失败', icon: 2});
+                    }
+                },
+                error: function (data, status, e){
+                    layer.alert('导入错误');
+                }
+            });
+        });
     });
+
+    function exportExcel(){
+        let url = '[[@{/manageSystem/exportExcel.xlsx}]]';
+        window.open(url);
+    }
+
 
     function createTable() {
         let url = '[[@{/manageSystem/list}]]'
