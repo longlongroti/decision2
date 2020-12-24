@@ -22,4 +22,6 @@ public interface ManageLeaderGroupMapper {
     List<String> listByParentId(String uuid);
 
     void deleteByParentId(String mainUUid);
+
+    List<ManageLeaderGroup> list();
 }

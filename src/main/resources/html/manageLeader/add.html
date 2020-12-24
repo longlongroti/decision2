@@ -86,15 +86,15 @@
                                     <div class='col-sm-2'>
                                         <select class="form-control" id="leaderGroup" name="leaderGroup" >
                                             <option>所属领导班子</option>
-                                            <option value="0" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '0'}">党委(党组)成员(党委会)</option>
-                                            <option value="1" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '1'}">党委(党组)成员(党组会)</option>
-                                            <option value="2" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '2'}">经理班子成员(总经理办公室)</option>
-                                            <option value="3" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '3'}">党委(党组)成员(党委(党组)会)</option>
-                                            <option value="4" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '4'}">股东会成员(股东会)</option>
-                                            <option value="5" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '5'}">董事会成员(董事会)</option>
-                                            <option value="6" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '6'}">经理班子成员(经理层办公会)</option>
-                                            <option value="7" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '7'}">(职代会)</option>
-                                            <option value="8" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '8'}">(其他)</option>
+                                            <option value="党委(党组)成员(党委会)" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '党委(党组)成员(党委会)'}">党委(党组)成员(党委会)</option>
+                                            <option value="党委(党组)成员(党组会)" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '党委(党组)成员(党组会)'}">党委(党组)成员(党组会)</option>
+                                            <option value="经理班子成员(总经理办公室)" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '经理班子成员(总经理办公室)'}">经理班子成员(总经理办公室)</option>
+                                            <option value="党委(党组)成员(党委(党组)会)" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '党委(党组)成员(党委(党组)会)'}">党委(党组)成员(党委(党组)会)</option>
+                                            <option value="股东会成员(股东会)" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '股东会成员(股东会)'}">股东会成员(股东会)</option>
+                                            <option value="董事会成员(董事会)" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '董事会成员(董事会)'}">董事会成员(董事会)</option>
+                                            <option value="经理班子成员(经理层办公会)" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '经理班子成员(经理层办公会)'}">经理班子成员(经理层办公会)</option>
+                                            <option value="(职代会)" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '(职代会)'}">(职代会)</option>
+                                            <option value="(其他)" th:selected="${manageLeaderGrpoupSel!=null}?${dat.leaderGroup == '(其他)'}">(其他)</option>
                                         </select>
                                     </div>
                                     <div class='col-sm-2'>
@@ -178,15 +178,15 @@
             "<div><div class='col-sm-2'>" +
             "<select class=\"form-control\" id=\"leaderGroup\" name=\"leaderGroup\" >\n" +
             "<option></option>\n" +
-            "<option value=\"0\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '0'}\">党委(党组)成员(党委会)</option>\n" +
-            "<option value=\"1\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '1'}\">党委(党组)成员(党组会)</option>\n" +
-            "<option value=\"2\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '2'}\">经理班子成员(总经理办公室)</option>\n" +
-            "<option value=\"3\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '3'}\">党委(党组)成员(党委(党组)会)</option>\n" +
-            "<option value=\"4\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '4'}\">股东会成员(股东会)</option>\n" +
-            "<option value=\"5\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '5'}\">董事会成员(董事会)</option>\n" +
-            "<option value=\"6\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '6'}\">经理班子成员(经理层办公会)</option>\n" +
-            "<option value=\"7\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '7'}\">(职代会)</option>\n" +
-            "<option value=\"8\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '8'}\">(其他)</option>\n" +
+            "<option value=\"党委(党组)成员(党委会)\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '党委(党组)成员(党委会)'}\">党委(党组)成员(党委会)</option>\n" +
+            "<option value=\"党委(党组)成员(党组会)\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '党委(党组)成员(党组会)'}\">党委(党组)成员(党组会)</option>\n" +
+            "<option value=\"经理班子成员(总经理办公室)\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '经理班子成员(总经理办公室)'}\">经理班子成员(总经理办公室)</option>\n" +
+            "<option value=\"党委(党组)成员(党委(党组)会)\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '党委(党组)成员(党委(党组)会)'}\">党委(党组)成员(党委(党组)会)</option>\n" +
+            "<option value=\"股东会成员(股东会)\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '股东会成员(股东会)'}\">股东会成员(股东会)</option>\n" +
+            "<option value=\"董事会成员(董事会)\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '董事会成员(董事会)'}\">董事会成员(董事会)</option>\n" +
+            "<option value=\"经理班子成员(经理层办公会)\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '经理班子成员(经理层办公会)'}\">经理班子成员(经理层办公会)</option>\n" +
+            "<option value=\"(职代会)\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '(职代会)'}\">(职代会)</option>\n" +
+            "<option value=\"(其他)\" th:selected=\"${manageLeaderGrpoupSel!=null}?${manageLeaderGrpoupSel.leaderGroup == '(其他)'}\">(其他)</option>\n" +
             "</select></div>" +
             "<div class='col-sm-2'><input type='text'  name='jobTitle'  class='form-control m-t-sm col-sm-2'  placeholder='职位名称'></div>" +
             "<div class='col-sm-2'><input type='text'  name='officeStartDate'  class='form-control m-t-sm col-sm-2'  placeholder='任职开始日期'></div>" +

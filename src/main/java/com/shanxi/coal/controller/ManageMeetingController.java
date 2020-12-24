@@ -32,6 +32,7 @@ public class ManageMeetingController {
     ManageMeetingItemsMapper manageMeetingItemsMapper;
     @Resource
     CommonService commonService;
+
     @GetMapping("/go")
     public String go() {
         return "manageMeeting/list";
@@ -55,7 +56,9 @@ public class ManageMeetingController {
         model.addAttribute("leadersSelection", manageLeaders);
         model.addAttribute("attendeesSelection", manageLeaders);
         ManageMeeting manageMeeting = manageMeetingMapper.selectAttendeesExtra(uuid);
-        if (manageMeeting == null) { return "redirect:/manageMeeting/go"; }
+        if (manageMeeting == null) {
+            return "redirect:/manageMeeting/go";
+        }
         model.addAttribute("manageMeetingSel", manageMeeting);
         return "manageMeeting/add";
     }
@@ -103,10 +106,14 @@ public class ManageMeetingController {
     @PostMapping("/list")
     @ResponseBody
     public String list(@RequestParam("pageNumber") Integer pageNumber,
+                       @RequestParam("meetingType") String meetingType,
+                       @RequestParam("name") String name,
                        @RequestParam("pageSize") Integer pageSize) throws ParseException {
         PageHelper.startPage(pageNumber, pageSize);
         ManageMeeting where = new ManageMeeting();
         where.setStatus(0);
+        where.setMeetingName(StringUtils.isNotEmpty(name) ? name : null);
+        where.setMeetingType(StringUtils.isNotEmpty(meetingType) ? meetingType : null);
         List<ManageMeeting> manageMeetings = manageMeetingMapper.getList(where);
         PageInfo<ManageMeeting> pageInfo = new PageInfo<ManageMeeting>(manageMeetings);
         return MyUtils.pageInfoToJson(pageInfo);
@@ -116,7 +123,7 @@ public class ManageMeetingController {
     @ResponseBody
     public String delete(@PathParam("uuid") String uuid) {
         ManageMeeting manageMeeting = manageMeetingMapper.selectByPrimaryKey(uuid);
-        if (manageMeeting != null){
+        if (manageMeeting != null) {
             manageMeeting.setIsDel(1);
             manageMeetingMapper.updateByPrimaryKeySelective(manageMeeting);
             manageMeetingAttendeeMapper.deleteByMeetingId(manageMeeting.getUuid());
@@ -155,5 +162,8 @@ public class ManageMeetingController {
         manageMeetingItemsMapper.deleteByPrimaryKey(uuid);
         return "ok";
     }
+
+
+
 
 }

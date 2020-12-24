@@ -1,28 +1,45 @@
 package com.shanxi.coal.domain;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import com.alibaba.excel.annotation.ExcelIgnore;
 
 import java.util.Date;
 import java.util.List;
 
 public class CommonBean {
-    @Excel(name="设备ID", orderNum = "-2")
+    @ExcelIgnore
     private String uuid;
+    @ExcelIgnore
     private String createdBy;
+    @ExcelIgnore
     private Date createdDate;
+    @ExcelIgnore
     private String modifiedBy;
+    @ExcelIgnore
     private Date modifiedDate;
+    @ExcelIgnore
     private Integer isDel;
+    @ExcelIgnore
     private Integer status;
+    @ExcelIgnore
     private String createdByOrg;
+    @ExcelIgnore
     private List<String> supervisedOrg;
+    @ExcelIgnore
     private List<String> currentUsingOrg;
+    @ExcelIgnore
     private List<String> currentStorageOrg;
+    @ExcelIgnore
     private List<String> currentUsingDept;
+    @ExcelIgnore
     private Date createdDateStart;
+    @ExcelIgnore
     private Date createdDateEnd;
+    @ExcelIgnore
     private String remark;
+    @ExcelIgnore
     private String createdByName;
+    @ExcelIgnore
     private String createdByOrgName;
 
     public List<String> getCurrentUsingOrg() {

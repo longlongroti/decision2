@@ -311,6 +311,12 @@
     select * from manage_meeting
     <where>
       is_del=0
+      <if test="meetingName != null">
+        and meeting_name  LIKE concat(concat('%',#{meetingName,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="meetingType != null">
+        and meeting_type = #{meetingType,jdbcType=VARCHAR}
+      </if>
     </where>
     order by created_date desc
   </select>
