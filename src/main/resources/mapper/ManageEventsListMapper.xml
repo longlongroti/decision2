@@ -207,6 +207,9 @@
     select * from manage_events_list
     <where>
       is_del=0
+      <if test="versionNumber != null">
+        and version_number  LIKE concat(concat('%',#{versionNumber,jdbcType=VARCHAR}),'%')
+      </if>
     </where>
     order by created_date desc
   </select>

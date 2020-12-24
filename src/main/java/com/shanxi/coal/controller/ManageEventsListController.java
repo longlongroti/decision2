@@ -119,11 +119,13 @@ public class ManageEventsListController {
     @PostMapping("/list")
     @ResponseBody
     public String list(@RequestParam("pageNumber") Integer pageNumber,
+                       @RequestParam("checkYear") String checkYear,
                        @RequestParam("pageSize") Integer pageSize) throws ParseException {
         PageHelper.startPage(pageNumber, pageSize);
         ManageEventsList where = new ManageEventsList();
         MyUtils.buildCommonWhere(where);
         where.setStatus(0);
+        where.setVersionNumber(StringUtils.isNotEmpty(checkYear)?checkYear:null);
         List<ManageEventsList> manageEventsLists = manageEventsListMapper.getList(where);
         PageInfo<ManageEventsList> pageInfo = new PageInfo<ManageEventsList>(manageEventsLists);
         return MyUtils.pageInfoToJson(pageInfo);
