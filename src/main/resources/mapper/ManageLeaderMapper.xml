@@ -182,6 +182,9 @@
     <where>
       is_del=0
       <!--<include refid="Common.condition_sql"/>-->
+      <if test="leaderName != null">
+        and leader_name  LIKE concat(concat('%',#{leaderName,jdbcType=VARCHAR}),'%')
+      </if>
     </where>
     order by created_date desc
   </select>

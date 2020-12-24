@@ -18,7 +18,7 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
 
-    <!--<div class="row">
+  <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -33,15 +33,10 @@
                     <div class="row">
                         <div class="col-sm-12 mt-4">
                             <div class="form-group row">
-                                <label class="col-sm-1 my-font-bold">领用单编码</label>
-                                <div class="col-sm-2"><input id="useId" name="useId" type="text" class="form-control required"></div>
-                                <label class="col-sm-1 my-font-bold">领用日期</label>
-                                <div class="col-sm-2"> <input id="useDate" name="useDate" type="text" class="form-control required"></div>
-                                <label class="col-sm-1 my-font-bold">单据状态</label>
-                                <div class="col-sm-2"><input id="useStatus" name="useStatus" type="text" class="form-control required"></div>
+                                <label class="col-sm-1 my-font-bold">领导姓名</label>
+                                <div class="col-sm-2"><input id="name" name="name" type="text" class="form-control"></div>
                             </div>
                             <div class="form-group row">
-                                <div class= "col-sm-3" th:replace="common/bar::commonDateBar"></div>
                                 <div class="col-sm-2">
                                     <div class="form-group text-right">
                                         <button  class="btn btn-sm btn-success" type="button" onclick="createTable()">查询</button>
@@ -55,7 +50,7 @@
             </div>
         </div>
     </div>
--->
+
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
@@ -115,9 +110,9 @@
             queryParams: function queryParams(params) {   //设置查询参数
                 let param = {
                     pageNumber: params.pageNumber,
-                    pageSize: params.pageSize/*,
-                    useId: $('#useId').val(),
-                    status: $('#status').val()*/
+                    pageSize: params.pageSize,
+                    name: $('#name').val(),
+                    /*, status: $('#status').val()*/
                 };
                 return param;
             },

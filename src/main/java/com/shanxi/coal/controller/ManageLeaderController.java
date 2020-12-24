@@ -121,11 +121,13 @@ public class ManageLeaderController {
     @PostMapping("/list")
     @ResponseBody
     public String list(@RequestParam("pageNumber") Integer pageNumber,
+                        @RequestParam("name") String name,
                        @RequestParam("pageSize") Integer pageSize) throws ParseException {
         PageHelper.startPage(pageNumber, pageSize);
         ManageLeader where = new ManageLeader();
         MyUtils.buildCommonWhere(where);
         where.setStatus(0);
+        where.setLeaderName(StringUtils.isNotEmpty(name)?name:null);
         List<ManageLeader> manageLeader = manageLeaderMapper.getList(where);
         PageInfo<ManageLeader> pageInfo = new PageInfo<ManageLeader>(manageLeader);
         return MyUtils.pageInfoToJson(pageInfo);
