@@ -4,56 +4,51 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <property name="uuid" value="uuid()" dbms="mysql"/>
+    <changeSet author="chenlong" id="addXMLReport" context="production">
+        <createTable tableName="xml_report">
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_USER"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+            </column>
+            <column name="created_by_org" type="varchar(50)">
+            </column>
+            <column name="modified_by" type="varchar(50)">
+            </column>
+            <column name="modified_date" type="TIMESTAMP">
+            </column>
+            <column name="is_del" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
 
-    <!--<changeSet author="chenlong" id="uploadFilesv5" context="production">-->
-        <!--<createTable tableName="tbl_file_uploaded">-->
-            <!--<column name="uuid" type="uuid">-->
-                <!--<constraints nullable="false" primaryKey="true" primaryKeyName="PK_UPLOADED_FILE"/>-->
-            <!--</column>-->
-            <!--<column name="created_date" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP">-->
-                <!--<constraints nullable="false"/>-->
-            <!--</column>-->
-            <!--<column name="created_by" type="varchar(50)">-->
-            <!--</column>-->
-            <!--<column name="created_by_org" type="varchar(50)">-->
-            <!--</column>-->
-            <!--<column name="modified_by" type="varchar(50)">-->
-            <!--</column>-->
-            <!--<column name="modified_date" type="TIMESTAMP">-->
-            <!--</column>-->
-            <!--<column name="is_del" type="tinyint" defaultValueNumeric="0">-->
-                <!--<constraints nullable="false"/>-->
-            <!--</column>-->
-            <!--<column name="status" type="tinyint" defaultValueNumeric="0">-->
-                <!--<constraints nullable="false"/>-->
-            <!--</column>-->
+            <column name="url" type="varchar(90)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="response" type="varchar(600)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remark" type="varchar(100)">
+            </column>
+            <column name="remark1" type="varchar(200)">
+            </column>
+            <column name="remark2" type="varchar(300)">
+            </column>
+            <column name="remark3" type="varchar(400)">
+            </column>
 
-            <!--<column name="file_name" type="varchar(225)">-->
-                <!--<constraints nullable="false"/>-->
-            <!--</column>-->
-            <!--<column name="file_path" type="varchar(225)">-->
-                <!--<constraints nullable="false"/>-->
-            <!--</column>-->
-            <!--<column name="file_type" type="varchar(100)">-->
-                <!--<constraints nullable="false"/>-->
-            <!--</column>-->
-            <!--<column name="file_size" type="bigint" defaultValueNumeric="0">-->
-                <!--<constraints nullable="false"/>-->
-            <!--</column>-->
-            <!--<column name="file_category" type="varchar(50)">-->
-                <!--<constraints nullable="false"/>-->
-            <!--</column>-->
-            <!--<column name="file_category_id" type="varchar(50)">-->
-            <!--</column>-->
-        <!--</createTable>-->
-    <!--</changeSet>-->
 
-    <!--<changeSet author="chenlong" id="addColumn-tbl_file_uploaded_remark">-->
-        <!--<addColumn tableName="tbl_file_uploaded">-->
-            <!--<column name="remark" type="varchar(50)" defaultValue="0">-->
-                <!--<constraints nullable="false"></constraints>-->
-            <!--</column>-->
-        <!--</addColumn>-->
-    <!--</changeSet>-->
-
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

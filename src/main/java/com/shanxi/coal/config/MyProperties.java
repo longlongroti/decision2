@@ -32,6 +32,42 @@ public class MyProperties {
     private List<String> rentCompany = new ArrayList<>();
     private String fileUploadedPath;
 
+    private String companyName;
+    private String creditCode;
+    private String xmlPath;
+    private String xml0011url;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCreditCode() {
+        return creditCode;
+    }
+
+    public void setCreditCode(String creditCode) {
+        this.creditCode = creditCode;
+    }
+
+    public String getXmlPath() {
+        return xmlPath;
+    }
+
+    public void setXmlPath(String xmlPath) {
+        this.xmlPath = xmlPath;
+    }
+
+    public String getXml0011url() {
+        return xml0011url;
+    }
+
+    public void setXml0011url(String xml0011url) {
+        this.xml0011url = xml0011url;
+    }
 
     public List<String> getRentCompany() {
         return rentCompany;
