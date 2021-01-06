@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>信息填报-会议信息管理</title>
+    <title>信息填报-会议信息-议题管理</title>
     <link rel="shortcut icon" th:href="@{/asserts/img/logo.png}">
     <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
@@ -18,8 +18,8 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
-
-    <div class="row">
+    <input id="meetingId"  th:value="${meetingId}" type="hidden"/>
+    <!--<div class="row">
         <div class="col-sm-12">
            <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -65,18 +65,23 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 
     <div class="row">
         <div class="col-sm-12">
+            <div class="ibox-title">
+                <h5 th:text="'会议：'+ ${meetingName}+'--议题管理列表'">议题管理列表</h5>
+                <div class="ibox-tools">
+                    <a href="javascript:history.back(-1)">返回</a>
+                </div>
+            </div>
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <div class="text-right">
-                        <shiro:hasPermission name="会议信息管理_新增">
-                            <a class="btn btn-warning pull-right btn-sm badge-pill mb-1"
-                               th:href="@{/manageMeeting/goadd}"><i
-                                    class="fa fa-plus"> </i>新增</a>
-                        </shiro:hasPermission>
+                        <a class="btn btn-warning pull-right btn-sm badge-pill mb-1"
+                           href="javascript:void(0)"  id="add_btn"  >
+                            <!-- th:href="@{/manageSubject/add?meetingId=${meetingId}}" -->
+                            <i class="fa fa-plus"> </i>新增</a>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -132,26 +137,25 @@
     }
 
     function createTable() {
-        let url = '[[@{/manageMeeting/list}]]';
+        let url = '[[@{/manageSubject/list}]]';
         $("#table").bootstrapTable('destroy');
         $("#table").bootstrapTable({
             url: url,        //请求后台的URL（*）
             method: 'post',
             contentType: "application/x-www-form-urlencoded",
-            pagination: true,                   //是否显示分页（*）
+            pagination: false,                   //是否显示分页（*）
             cache: false,
             pageSize: 10,//每页一条数据
             striped: true,  //表格显示条纹
             detailView: true, //1，开启详情视树形图模式
-            detailFormatter: "detailFormatter", //2，定义详情显示函数
+            // detailFormatter: "detailFormatter", //2，定义详情显示函数
             dataField: "list",
             queryParamsType: "undefined",
             queryParams: function queryParams(params) {   //设置查询参数
                 let param = {
                     pageNumber: params.pageNumber,
                     pageSize: params.pageSize,
-                    meetingType: $('#meetingType').val(),
-                    name: $('#name').val(),
+                    meetingId: $('#meetingId').val(),
                 };
                 return param;
             },
@@ -162,60 +166,47 @@
             pageNumber: 1,
             columns: [
                 {field: "uuid", visible: false},
-                {field: "meetingName", title: "会议名称"},
-                {field: "meetingType", title: "会议类型",
-                    formatter: function (value, row) {
-                        return formatter.formatMeetingType(value);
-                    }
-                },
-                {field: "versionNum", title: "版本号(年号)"},
-                {field: "meetingForm", title: "会议形式",
-                    formatter: function (value, row) {
-                        return formatter.formatMeetingForm(value);
-                    }
-                },
-                {field: "meetingTime", title: "会议时间"},
+                {field: "subjectName", title: "议题名称"},
+                {field: "subjectCode", title: "议题编码"},
+                {field: "sourceName", title: "任务来源"},
+                {field: "specialName", title: "专项名称"},
                 {
                     field: "cz", title: '操作',
                     formatter: function (value, row) {
-                        let editHtml = '';
-                        let delHtml = '';
-                        let addHtml = '';
-                        let addSubjectHtml = '';
+                        let editHtml = '<a href="javascript:;" class="btn btn-sm btn-success edit badge-pill mb-2" ><i class="fa fa-pencil"> </i>' + '编辑' + '</a>&nbsp;';
+                        let delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
+                        let addHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adde badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加事项' + '</a>&nbsp;';
+                        let addAttendanceHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adda badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加列席人' + '</a>&nbsp;';
+                        let addDeliberationHtml = '<a href="javascript:;" class="btn btn-sm btn-danger addd badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加审议结果' + '</a>&nbsp;';
 
-                            if (checkAuthorization('会议信息管理_编辑'))
-                                editHtml = '<a href="javascript:;" class="btn btn-sm btn-success edit badge-pill mb-2" ><i class="fa fa-pencil"> </i>' + '编辑' + '</a>&nbsp;';
-                            if (checkAuthorization('会议信息管理_删除'))
-                                delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
-                            if (checkAuthorization('会议信息管理_添加事项'))
-                                addHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adde badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加事项' + '</a>&nbsp;';
-
-                            addSubjectHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adds badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '议题管理' + '</a>&nbsp;';
-                        let buttonhtml = editHtml + delHtml + addHtml+addSubjectHtml;
+                        let buttonhtml = editHtml + delHtml + addHtml+addAttendanceHtml+addDeliberationHtml;
                         return buttonhtml;
                     },
                     events: {
                         'click .edit': function (e, value, row, index) {
                             let id = row.uuid;
-                            location.href = '[[@{'/manageMeeting/goedit'}]]' + '?uuid=' + id;
+                            location.href = '[[@{'/manageSubject/add'}]]' + '?uuid=' + id+'&meetingId='+ $('#meetingId').val();
                         },
                         'click .del': function (e, value, row, index) {
                             let id = row.uuid;
-                            let url = '[[@{'/manageMeeting/delete'}]]';
-                            let redirectUrl = '[[@{'/manageMeeting/go'}]]';
-                            commonAction.delAction(id, url, redirectUrl, 'confirmModal')
+                            let url = '[[@{'/manageSubject/delete'}]]';
+                            $.post(url,{uuid:id},function(result){
+                                if(result == 'ok'){
+                                    createTable();
+                                }
+                            });
                         },
                         'click .adde': function (e, value, row, index) {
                             let id = row.uuid;
-                            let url = '[[@{'/manageMeeting/addDetailItem'}]]';
-                            let redirectUrl = '[[@{'/manageMeeting/go'}]]';
-                            let urls = '[[@{'/manageMeeting/listDetailItems'}]]';
-                            let delurl = '[[@{'/manageMeeting/deleteDetailItem'}]]';
-                            commonAction.addAction3(id, url, redirectUrl, 'confirmModal3',urls,delurl)
+                            let url = '[[@{'/manageSubject/addItem'}]]';
+                            let redirectUrl = '[[@{'/manageSubject/go'}]]';
+                            let urls = '[[@{'/manageSubject/listItems'}]]';
+                            let delurl = '[[@{'/manageSubject/deleteItem'}]]';
+                            commonAction.addAction4(id, url, redirectUrl, 'confirmModal3',urls,delurl)
                         },
                         'click .adds': function (e, value, row, index) {
                             let id = row.uuid;
-                            location.href = '[[@{'/manageSubject/list'}]]' + '?uuid=' + id;
+                            location.href = '[[@{'/manageSubject/add'}]]' + '?uuid=' + id;
                         }
                     }
                 }
@@ -224,6 +215,9 @@
 
     }
 
+    $('#add_btn').click(function (){
+        location.href = '[[@{'/manageSubject/add'}]]' + '?meetingId=' + $('#meetingId').val();
+    });
 </script>
 </body>
 

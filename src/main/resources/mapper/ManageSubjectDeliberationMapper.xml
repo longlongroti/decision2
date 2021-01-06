@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.ManageSubjectDeliberationMapper">
+  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.ManageSubjectDeliberation">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="subject_id" jdbcType="CHAR" property="subjectId" />
+    <result column="deliberation_personnel" jdbcType="VARCHAR" property="deliberationPersonnel" />
+    <result column="deliberation_result" jdbcType="VARCHAR" property="deliberationResult" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, subject_id, deliberation_personnel, deliberation_result
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_subject_deliberation
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from manage_subject_deliberation
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shanxi.coal.domain.ManageSubjectDeliberation">
+    insert into manage_subject_deliberation (uuid, subject_id, deliberation_personnel, 
+      deliberation_result)
+    values (#{uuid,jdbcType=CHAR}, #{subjectId,jdbcType=CHAR}, #{deliberationPersonnel,jdbcType=VARCHAR}, 
+      #{deliberationResult,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageSubjectDeliberation">
+    insert into manage_subject_deliberation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="deliberationPersonnel != null">
+        deliberation_personnel,
+      </if>
+      <if test="deliberationResult != null">
+        deliberation_result,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=CHAR},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=CHAR},
+      </if>
+      <if test="deliberationPersonnel != null">
+        #{deliberationPersonnel,jdbcType=VARCHAR},
+      </if>
+      <if test="deliberationResult != null">
+        #{deliberationResult,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageSubjectDeliberation">
+    update manage_subject_deliberation
+    <set>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=CHAR},
+      </if>
+      <if test="deliberationPersonnel != null">
+        deliberation_personnel = #{deliberationPersonnel,jdbcType=VARCHAR},
+      </if>
+      <if test="deliberationResult != null">
+        deliberation_result = #{deliberationResult,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.ManageSubjectDeliberation">
+    update manage_subject_deliberation
+    set subject_id = #{subjectId,jdbcType=CHAR},
+      deliberation_personnel = #{deliberationPersonnel,jdbcType=VARCHAR},
+      deliberation_result = #{deliberationResult,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+</mapper>

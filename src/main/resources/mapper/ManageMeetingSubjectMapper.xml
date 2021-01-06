@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.ManageMeetingSubjectMapper">
+  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.ManageMeetingSubject">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_by_org" jdbcType="VARCHAR" property="createdByOrg" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="modified_date" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="is_del" jdbcType="TINYINT" property="isDel" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="meeting_id" jdbcType="VARCHAR" property="meetingId" />
+    <result column="subject_code" jdbcType="VARCHAR" property="subjectCode" />
+    <result column="subject_name" jdbcType="VARCHAR" property="subjectName" />
+    <result column="source_name" jdbcType="VARCHAR" property="sourceName" />
+    <result column="special_name" jdbcType="VARCHAR" property="specialName" />
+    <result column="pass_flag" jdbcType="CHAR" property="passFlag" />
+    <result column="approval_flag" jdbcType="CHAR" property="approvalFlag" />
+    <result column="adopt_flag" jdbcType="CHAR" property="adoptFlag" />
+    <result column="supervise_flag" jdbcType="CHAR" property="superviseFlag" />
+    <result column="subject_result" jdbcType="VARCHAR" property="subjectResult" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 
+    status, remark, meeting_id, subject_code, subject_name, source_name, special_name, 
+    pass_flag, approval_flag, adopt_flag, supervise_flag, subject_result
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_meeting_subject
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+
+  <select id="listByMeetingId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_meeting_subject
+    where meeting_id = #{meetingId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from manage_meeting_subject
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shanxi.coal.domain.ManageMeetingSubject">
+    insert into manage_meeting_subject (uuid, created_date, created_by, 
+      created_by_org, modified_by, modified_date, 
+      is_del, status, remark, 
+      meeting_id, subject_code, subject_name, 
+      source_name, special_name, pass_flag, 
+      approval_flag, adopt_flag, supervise_flag, 
+      subject_result)
+    values (#{uuid,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdByOrg,jdbcType=VARCHAR}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{isDel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
+      #{meetingId,jdbcType=VARCHAR}, #{subjectCode,jdbcType=VARCHAR}, #{subjectName,jdbcType=VARCHAR}, 
+      #{sourceName,jdbcType=VARCHAR}, #{specialName,jdbcType=VARCHAR}, #{passFlag,jdbcType=CHAR}, 
+      #{approvalFlag,jdbcType=CHAR}, #{adoptFlag,jdbcType=CHAR}, #{superviseFlag,jdbcType=CHAR}, 
+      #{subjectResult,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageMeetingSubject">
+    insert into manage_meeting_subject
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="createdDate != null">
+        created_date,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="createdByOrg != null">
+        created_by_org,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedDate != null">
+        modified_date,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="meetingId != null">
+        meeting_id,
+      </if>
+      <if test="subjectCode != null">
+        subject_code,
+      </if>
+      <if test="subjectName != null">
+        subject_name,
+      </if>
+      <if test="sourceName != null">
+        source_name,
+      </if>
+      <if test="specialName != null">
+        special_name,
+      </if>
+      <if test="passFlag != null">
+        pass_flag,
+      </if>
+      <if test="approvalFlag != null">
+        approval_flag,
+      </if>
+      <if test="adoptFlag != null">
+        adopt_flag,
+      </if>
+      <if test="superviseFlag != null">
+        supervise_flag,
+      </if>
+      <if test="subjectResult != null">
+        subject_result,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=CHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdByOrg != null">
+        #{createdByOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingId != null">
+        #{meetingId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectCode != null">
+        #{subjectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectName != null">
+        #{subjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceName != null">
+        #{sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="specialName != null">
+        #{specialName,jdbcType=VARCHAR},
+      </if>
+      <if test="passFlag != null">
+        #{passFlag,jdbcType=CHAR},
+      </if>
+      <if test="approvalFlag != null">
+        #{approvalFlag,jdbcType=CHAR},
+      </if>
+      <if test="adoptFlag != null">
+        #{adoptFlag,jdbcType=CHAR},
+      </if>
+      <if test="superviseFlag != null  ">
+        #{superviseFlag,jdbcType=CHAR},
+      </if>
+      <if test="subjectResult != null ">
+        #{subjectResult,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageMeetingSubject">
+    update manage_meeting_subject
+    <set>
+      <if test="createdDate != null and createdDate != ''">
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy != '' ">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdByOrg != null and createdByOrg != '' ">
+        created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedBy != null and modifiedBy != '' ">
+        modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null and modifiedDate != '' ">
+        modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDel != null and isDel != '' ">
+        is_del = #{isDel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null and status != '' ">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null and remark != '' ">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingId != null and meetingId != '' ">
+        meeting_id = #{meetingId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectCode != null and subjectCode != '' ">
+        subject_code = #{subjectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectName != null and subjectName != '' ">
+        subject_name = #{subjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceName != null and sourceName != '' ">
+        source_name = #{sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="specialName != null and specialName != '' ">
+        special_name = #{specialName,jdbcType=VARCHAR},
+      </if>
+      <if test="passFlag != null and passFlag != '' ">
+        pass_flag = #{passFlag,jdbcType=CHAR},
+      </if>
+      <if test="approvalFlag != null and approvalFlag != '' ">
+        approval_flag = #{approvalFlag,jdbcType=CHAR},
+      </if>
+      <if test="adoptFlag != null and adoptFlag != '' ">
+        adopt_flag = #{adoptFlag,jdbcType=CHAR},
+      </if>
+      <if test="superviseFlag != null and superviseFlag != '' ">
+        supervise_flag = #{superviseFlag,jdbcType=CHAR},
+      </if>
+      <if test="subjectResult != null and subjectResult != '' ">
+        subject_result = #{subjectResult,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.ManageMeetingSubject">
+    update manage_meeting_subject
+    set created_date = #{createdDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      created_by_org = #{createdByOrg,jdbcType=VARCHAR},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
+      is_del = #{isDel,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      meeting_id = #{meetingId,jdbcType=VARCHAR},
+      subject_code = #{subjectCode,jdbcType=VARCHAR},
+      subject_name = #{subjectName,jdbcType=VARCHAR},
+      source_name = #{sourceName,jdbcType=VARCHAR},
+      special_name = #{specialName,jdbcType=VARCHAR},
+      pass_flag = #{passFlag,jdbcType=CHAR},
+      approval_flag = #{approvalFlag,jdbcType=CHAR},
+      adopt_flag = #{adoptFlag,jdbcType=CHAR},
+      supervise_flag = #{superviseFlag,jdbcType=CHAR},
+      subject_result = #{subjectResult,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+
+
+
+</mapper>

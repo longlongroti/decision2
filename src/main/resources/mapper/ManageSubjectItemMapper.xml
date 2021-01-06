@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.ManageSubjectItemMapper">
+  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.ManageSubjectItem">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="subject_id" jdbcType="CHAR" property="subjectId" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, subject_id, item_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_subject_item
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+
+
+  <select id="listBySubjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_subject_item
+    where subject_id = #{subjectId,jdbcType=CHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from manage_subject_item
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shanxi.coal.domain.ManageSubjectItem">
+    insert into manage_subject_item (uuid, subject_id, item_code
+      )
+    values (#{uuid,jdbcType=CHAR}, #{subjectId,jdbcType=CHAR}, #{itemCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageSubjectItem">
+    insert into manage_subject_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=CHAR},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageSubjectItem">
+    update manage_subject_item
+    <set>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=CHAR},
+      </if>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.ManageSubjectItem">
+    update manage_subject_item
+    set subject_id = #{subjectId,jdbcType=CHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+</mapper>

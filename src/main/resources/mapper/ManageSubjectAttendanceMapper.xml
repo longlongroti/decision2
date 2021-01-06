@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.ManageSubjectAttendanceMapper">
+  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.ManageSubjectAttendance">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="subject_id" jdbcType="CHAR" property="subjectId" />
+    <result column="attendance_name" jdbcType="VARCHAR" property="attendanceName" />
+    <result column="positions" jdbcType="VARCHAR" property="positions" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, subject_id, attendance_name, positions
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_subject_attendance
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from manage_subject_attendance
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shanxi.coal.domain.ManageSubjectAttendance">
+    insert into manage_subject_attendance (uuid, subject_id, attendance_name, 
+      positions)
+    values (#{uuid,jdbcType=CHAR}, #{subjectId,jdbcType=CHAR}, #{attendanceName,jdbcType=VARCHAR}, 
+      #{positions,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageSubjectAttendance">
+    insert into manage_subject_attendance
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="attendanceName != null">
+        attendance_name,
+      </if>
+      <if test="positions != null">
+        positions,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=CHAR},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=CHAR},
+      </if>
+      <if test="attendanceName != null">
+        #{attendanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="positions != null">
+        #{positions,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageSubjectAttendance">
+    update manage_subject_attendance
+    <set>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=CHAR},
+      </if>
+      <if test="attendanceName != null">
+        attendance_name = #{attendanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="positions != null">
+        positions = #{positions,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.ManageSubjectAttendance">
+    update manage_subject_attendance
+    set subject_id = #{subjectId,jdbcType=CHAR},
+      attendance_name = #{attendanceName,jdbcType=VARCHAR},
+      positions = #{positions,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+</mapper>
