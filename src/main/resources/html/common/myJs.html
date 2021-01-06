@@ -355,8 +355,8 @@
             pageNumber: 1,
             columns: [
                 {field: "uuid", visible: false},
-                {field: "eventCode", title: "eventCode"},
-                {field: "pass", title: "pass"},
+                {field: "eventCode", title: "事项编码"},
+                {field: "pass", title: "是否通过"},
                 {
                     field: "cz", title: '操作', width: "23%",
                     formatter: function (value, row) {
@@ -406,13 +406,12 @@
             pageNumber: 1,
             columns: [
                 {field: "uuid", visible: false},
-                {field: "eventName", title: "eventName"},
-                {field: "eventCode", title: "eventCode"},
-                {field: "decisionSequence", title: "decisionSequence"},
-                {field: "decisionSequence2", title: "decisionSequence2"},
-                {field: "decisionSequence3", title: "decisionSequence3"},
-                {field: "decisionSequence3", title: "decisionSequence3"},
-                {field: "isLegalReview", title: "isLegalReview"},
+                {field: "eventName", title: "事项名称"},
+                {field: "eventCode", title: "事项编码"},
+                {field: "decisionSequence", title: "决策人1"},
+                {field: "decisionSequence2", title: "决策人2"},
+                {field: "decisionSequence3", title: "决策人3"},
+                {field: "isLegalReview", title: "是否法律审核"},
                 {
                     field: "cz", title: '操作', width: "23%",
                     formatter: function (value, row) {
