@@ -51,4 +51,43 @@
 
         </createTable>
     </changeSet>
+
+    <changeSet author="chenlong" id="addAutoCodeV2" context="production">
+        <createTable tableName="auto_code">
+            <column name="uuid" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_USER"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+            </column>
+            <column name="created_by_org" type="varchar(50)">
+            </column>
+            <column name="modified_by" type="varchar(50)">
+            </column>
+            <column name="modified_date" type="TIMESTAMP">
+            </column>
+            <column name="is_del" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="remark" type="varchar(100)">
+            </column>
+            <column name="remark1" type="varchar(100)">
+            </column>
+            <column name="remark2" type="varchar(100)">
+            </column>
+            <column name="remark3" type="varchar(100)">
+            </column>
+            <column name="remark4" type="varchar(100)">
+            </column>
+            <column name="number" type="INTEGER">
+            </column>
+
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

@@ -2,11 +2,9 @@ package com.shanxi.coal.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.shanxi.coal.dao.DicEventsCatalogMapper;
-import com.shanxi.coal.dao.ManageEventsDetailsItemMapper;
-import com.shanxi.coal.dao.ManageEventsDetailsMapper;
-import com.shanxi.coal.dao.ManageEventsListMapper;
+import com.shanxi.coal.dao.*;
 import com.shanxi.coal.domain.*;
+import com.shanxi.coal.utils.MyDateTimeUtils;
 import com.shanxi.coal.utils.MyUtils;
 import liquibase.util.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -31,6 +29,8 @@ public class ManageEventsListController {
     DicEventsCatalogMapper dicEventsCatalogMapper;
     @Resource
     ManageEventsDetailsItemMapper manageEventsDetailsItemMapper;
+    @Resource
+    AutoCodeMapper autoCodeMapper;
 
     @GetMapping("/go")
     public String go() {
@@ -125,7 +125,7 @@ public class ManageEventsListController {
         ManageEventsList where = new ManageEventsList();
         MyUtils.buildCommonWhere(where);
         where.setStatus(0);
-        where.setVersionNumber(StringUtils.isNotEmpty(checkYear)?checkYear:null);
+        where.setVersionNumber(StringUtils.isNotEmpty(checkYear) ? checkYear : null);
         List<ManageEventsList> manageEventsLists = manageEventsListMapper.getList(where);
         PageInfo<ManageEventsList> pageInfo = new PageInfo<ManageEventsList>(manageEventsLists);
         return MyUtils.pageInfoToJson(pageInfo);
@@ -152,18 +152,16 @@ public class ManageEventsListController {
         return MyUtils.pageInfoToJson(pageInfo);
     }
 
-
     @PostMapping("/listDetailItems")
     @ResponseBody
     public String listDetailItems(@RequestParam("pageNumber") Integer pageNumber,
-                             @RequestParam("pageSize") Integer pageSize,
+                                  @RequestParam("pageSize") Integer pageSize,
                                   @RequestParam("id") String id) throws ParseException {
         PageHelper.startPage(pageNumber, pageSize);
         List<ManageEventsDetailItem> manageEventsDetailItems = manageEventsDetailsItemMapper.listByParentId(id);
         PageInfo<ManageEventsDetailItem> pageInfo = new PageInfo<ManageEventsDetailItem>(manageEventsDetailItems);
         return MyUtils.pageInfoToJson(pageInfo);
     }
-
 
     @PostMapping("/listAllDetailItems")
     @ResponseBody
@@ -206,24 +204,56 @@ public class ManageEventsListController {
     @ResponseBody
     public String addDetailItem(@PathParam("itemid") String itemid,
                                 @PathParam("eventName") String eventName,
-                                @PathParam("eventCode") String eventCode,
                                 @PathParam("seq1") String seq1,
                                 @PathParam("seq2") String seq2,
                                 @PathParam("seq3") String seq3,
                                 @PathParam("parentId") String parentId,
                                 @PathParam("islegal") String islegal) {
-        ManageEventsDetailItem manageEventsDetailItem = new ManageEventsDetailItem();
-        manageEventsDetailItem.setUuid(UUID.randomUUID().toString());
-        manageEventsDetailItem.setDecisionSequence(seq1);
-        manageEventsDetailItem.setDecisionSequence2(seq2);
-        manageEventsDetailItem.setDecisionSequence3(seq3);
-        manageEventsDetailItem.setEventId(itemid);
-        manageEventsDetailItem.setEventCode(eventCode);
-        manageEventsDetailItem.setEventName(eventName);
-        manageEventsDetailItem.setIsLegalReview(islegal);
-        manageEventsDetailItem.setParentId(parentId);
-        manageEventsDetailsItemMapper.insertSelective(manageEventsDetailItem);
-        return "ok";
+        ManageEventsDetails manageEventsDetails = manageEventsDetailsMapper.selectByPrimaryKey(itemid);
+        if (manageEventsDetails != null) {
+            DicEventsCatalog dicEventsCatalog = dicEventsCatalogMapper.selectByPrimaryKey(manageEventsDetails.getEventId());
+            if (dicEventsCatalog != null) {
+                ManageEventsDetailItem manageEventsDetailItem = new ManageEventsDetailItem();
+                manageEventsDetailItem.setUuid(UUID.randomUUID().toString());
+                manageEventsDetailItem.setDecisionSequence(seq1);
+                manageEventsDetailItem.setDecisionSequence2(seq2);
+                manageEventsDetailItem.setDecisionSequence3(seq3);
+                manageEventsDetailItem.setEventId(itemid);
+                AutoCode autoCode = autoCodeMapper.selectBy(dicEventsCatalog.getCatalogCode(), MyDateTimeUtils.strNow("yyyyMM"));
+                String code = "";
+                String a = "";
+                String b = "";
+                Integer c = 1;
+                if (autoCode == null) {
+                    a = dicEventsCatalog.getCatalogCode();
+                    b = MyDateTimeUtils.strNow("yyyyMM");
+                    c = 1;
+                } else {
+                    a = autoCode.getRemark1();
+                    b = autoCode.getRemark2();
+                    c = autoCode.getNumber() + 1;
+                }
+                code = a + "-" + b + "-" + MyUtils.prettyNumber(c, "000000");
+                manageEventsDetailItem.setEventCode(code);
+                manageEventsDetailItem.setEventName(eventName);
+                manageEventsDetailItem.setIsLegalReview(islegal);
+                manageEventsDetailItem.setParentId(parentId);
+                manageEventsDetailsItemMapper.insertSelective(manageEventsDetailItem);
+                insertCode("sxbm", a, b, c);
+                return "ok";
+            }
+        }
+        return "error";
+    }
+
+    private void insertCode(String sxbm, String a, String b, Integer c) {
+        AutoCode autoCode = new AutoCode();
+        autoCode.setRemark(sxbm);
+        autoCode.setRemark1(a);
+        autoCode.setRemark2(b);
+        autoCode.setNumber(c);
+        autoCode.setUuid(UUID.randomUUID().toString());
+        autoCodeMapper.insertSelective(autoCode);
     }
 
 }

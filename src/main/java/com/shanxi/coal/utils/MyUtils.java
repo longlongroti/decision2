@@ -172,8 +172,8 @@ public class MyUtils {
     }
 
 
-    public static String prettyNumber(Integer index) {
-        DecimalFormat g1 = new DecimalFormat("0000");
+    public static String prettyNumber(Integer index,String pattern) {
+        DecimalFormat g1 = new DecimalFormat(pattern);
         String startZeroStr = g1.format(index);
         return startZeroStr;
     }
