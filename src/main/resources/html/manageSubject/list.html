@@ -72,7 +72,7 @@
             <div class="ibox-title">
                 <h5 th:text="'会议：'+ ${meetingName}+'--议题管理列表'">议题管理列表</h5>
                 <div class="ibox-tools">
-                    <a href="javascript:history.back(-1)">返回</a>
+                    <a th:href="@{/manageMeeting/go}" >返回</a>
                 </div>
             </div>
             <div class="ibox float-e-margins">
