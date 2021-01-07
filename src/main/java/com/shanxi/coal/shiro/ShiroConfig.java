@@ -46,6 +46,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/wechat/**", "anon");
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/loginm", "anon");
+        filterChainDefinitionMap.put("/user/loging", "anon");
+        filterChainDefinitionMap.put("/user/loginn", "anon");
         filterChainDefinitionMap.put("/sysuser/gopwd", "anon");
         filterChainDefinitionMap.put("/sysuser/updatepwd", "anon");
         filterChainDefinitionMap.put("/page/index", "anon");
