@@ -3,6 +3,7 @@ package com.shanxi.coal.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
+import com.shanxi.coal.dao.AutoCodeMapper;
 import com.shanxi.coal.domain.*;
 import liquibase.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -270,5 +271,15 @@ public class MyUtils {
             default:
                 return "";
         }
+    }
+
+    public static void insertCode(String sxbm, String a, String b, Integer c, AutoCodeMapper autoCodeMapper) {
+        AutoCode autoCode = new AutoCode();
+        autoCode.setRemark(sxbm);
+        autoCode.setRemark1(a);
+        autoCode.setRemark2(b);
+        autoCode.setNumber(c);
+        autoCode.setUuid(UUID.randomUUID().toString());
+        autoCodeMapper.insertSelective(autoCode);
     }
 }

@@ -88,6 +88,7 @@ public class ManageMeetingController {
             commonService.batchUpdateFileId(manageMeeting.getFileIds(), manageMeeting.getUuid());
         }
         batchInsertAttendee(manageMeeting);
+        MyUtils.insertCode("hybm", a, b, c, autoCodeMapper);
         return "manageMeeting/list";
     }
 

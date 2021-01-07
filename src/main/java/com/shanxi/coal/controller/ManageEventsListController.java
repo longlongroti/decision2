@@ -239,21 +239,13 @@ public class ManageEventsListController {
                 manageEventsDetailItem.setIsLegalReview(islegal);
                 manageEventsDetailItem.setParentId(parentId);
                 manageEventsDetailsItemMapper.insertSelective(manageEventsDetailItem);
-                insertCode("sxbm", a, b, c);
+                MyUtils.insertCode("sxbm", a, b, c,autoCodeMapper);
                 return "ok";
             }
         }
         return "error";
     }
 
-    private void insertCode(String sxbm, String a, String b, Integer c) {
-        AutoCode autoCode = new AutoCode();
-        autoCode.setRemark(sxbm);
-        autoCode.setRemark1(a);
-        autoCode.setRemark2(b);
-        autoCode.setNumber(c);
-        autoCode.setUuid(UUID.randomUUID().toString());
-        autoCodeMapper.insertSelective(autoCode);
-    }
+
 
 }
