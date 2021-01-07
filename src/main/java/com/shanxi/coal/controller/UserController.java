@@ -1,5 +1,8 @@
 package com.shanxi.coal.controller;
 
+import com.shanxi.coal.dao.SysUserMapper;
+import com.shanxi.coal.domain.JsonResult;
+import com.shanxi.coal.domain.SysUser;
 import com.shanxi.coal.utils.MyUtils;
 import liquibase.util.MD5Util;
 import liquibase.util.StringUtils;
@@ -13,11 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -28,6 +29,9 @@ import java.util.Random;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
+    @Resource
+    SysUserMapper sysUserMapper;
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -59,6 +63,30 @@ public class UserController {
                         @RequestParam("password") String password,
                         HttpSession session, HttpServletRequest request, HttpServletResponse response, Model model) {
         return idmRequest(userName, password, response, model);
+    }
+
+    @GetMapping("/loginm")
+    public String loginm(@RequestParam("code") String code,
+                         HttpSession session, HttpServletRequest request, HttpServletResponse response, Model model) {
+        SysUser sysUser = sysUserMapper.selectByUserName(code);
+        if (sysUser == null) {
+            return "redirect:/wechat/loginQr";
+        }
+        return idmRequest(code, sysUser.getPassword(), response, model);
+    }
+
+    @GetMapping("/loginn")
+    @ResponseBody
+    public String loginn(@RequestParam("code") String code,
+                         HttpSession session, HttpServletRequest request, HttpServletResponse response, Model model) {
+        if (StringUtils.isEmpty(code)) {
+            return JsonResult.errorMsg("code为空");
+        }
+        SysUser sysUser = sysUserMapper.selectByUserName(code);
+        if (sysUser == null) {
+            return JsonResult.errorMsg("用户不存在");
+        }
+        return JsonResult.okMsg(code);
     }
 
     private String idmRequest(@RequestParam("userName") String userName, @RequestParam("password") String password, HttpServletResponse response, Model model) {
