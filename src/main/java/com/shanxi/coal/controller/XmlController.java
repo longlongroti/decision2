@@ -3,6 +3,7 @@ package com.shanxi.coal.controller;
 import com.shanxi.coal.config.MyProperties;
 import com.shanxi.coal.dao.ManageEventsDetailsItemMapper;
 import com.shanxi.coal.dao.ManageEventsListMapper;
+import com.shanxi.coal.dao.ManageSystemMapper;
 import com.shanxi.coal.dao.XmlReportMapper;
 import com.shanxi.coal.domain.*;
 import com.shanxi.coal.utils.MyDateTimeUtils;
@@ -43,6 +44,9 @@ public class XmlController {
     ManageEventsListMapper manageEventsListMapper;
     @Resource
     ManageEventsDetailsItemMapper manageEventsDetailsItemMapper;
+
+    @Resource
+    ManageSystemMapper manageSystemMapper;
 
     public static File packageFileCatalogPwdZip(String p, String fname) throws Exception {
         String catalogPath = p + fname;
@@ -101,6 +105,35 @@ public class XmlController {
         String s = doSend(zipFile);
         insertReport(s, folder, path,"集团总部所属企业监管统计信息");
         return "manageEventsList/list";
+    }
+
+    @PostMapping("/send0014")
+    @ResponseBody
+    public String send0014(@RequestParam("id") String id) throws Exception {
+        ManageSystem manageSystem = manageSystemMapper.selectByPrimaryKey(id);
+        XML0014Parent xml0014Parent = new XML0014Parent();
+        xml0014Parent.setCompanyId(myProperties.getCreditCode());
+        xml0014Parent.setCompanyName(myProperties.getCompanyName());
+        xml0014Parent.setEffectiveDate(manageSystem.getEffectiveDate());
+        xml0014Parent.setInvalidDate(manageSystem.getExpiryDate());
+        xml0014Parent.setRegulationId(manageSystem.getUuid());
+        xml0014Parent.setRegulationName(manageSystem.getSystemName());
+        xml0014Parent.setSource("系统");
+        xml0014Parent.setOperType("add");
+        JAXBContext jaxbContext = JAXBContext.newInstance(XML0014Parent.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        String folder = myProperties.getCreditCode() + "_0014_1000_" + MyDateTimeUtils.strNow("yyyyMMddHHmmss") + "_" + UUID.randomUUID().toString().replaceAll("-", "");
+        String path = myProperties.getXmlPath() + folder;
+        File f = new File(path);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+        jaxbMarshaller.marshal(xml0014Parent, new File(path + "/0014_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
+        File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
+        String s = doSend(zipFile);
+        insertReport(s, folder, path,"集团所属企业决策制度");
+        return "ok";
     }
 
     @PostMapping("/send")
