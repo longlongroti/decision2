@@ -20,10 +20,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBContext;
@@ -66,9 +63,49 @@ public class XmlController {
         return zipFile.getFile();
     }
 
+    @GetMapping("/send0013")
+    public String send0013() throws Exception {
+        XMLStaticsParent xmlStaticsParent = new XMLStaticsParent();
+        XMLStaticsCompany xmlStaticsCompany = new XMLStaticsCompany();
+        xmlStaticsCompany.setCompanyId(myProperties.getCreditCode());
+        xmlStaticsCompany.setCompanyName(myProperties.getCompanyName());
+        xmlStaticsCompany.setConditionCode("C01");
+        xmlStaticsCompany.setConditionCode("C01");
+        xmlStaticsCompany.setItemFlag("是");
+        xmlStaticsCompany.setDecisionFlag("是");
+        xmlStaticsCompany.setManageCode("M01");
+        xmlStaticsCompany.setConditionCode("C01");
+        xmlStaticsCompany.setStructureCode("S01");
+        xmlStaticsCompany.setRegulationCount("0");
+        xmlStaticsCompany.setItemCount("0");
+        xmlStaticsCompany.setMeetingCount("0");
+        xmlStaticsCompany.setSubjectCount("0");
+        xmlStaticsCompany.setExceptionCount("0");
+        xmlStaticsCompany.setExecutionCount("0");
+        xmlStaticsCompany.setRate("0");
+        xmlStaticsCompany.setRemark("");
+        xmlStaticsCompany.setSource("系统");
+        xmlStaticsCompany.setOperType("add");
+        xmlStaticsParent.setCompany(xmlStaticsCompany);
+        JAXBContext jaxbContext = JAXBContext.newInstance(XMLStaticsParent.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        String folder = myProperties.getCreditCode() + "_0013_1000_" + MyDateTimeUtils.strNow("yyyyMMddHHmmss") + "_" + UUID.randomUUID().toString().replaceAll("-", "");
+        String path = myProperties.getXmlPath() + folder;
+        File f = new File(path);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+        jaxbMarshaller.marshal(xmlStaticsParent, new File(path + "/0013_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
+        File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
+        String s = doSend(zipFile);
+        insertReport(s, folder, path,"集团总部所属企业监管统计信息");
+        return "manageEventsList/list";
+    }
+
     @PostMapping("/send")
     @ResponseBody
-    public String delete(@RequestParam("id") String id) throws Exception {
+    public String send(@RequestParam("id") String id) throws Exception {
         List<ManageEventsDetailItem> manageEventsDetailItems = manageEventsDetailsItemMapper.listByParentId(id);
         ManageEventsList manageEventsList = manageEventsListMapper.selectByPrimaryKey(id);
         XMLEventParent xmlParent = new XMLEventParent();
@@ -124,7 +161,7 @@ public class XmlController {
         jaxbMarshaller.marshal(xmlParent, new File(path + "/0004_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
-        insertReport(s, folder, path);
+        insertReport(s, folder, path,"集团总部事项清单");
         return "ok";
     }
 
@@ -153,12 +190,12 @@ public class XmlController {
         }
     }
 
-    private void insertReport(String response, String fileName, String path) {
+    private void insertReport(String response, String fileName, String path,String type) {
         XmlReport xmlReport = new XmlReport();
         xmlReport.setUuid(UUID.randomUUID().toString());
         xmlReport.setFileName(fileName);
         xmlReport.setUrl(myProperties.getXml0011url());
-        xmlReport.setType("集团总部事项清单");
+        xmlReport.setType(type);
         xmlReport.setResponse(response);
         xmlReport.setRemark(path);
         xmlReportMapper.insertSelective(xmlReport);
@@ -195,13 +232,16 @@ public class XmlController {
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();
+            res = e.getMessage();
         } catch (IOException e) {
             e.printStackTrace();
+            res = e.getMessage();
         } finally {
             try {
                 httpclient.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                res = e.getMessage();
             }
         }
         return res;
