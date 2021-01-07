@@ -2,6 +2,8 @@ package com.shanxi.coal.dao;
 
 import com.shanxi.coal.domain.ManageSubjectDeliberation;
 
+import java.util.List;
+
 public interface ManageSubjectDeliberationMapper {
     int deleteByPrimaryKey(String uuid);
 
@@ -14,4 +16,6 @@ public interface ManageSubjectDeliberationMapper {
     int updateByPrimaryKeySelective(ManageSubjectDeliberation record);
 
     int updateByPrimaryKey(ManageSubjectDeliberation record);
+
+    List<ManageSubjectDeliberation> listBySubjectId(String subjectId);
 }

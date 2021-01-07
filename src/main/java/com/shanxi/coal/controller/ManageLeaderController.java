@@ -146,6 +146,12 @@ public class ManageLeaderController {
         PageInfo<ManageLeader> pageInfo = new PageInfo<ManageLeader>(manageLeader);
         return MyUtils.pageInfoToJson(pageInfo);
     }
+    @PostMapping("/leaderList")
+    @ResponseBody
+    public List<ManageLeader>  leaderList(){
+        List<ManageLeader> manageLeader = manageLeaderMapper.getLeaders();
+        return manageLeader;
+    }
 
     @PostMapping("/delete")
     @ResponseBody

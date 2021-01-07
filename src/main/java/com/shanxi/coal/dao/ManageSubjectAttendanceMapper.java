@@ -2,6 +2,8 @@ package com.shanxi.coal.dao;
 
 import com.shanxi.coal.domain.ManageSubjectAttendance;
 
+import java.util.List;
+
 public interface ManageSubjectAttendanceMapper {
     int deleteByPrimaryKey(String uuid);
 
@@ -14,4 +16,6 @@ public interface ManageSubjectAttendanceMapper {
     int updateByPrimaryKeySelective(ManageSubjectAttendance record);
 
     int updateByPrimaryKey(ManageSubjectAttendance record);
+
+    List<ManageSubjectAttendance> listBySubjectId(String subjectId);
 }

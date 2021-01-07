@@ -94,7 +94,9 @@
     </div>
 </div>
 <div th:replace="common/pop/confirm::showConfirm"></div>
-<div th:replace="common/pop/confirm3::showConfirm"></div>
+<div th:replace="common/pop/confirm4::showConfirm"></div>
+<div th:replace="common/pop/confirm5::showConfirm"></div>
+<div th:replace="common/pop/confirm6::showConfirm"></div>
 
 <script th:src="@{/asserts/js/jquery.min.js}"></script>
 <script th:src="@{/asserts/js/bootstrap.min.js}"></script>
@@ -199,15 +201,24 @@
                         'click .adde': function (e, value, row, index) {
                             let id = row.uuid;
                             let url = '[[@{'/manageSubject/addItem'}]]';
-                            let redirectUrl = '[[@{'/manageSubject/go'}]]';
                             let urls = '[[@{'/manageSubject/listItems'}]]';
                             let delurl = '[[@{'/manageSubject/deleteItem'}]]';
-                            commonAction.addAction4(id, url, redirectUrl, 'confirmModal3',urls,delurl)
+                            commonAction.addAction4(id, url, '', 'confirmModal4',urls,delurl)
                         },
-                        'click .adds': function (e, value, row, index) {
+                        'click .adda': function (e, value, row, index) {
                             let id = row.uuid;
-                            location.href = '[[@{'/manageSubject/add'}]]' + '?uuid=' + id;
-                        }
+                            let url = '[[@{'/manageSubject/addAttendance'}]]';
+                            let urls = '[[@{'/manageSubject/listAttendances'}]]';
+                            let delurl = '[[@{'/manageSubject/deleteAttendance'}]]';
+                            commonAction.addAction5(id, url, '', 'confirmModal5',urls,delurl)
+                        },
+                        'click .addd': function (e, value, row, index) {
+                            let id = row.uuid;
+                            let url = '[[@{'/manageSubject/addDeliberation'}]]';
+                            let urls = '[[@{'/manageSubject/listDeliberation'}]]';
+                            let delurl = '[[@{'/manageSubject/deleteDeliberation'}]]';
+                            commonAction.addAction6(id, url, '', 'confirmModal6',urls,delurl)
+                        },
                     }
                 }
             ]

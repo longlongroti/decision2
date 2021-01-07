@@ -2,9 +2,7 @@ package com.shanxi.coal.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.shanxi.coal.dao.*;
-import com.shanxi.coal.domain.ManageMeeting;
-import com.shanxi.coal.domain.ManageMeetingSubject;
-import com.shanxi.coal.domain.ManageSubjectItem;
+import com.shanxi.coal.domain.*;
 import com.shanxi.coal.utils.MyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -35,6 +33,8 @@ public class ManageSubjectController {
     ManageSubjectAttendanceMapper attendanceMapper;
     @Resource
     ManageSubjectDeliberationMapper deliberationMapper;
+    @Resource
+    ManageLeaderGroupMapper leaderGroupMapper;
 
 
     @PostMapping("/list")
@@ -106,6 +106,64 @@ public class ManageSubjectController {
     public String listItems(@PathParam("id") String id){
         List<ManageSubjectItem> itemList = itemMapper.listBySubjectId(id);
         PageInfo<ManageSubjectItem> pageInfo = new PageInfo<ManageSubjectItem>(itemList);
+        return MyUtils.pageInfoToJson(pageInfo);
+    }
+
+    @PostMapping("/addAttendance")
+    @ResponseBody
+    public String addAttendance(@PathParam("subjectId") String subjectId,@PathParam("attendanceInfo") String attendanceInfo){
+        ManageSubjectAttendance attendance = new ManageSubjectAttendance();
+        attendance.setSubjectId(subjectId);
+        List<ManageLeaderGroup> leaderGroupList = leaderGroupMapper.listByUseId(attendanceInfo.split("@_@")[0]);
+        String positions = "";
+        for (ManageLeaderGroup group : leaderGroupList ) {
+            if("".equals(positions)){
+                positions = group.getJobTitle();
+            }else{
+                positions +="," + group.getJobTitle();
+            }
+        }
+        attendance.setAttendanceName(attendanceInfo.split("@_@")[1]);
+        attendance.setPositions(positions);
+        attendance.setUuid(UUID.randomUUID().toString());
+        attendanceMapper.insert(attendance);
+        return "ok";
+    }
+    @PostMapping("/deleteAttendance")
+    @ResponseBody
+    public String deleteAttendance(@PathParam("uuid") String uuid){
+        attendanceMapper.deleteByPrimaryKey(uuid);
+        return "ok";
+    }
+    @PostMapping("/listAttendances")
+    @ResponseBody
+    public String listAttendances(@PathParam("id") String id){
+        List<ManageSubjectAttendance> attendanceList = attendanceMapper.listBySubjectId(id);
+        PageInfo<ManageSubjectAttendance> pageInfo = new PageInfo<ManageSubjectAttendance>(attendanceList);
+        return MyUtils.pageInfoToJson(pageInfo);
+    }
+    @PostMapping("/addDeliberation")
+    @ResponseBody
+    public String addDeliberation(@PathParam("subjectId") String subjectId,@PathParam("deliberation") String deliberation,@PathParam("deliberationResult") String deliberationResult){
+        ManageSubjectDeliberation subjectDeliberation = new ManageSubjectDeliberation();
+        subjectDeliberation.setSubjectId(subjectId);
+        subjectDeliberation.setDeliberationPersonnel(deliberation);
+        subjectDeliberation.setDeliberationResult(deliberationResult);
+        subjectDeliberation.setUuid(UUID.randomUUID().toString());
+        deliberationMapper.insert(subjectDeliberation);
+        return "ok";
+    }
+    @PostMapping("/deleteDeliberation")
+    @ResponseBody
+    public String deleteDeliberation(@PathParam("uuid") String uuid){
+        deliberationMapper.deleteByPrimaryKey(uuid);
+        return "ok";
+    }
+    @PostMapping("/listDeliberation")
+    @ResponseBody
+    public String listDeliberation(@PathParam("id") String id){
+        List<ManageSubjectDeliberation> deliberationList = deliberationMapper.listBySubjectId(id);
+        PageInfo<ManageSubjectDeliberation> pageInfo = new PageInfo<ManageSubjectDeliberation>(deliberationList);
         return MyUtils.pageInfoToJson(pageInfo);
     }
 

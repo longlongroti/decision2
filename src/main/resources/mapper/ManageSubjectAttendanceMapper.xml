@@ -16,6 +16,12 @@
     from manage_subject_attendance
     where uuid = #{uuid,jdbcType=CHAR}
   </select>
+  <select id="listBySubjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_subject_attendance
+    where subject_id = #{subjectId,jdbcType=CHAR}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from manage_subject_attendance
     where uuid = #{uuid,jdbcType=CHAR}
