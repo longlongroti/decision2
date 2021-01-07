@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.shanxi.coal.dao.*;
 import com.shanxi.coal.domain.*;
 import com.shanxi.coal.service.CommonService;
+import com.shanxi.coal.utils.MyDateTimeUtils;
 import com.shanxi.coal.utils.MyUtils;
 import liquibase.util.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,8 @@ public class ManageMeetingController {
     ManageMeetingItemsMapper manageMeetingItemsMapper;
     @Resource
     CommonService commonService;
+    @Resource
+    AutoCodeMapper autoCodeMapper;
 
     @GetMapping("/go")
     public String go() {
@@ -65,7 +68,21 @@ public class ManageMeetingController {
 
     @PostMapping("/add")
     public String add(ManageMeeting manageMeeting) {
+        String a = MyUtils.code2code(manageMeeting.getMeetingType());
         MyUtils.setCommonBean(manageMeeting);
+        AutoCode autoCode = autoCodeMapper.selectBy("hybm", a, MyDateTimeUtils.strNow("yyyy"));
+        String code = "";
+        String b = "";
+        Integer c = 1;
+        if (autoCode == null) {
+            b = MyDateTimeUtils.strNow("yyyy");
+            c = 1;
+        } else {
+            b = autoCode.getRemark2();
+            c = autoCode.getNumber() + 1;
+        }
+        code = a + b + MyUtils.prettyNumber(c, "0000");
+        manageMeeting.setSerialNum(code);
         manageMeetingMapper.insertSelective(manageMeeting);
         if (StringUtils.isNotEmpty(manageMeeting.getFileIds())) {
             commonService.batchUpdateFileId(manageMeeting.getFileIds(), manageMeeting.getUuid());
@@ -162,8 +179,6 @@ public class ManageMeetingController {
         manageMeetingItemsMapper.deleteByPrimaryKey(uuid);
         return "ok";
     }
-
-
 
 
 }

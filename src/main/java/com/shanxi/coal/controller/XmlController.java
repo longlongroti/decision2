@@ -7,6 +7,7 @@ import com.shanxi.coal.dao.ManageSystemMapper;
 import com.shanxi.coal.dao.XmlReportMapper;
 import com.shanxi.coal.domain.*;
 import com.shanxi.coal.utils.MyDateTimeUtils;
+import com.shanxi.coal.utils.MyUtils;
 import com.shanxi.coal.utils.ZipUtil;
 import net.lingala.zip4j.ZipFile;
 import org.apache.commons.lang3.StringUtils;
@@ -164,17 +165,17 @@ public class XmlController {
             List<XMLEventItemMeeting> list1 = new ArrayList<>();
             if (StringUtils.isNotBlank(m.getDecisionSequence())) {
                 XMLEventItemMeeting xmlEventItemMeeting = new XMLEventItemMeeting();
-                xmlEventItemMeeting.setTypeCode(name2code(m.getDecisionSequence()));
+                xmlEventItemMeeting.setTypeCode(MyUtils.name2code(m.getDecisionSequence()));
                 xmlEventItemMeeting.setTypeName(m.getDecisionSequence());
                 list1.add(xmlEventItemMeeting);
             } else if (StringUtils.isNotBlank(m.getDecisionSequence2())) {
                 XMLEventItemMeeting xmlEventItemMeeting = new XMLEventItemMeeting();
-                xmlEventItemMeeting.setTypeCode(name2code(m.getDecisionSequence2()));
+                xmlEventItemMeeting.setTypeCode(MyUtils.name2code(m.getDecisionSequence2()));
                 xmlEventItemMeeting.setTypeName(m.getDecisionSequence2());
                 list1.add(xmlEventItemMeeting);
             } else if (StringUtils.isNotBlank(m.getDecisionSequence3())) {
                 XMLEventItemMeeting xmlEventItemMeeting = new XMLEventItemMeeting();
-                xmlEventItemMeeting.setTypeCode(name2code(m.getDecisionSequence3()));
+                xmlEventItemMeeting.setTypeCode(MyUtils.name2code(m.getDecisionSequence3()));
                 xmlEventItemMeeting.setTypeName(m.getDecisionSequence3());
                 list1.add(xmlEventItemMeeting);
             }
@@ -198,30 +199,7 @@ public class XmlController {
         return "ok";
     }
 
-    private String name2code(String decisionSequence) {
-        switch (decisionSequence) {
-            case "党委会":
-                return "DZ";
-            case "党组会":
-                return "DZ";
-            case "总经理办公会":
-                return "JL";
-            case "党委（党组）会":
-                return "DZ";
-            case "股东会":
-                return "GD";
-            case "董事会":
-                return "DS";
-            case "经理层办公会":
-                return "JL";
-            case "职代会":
-                return "ZD";
-            case "其他":
-                return "QT";
-            default:
-                return "";
-        }
-    }
+
 
     private void insertReport(String response, String fileName, String path,String type) {
         XmlReport xmlReport = new XmlReport();

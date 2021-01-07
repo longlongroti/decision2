@@ -219,7 +219,7 @@ public class ManageEventsListController {
                 manageEventsDetailItem.setDecisionSequence2(seq2);
                 manageEventsDetailItem.setDecisionSequence3(seq3);
                 manageEventsDetailItem.setEventId(itemid);
-                AutoCode autoCode = autoCodeMapper.selectBy(dicEventsCatalog.getCatalogCode(), MyDateTimeUtils.strNow("yyyyMM"));
+                AutoCode autoCode = autoCodeMapper.selectBy("sxbm",dicEventsCatalog.getCatalogCode(), MyDateTimeUtils.strNow("yyyyMM"));
                 String code = "";
                 String a = "";
                 String b = "";

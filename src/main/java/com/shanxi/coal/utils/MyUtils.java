@@ -222,7 +222,53 @@ public class MyUtils {
         return new String(baos.toByteArray(), StandardCharsets.UTF_8);
     }
 
+    public static String code2code(String meetingType) {
+        switch (meetingType) {
+            case "0":
+                return "DZ";
+            case "1":
+                return "ZD";
+            case "2":
+                return "DZ";
+            case "3":
+                return "DS";
+            case "4":
+                return "JL";
+            case "5":
+                return "GD";
+            case "6":
+                return "DZ";
+            case "7":
+                return "QT";
+            case "8":
+                return "JL";
+            default:
+                return "";
+        }
+    }
 
-
-
+    public static String name2code(String decisionSequence) {
+        switch (decisionSequence) {
+            case "党委会":
+                return "DZ";
+            case "党组会":
+                return "DZ";
+            case "总经理办公会":
+                return "JL";
+            case "党委（党组）会":
+                return "DZ";
+            case "股东会":
+                return "GD";
+            case "董事会":
+                return "DS";
+            case "经理层办公会":
+                return "JL";
+            case "职代会":
+                return "ZD";
+            case "其他":
+                return "QT";
+            default:
+                return "";
+        }
+    }
 }

@@ -31,8 +31,17 @@
       select
       <include refid="Base_Column_List" />
       from auto_code
-      where remark1 = #{remark1,jdbcType=CHAR}
-      and remark2 = #{remark2,jdbcType=CHAR}
+      <where>
+        <if test="remark1 != null">
+         and  remark1 = #{remark1,jdbcType=CHAR}
+        </if>
+        <if test="remark2 != null">
+        and  remark2 = #{remark2,jdbcType=CHAR}
+        </if>
+        <if test="remark != null">
+        and   remark = #{remark,jdbcType=CHAR}
+        </if>
+      </where>
       order by number desc limit 1
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

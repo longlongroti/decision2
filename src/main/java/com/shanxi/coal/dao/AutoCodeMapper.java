@@ -16,5 +16,5 @@ public interface AutoCodeMapper {
 
     int updateByPrimaryKey(AutoCode record);
 
-    AutoCode selectBy(@Param("remark1") String catalogCode, @Param("remark2") String yyyyMM);
+    AutoCode selectBy(@Param("remark") String remark, @Param("remark1") String catalogCode, @Param("remark2") String yyyyMM);
 }
