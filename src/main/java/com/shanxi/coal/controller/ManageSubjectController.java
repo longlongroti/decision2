@@ -3,6 +3,7 @@ package com.shanxi.coal.controller;
 import com.github.pagehelper.PageInfo;
 import com.shanxi.coal.dao.*;
 import com.shanxi.coal.domain.*;
+import com.shanxi.coal.service.CommonService;
 import com.shanxi.coal.utils.MyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,8 @@ public class ManageSubjectController {
     ManageLeaderGroupMapper leaderGroupMapper;
     @Resource
     AutoCodeMapper autoCodeMapper;
+    @Resource
+    CommonService commonService;
 
     @PostMapping("/list")
     @ResponseBody
@@ -50,7 +53,7 @@ public class ManageSubjectController {
     public String add(@PathParam("meetingId") String meetingId, @PathParam("uuid") String uuid, Model model) {
         model.addAttribute("meetingId", meetingId);
         if (StringUtils.isNotBlank(uuid)) {
-            ManageMeetingSubject manageMeetingSubject = subjectMapper.selectByPrimaryKey(uuid);
+            ManageMeetingSubject manageMeetingSubject = subjectMapper.selectById(uuid);
             model.addAttribute("manageMeetingSubject", manageMeetingSubject);
         }
         return "manageSubject/add";
@@ -86,6 +89,9 @@ public class ManageSubjectController {
             }
         } else {
             subjectMapper.updateByPrimaryKeySelective(manageMeetingSubject);
+        }
+        if (liquibase.util.StringUtils.isNotEmpty(manageMeetingSubject.getFileIds())) {
+            commonService.batchUpdateFileId(manageMeetingSubject.getFileIds(), manageMeetingSubject.getUuid());
         }
         return "redirect:/manageSubject/list?uuid=" + manageMeetingSubject.getMeetingId();
     }

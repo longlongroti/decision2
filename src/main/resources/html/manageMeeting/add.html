@@ -153,14 +153,24 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label   my-font-bold"
-                                   for="fileuploader">相关凭证</label>
+                                   for="fileuploader">会议纪要</label>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-8 ">
                                 <div id="fileuploader">Upload</div>
                             </div>
                         </div>
-
+                        <div class="clr"></div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label   my-font-bold"
+                                   for="fileuploader2">会议通知</label>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-8 ">
+                                <div id="fileuploader2">Upload</div>
+                            </div>
+                        </div>
 
 
                         <div class="form-group row">
@@ -195,7 +205,18 @@
 <script th:inline="javascript">
     $(function () {
         let ret = [[${manageMeetingSel!=null}?${manageMeetingSel.fileUploads}]];
-        myFileAction.do("fileuploader", "fileIds", "meeting", ret);
+        let ret1 = [];
+        let ret2 = [];
+        for (let i = 0; i < ret.length; i++) {
+            if(ret[i].fileCategory == 'meeting'){
+                ret1.push(ret[i]);
+            }else{
+                ret2.push(ret[i]);
+            }
+        }
+
+        myFileAction.do("fileuploader", "fileIds", "meeting", ret1);
+        myFileAction.do("fileuploader2", "fileIds", "meetingNotice", ret2);
 
         let attendeeSel = [[${manageMeetingSel} ? ${manageMeetingSel.manageMeetingAttendee}]];
         if (attendeeSel) {

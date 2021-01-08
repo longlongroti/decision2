@@ -184,11 +184,23 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label   my-font-bold"
-                                   for="fileuploader">相关凭证</label>
+                                   for="fileuploader">正式文件</label>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-8 ">
                                 <div id="fileuploader">Upload</div>
+                            </div>
+                        </div>
+
+                        <div class="clr"></div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label   my-font-bold"
+                                   for="fileuploader2">辅佐材料</label>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-8 ">
+                                <div id="fileuploader2">Upload</div>
                             </div>
                         </div>
 
@@ -225,9 +237,17 @@
 <script th:inline="javascript">
     $(function () {
         let ret = [[${manageSystemSel!=null}?${manageSystemSel.fileUploads}]];
-        myFileAction.do("fileuploader", "fileIds", "managesystem", ret);
-
-
+        let ret1 = [];
+        let ret2 = [];
+        for (let i = 0; i < ret.length; i++) {
+            if(ret[i].fileCategory == 'managesystem'){
+                ret1.push(ret[i]);
+            }else{
+                ret2.push(ret[i]);
+            }
+        }
+        myFileAction.do("fileuploader", "fileIds", "managesystem", ret1);
+        myFileAction.do("fileuploader2", "fileIds", "managesystemMaterial", ret2);
     })
 
     function addInput() {

@@ -2,6 +2,7 @@ package com.shanxi.coal.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ManageMeetingSubject extends CommonBean implements Serializable {
 
@@ -27,8 +28,28 @@ public class ManageMeetingSubject extends CommonBean implements Serializable {
 
     private String subjectResult;
 
+    private List<FileUploaded> fileUploads;
+
+    private String fileIds;
+
+
     private static final long serialVersionUID = 1L;
 
+    public List<FileUploaded> getFileUploads() {
+        return fileUploads;
+    }
+
+    public void setFileUploads(List<FileUploaded> fileUploads) {
+        this.fileUploads = fileUploads;
+    }
+
+    public String getFileIds() {
+        return fileIds;
+    }
+
+    public void setFileIds(String fileIds) {
+        this.fileIds = fileIds;
+    }
 
     public String getRemark() {
         return remark;

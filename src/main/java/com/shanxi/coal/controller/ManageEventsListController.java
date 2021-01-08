@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shanxi.coal.dao.*;
 import com.shanxi.coal.domain.*;
+import com.shanxi.coal.service.CommonService;
 import com.shanxi.coal.utils.MyDateTimeUtils;
 import com.shanxi.coal.utils.MyUtils;
 import liquibase.util.StringUtils;
@@ -31,6 +32,8 @@ public class ManageEventsListController {
     ManageEventsDetailsItemMapper manageEventsDetailsItemMapper;
     @Resource
     AutoCodeMapper autoCodeMapper;
+    @Resource
+    CommonService commonService;
 
     @GetMapping("/go")
     public String go() {
@@ -61,14 +64,18 @@ public class ManageEventsListController {
     @PostMapping("/add")
     public String add(ManageEventsList manageEventsList, @RequestParam("eventId") String eventId, @RequestParam("listName") String listName,
                       @RequestParam("versionNumber") String versionNumber, @RequestParam("startTime") String startTime,
-                      @RequestParam("endTime") String endTime, @RequestParam("remark") String remark) {
+                      @RequestParam("endTime") String endTime, @RequestParam("remark") String remark, @RequestParam("fileIds") String fileIds) {
         manageEventsList.setListName(listName);
         manageEventsList.setVersionNumber(versionNumber);
         manageEventsList.setStartTime(startTime);
         manageEventsList.setEndTime(endTime);
         manageEventsList.setRemark(remark);
+        manageEventsList.setFileIds(fileIds);
         MyUtils.setCommonBean(manageEventsList);
         manageEventsListMapper.insertSelective(manageEventsList);
+        if (StringUtils.isNotEmpty(manageEventsList.getFileIds())) {
+            commonService.batchUpdateFileId(manageEventsList.getFileIds(), manageEventsList.getUuid());
+        }
         return insertDetail(manageEventsList.getUuid(), eventId);
     }
 
@@ -80,14 +87,19 @@ public class ManageEventsListController {
                          @RequestParam("versionNumber") String versionNumber,
                          @RequestParam("startTime") String startTime,
                          @RequestParam("endTime") String endTime,
-                         @RequestParam("remark") String remark) {
+                         @RequestParam("remark") String remark,
+                         @RequestParam("fileIds") String fileIds) {
         manageEventsList.setUuid(mainUuid);
         manageEventsList.setListName(listName);
         manageEventsList.setVersionNumber(versionNumber);
         manageEventsList.setStartTime(startTime);
         manageEventsList.setEndTime(endTime);
         manageEventsList.setRemark(remark);
+        manageEventsList.setFileIds(fileIds);
         manageEventsListMapper.updateByPrimaryKeySelective(manageEventsList);
+        if (StringUtils.isNotEmpty(manageEventsList.getFileIds())) {
+            commonService.batchUpdateFileId(manageEventsList.getFileIds(), manageEventsList.getUuid());
+        }
         String mainUUid = manageEventsList.getUuid();
         manageEventsDetailsMapper.deleteByMainId(mainUUid);
         return insertDetail(manageEventsList.getUuid(), eventId);

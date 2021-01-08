@@ -815,7 +815,7 @@
         do: function (inputElement, idField, type, ret) {
             let uploadUrl = [[@{'/file/upload'}]];
             let deleteUrl = [[@{'/file/delete'}]];
-            let arrId = [];
+            let arrId = '';
             $("#" + inputElement).uploadFile({
                 url: uploadUrl + "?type=" + type,                 //文件上传url
                 returnType: 'json',              //服务返回数据
@@ -825,9 +825,18 @@
                     if (ret) {
                         for (let a = 0, lengths = ret.length; a < lengths; a++) {
                             obj.createProgress(ret[a].fileName, ret[a].filePath, ret[a].fileSize, ret[a].uuid);
-                            arrId.push(ret[a].uuid);
+                            // arrId.push(ret[a].uuid);
+                            if(arrId==''){
+                                arrId = ret[a].uuid;
+                            }else{
+                                arrId += ','+ret[a].uuid;
+                            }
                         }
-                        $('#' + idField).val(arrId);
+                        if($('#' + idField).val() != '' && $('#' + idField).val() != null){
+                            $('#' + idField).val($('#' + idField).val()+','+arrId);
+                        }else{
+                            $('#' + idField).val(arrId);
+                        }
                     }
                 },
                 deleteCallback: function (data, pd) {
@@ -835,16 +844,25 @@
                         type: "post",
                         url: deleteUrl + "?uuid=" + data,
                         success: function (datas) {
-                            let index = arrId.indexOf(data);
-                            if (index > -1) {
-                                arrId.splice(index, 1);
-                            }
+                            // let index = arrId.indexOf(data);
+                            // if (index > -1) {
+                            //     arrId.splice(index, 1);
+                            // }
+                            let ids = $('#' + idField).val()+'';
+                            ids = ids.replace(data,'');
+                            $('#' + idField).val(ids);
                         }
                     });
                 },
                 onSuccess: function (files, data, xhr, pd) {
-                    arrId.push(data);
-                    $('#' + idField).val(arrId);
+                    // arrId.push(data);
+                    // $('#' + idField).val(arrId);
+                    if($('#' + idField).val() != '' && $('#' + idField).val() != null){
+                        $('#' + idField).val($('#' + idField).val()+','+data);
+                    }else{
+                        $('#' + idField).val(data);
+                    }
+
                 }
             });
         }

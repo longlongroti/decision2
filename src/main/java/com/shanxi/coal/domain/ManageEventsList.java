@@ -1,5 +1,7 @@
 package com.shanxi.coal.domain;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +16,26 @@ public class ManageEventsList extends CommonBean implements Serializable {
     private String endTime;
 
     private List<ManageEventsDetails> item;
+
+    private List<FileUploaded> fileUploads;
+
+    private String fileIds;
+
+    public List<FileUploaded> getFileUploads() {
+        return fileUploads;
+    }
+
+    public void setFileUploads(List<FileUploaded> fileUploads) {
+        this.fileUploads = fileUploads;
+    }
+
+    public String getFileIds() {
+        return fileIds;
+    }
+
+    public void setFileIds(String fileIds) {
+        this.fileIds = fileIds;
+    }
 
     public List<ManageEventsDetails> getItem() {
         return item;

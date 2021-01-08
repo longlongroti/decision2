@@ -18,4 +18,6 @@ public interface ManageMeetingSubjectMapper {
     int updateByPrimaryKey(ManageMeetingSubject record);
 
     List<ManageMeetingSubject> listByMeetingId(String meetingId);
+
+    ManageMeetingSubject selectById(String uuid);
 }
