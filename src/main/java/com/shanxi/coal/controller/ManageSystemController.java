@@ -42,6 +42,7 @@ public class ManageSystemController {
     ManageSystemItemsMapper manageSystemItemsMapper;
     @Resource
     CommonService commonService;
+
     @GetMapping("/go")
     public String go() {
         return "manageSystem/list";
@@ -69,47 +70,61 @@ public class ManageSystemController {
     }
 
     @PostMapping("/add")
-    public String add(ManageSystem manageSystem, @RequestParam("itemsName") String itemsName,
-                         @RequestParam("votingFormula") String votingFormula,
-                      @RequestParam("peopleCount") String peopleCount, Model model) {
-        System.out.println(itemsName);
-        String[] itemsNames = itemsName.split(",");
-        String[] votingFormulas = votingFormula.split(",");
-        String[] peopleCounts = peopleCount.split(",");
+    public String add(ManageSystem manageSystem, Model model) {
         MyUtils.setCommonBean(manageSystem);
         manageSystemMapper.insertSelective(manageSystem);
         if (StringUtils.isNotEmpty(manageSystem.getFileIds())) {
             commonService.batchUpdateFileId(manageSystem.getFileIds(), manageSystem.getUuid());
         }
-        return insertDetail(itemsNames, votingFormulas, peopleCounts, manageSystem.getUuid());
+        return "redirect:/manageSystem/go";
     }
 
     @PutMapping("/add")
-    public String update(ManageSystem manageSystem, @RequestParam("itemsName") String itemsName,
-                         @RequestParam("votingFormula") String votingFormula,
-                         @RequestParam("peopleCount") String peopleCount) {
-        String[] itemsNames = itemsName.split(",");
-        String[] votingFormulas = votingFormula.split(",");
-        String[] peopleCounts = peopleCount.split(",");
+    public String update(ManageSystem manageSystem) {
         manageSystemMapper.updateByPrimaryKeySelective(manageSystem);
         if (StringUtils.isNotEmpty(manageSystem.getFileIds())) {
             commonService.batchUpdateFileId(manageSystem.getFileIds(), manageSystem.getUuid());
         }
         manageSystemItemsMapper.deleteByParentId(manageSystem.getUuid());
-        return insertDetail(itemsNames, votingFormulas, peopleCounts, manageSystem.getUuid());
+        return "redirect:/manageSystem/go";
     }
 
-    private String insertDetail(String[] itemsNames, String[] votingFormulas, String[] peopleCounts,String mainUUid) {
-        for (int i = 0; i < itemsNames.length; i++) {
-            ManageSystemItems manageSystemItems = new ManageSystemItems();
-            manageSystemItems.setUuid(UUID.randomUUID().toString());
-            manageSystemItems.setSystemParentId(mainUUid);
-            manageSystemItems.setItemsName(checkNullAndReturn(itemsNames, i));
-            manageSystemItems.setVotingFormula(checkNullAndReturn(votingFormulas, i));
-            manageSystemItems.setPeopleCount(checkNullAndReturn(peopleCounts, i));
-            manageSystemItemsMapper.insertSelective(manageSystemItems);
-        }
-        return "redirect:/manageSystem/go";
+    @PostMapping("/addDetailItem")
+    @ResponseBody
+    public String addDetailItem(@RequestParam("itemsName") String itemsName,
+                                @RequestParam("votingFormula") String votingFormula,
+                                @RequestParam("peopleCount") String peopleCount,
+                                @RequestParam("mainUUid") String mainUUID) {
+        insertDetail(itemsName, votingFormula, peopleCount, mainUUID);
+        return "ok";
+    }
+
+    @PostMapping("/listDetailItems")
+    @ResponseBody
+    public String listDetailItems(@RequestParam("pageNumber") Integer pageNumber,
+                                  @RequestParam("pageSize") Integer pageSize,
+                                  @RequestParam("id") String id) throws ParseException {
+        PageHelper.startPage(pageNumber, pageSize);
+        List<ManageSystemItems> manageSystemItems = manageSystemItemsMapper.listByUseId(id);
+        PageInfo<ManageSystemItems> pageInfo = new PageInfo<ManageSystemItems>(manageSystemItems);
+        return MyUtils.pageInfoToJson(pageInfo);
+    }
+
+    @PostMapping("/deleteDetailItem")
+    @ResponseBody
+    public String deleteDetailItem(@PathParam("uuid") String uuid) {
+        manageSystemItemsMapper.deleteByPrimaryKey(uuid);
+        return "ok";
+    }
+
+    private void insertDetail(String itemsNames, String votingFormulas, String peopleCounts, String mainUUid) {
+        ManageSystemItems manageSystemItems = new ManageSystemItems();
+        manageSystemItems.setUuid(UUID.randomUUID().toString());
+        manageSystemItems.setSystemParentId(mainUUid);
+        manageSystemItems.setItemsName(itemsNames);
+        manageSystemItems.setVotingFormula(votingFormulas);
+        manageSystemItems.setPeopleCount(peopleCounts);
+        manageSystemItemsMapper.insertSelective(manageSystemItems);
     }
 
     public String checkNullAndReturn(String[] array, int idx) {
@@ -152,7 +167,6 @@ public class ManageSystemController {
         return "ok";
     }
 
-
     @GetMapping("/exportExcel.xlsx")
     public void exportExcel(HttpServletResponse response) throws ParseException, IOException {
         String fileName = "报表";
@@ -182,7 +196,7 @@ public class ManageSystemController {
                     EasyExcel.readSheet(0).head(ManageSystem.class).registerReadListener(new ManageSystemListener(manageSystemMapper)).build();
             ReadSheet readSheet2 =
                     EasyExcel.readSheet(1).head(ManageSystemItems.class).registerReadListener(new ManageSystemItemsListener(manageSystemItemsMapper)).build();
-            excelReader.read(readSheet0,  readSheet2 );
+            excelReader.read(readSheet0, readSheet2);
             // 这里千万别忘记关闭，读的时候会创建临时文件，到时磁盘会崩的
             excelReader.finish();
             return MyUtils.objectToJson("成功");

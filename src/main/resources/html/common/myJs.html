@@ -313,6 +313,31 @@
                 });
                 $('#' + pop).modal("hide");
             });
+        }, addAction7: function (id, url, redirect, pop,urls,delurl) {
+            $('#' + pop).modal("show");
+            creatb71();
+            creatb7(urls,id,delurl)
+            $("#confirmAdd7").click(function () {
+                $.ajax({
+                    url: url,
+                    data: 'itemsName=' + $("#itemsName").val()+"&votingFormula="+ $("#votingFormula").val()
+                         +"&peopleCount="+ $("#peopleCount").val()
+                        + "&mainUUid="+ id,
+                    type: "post",
+                    success: function (data) {
+                        if (!redirect) {
+                            return;
+                        }
+                        if (typeof redirect == 'function') {
+                            redirect();
+                        } else {
+                            location.href = redirect
+                        }
+                        $("#confirmAdd7").attr('onclick','').unbind('click');
+                        $('#' + pop).modal("hide");
+                    }
+                });
+            });
         },
         addAction4: function (id, url, redirect, pop,urls,delurl) {
             $('#' + pop).modal("show");
@@ -405,6 +430,19 @@
             }
         });
     }
+    function creatb71(){
+        $.ajax({
+            url: [[@{'/manageEventsList/listAllDetailItems'}]],
+            type: "post",
+            success: function (data) {
+                data = eval('(' + data + ')');
+                for( var i in data){
+                    let val =data[i].eventCode+ ">>>" + data[i].eventName ;
+                    $("#itemsName").append('<option value="' + data[i].eventCode + '">' + val + '</option>')
+                }
+            }
+        });
+    }
     function creatbForAttendanceInfo(){
         $.ajax({
             url: [[@{'/manageLeader/leaderList'}]],
@@ -481,6 +519,56 @@
                                 type: "post",
                                 success: function (data) {
                                     creatb2(urls,id,delurl)
+                                }
+                            });
+                        }
+                    }
+                }
+            ]
+        });
+    }function creatb7(urls,id,delurl){
+        $("#tabledetails").bootstrapTable('destroy');
+        $("#tabledetails").bootstrapTable({
+            url: urls,        //请求后台的URL（*）
+            method: 'post',
+            contentType: "application/x-www-form-urlencoded",
+            pagination: true,                   //是否显示分页（*）
+            cache: false,
+            pageSize: 10,//每页一条数据
+            striped: true,  //表格显示条纹
+            dataField: "list",
+            queryParamsType: "undefined",
+            queryParams: function queryParams(params) {   //设置查询参数
+                let param = {
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize,
+                    id: id
+                };
+                return param;
+            },
+            sidePagination: 'server',
+            pageNumber: 1,
+            columns: [
+                {field: "uuid", visible: false},
+                {field: "itemsName", title: "事项名称"},
+                {field: "votingFormula", title: "表决方式"},
+                {field: "peopleCount", title: "人数占比"},
+                {
+                    field: "cz", title: '操作', width: "23%",
+                    formatter: function (value, row) {
+                        let delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
+                        return delHtml;
+                    },
+                    events: {
+                        'click .del': function (e, value, row, index) {
+                            let ids = row.uuid;
+
+                            $.ajax({
+                                url: delurl,
+                                data: 'uuid=' + ids,
+                                type: "post",
+                                success: function (data) {
+                                    creatb7(urls,id,delurl)
                                 }
                             });
                         }

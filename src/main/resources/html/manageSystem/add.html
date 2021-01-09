@@ -141,44 +141,7 @@
                             </div>
                         </fieldset>
                         <div class="clr"></div>
-                        <div class="hr-line-dashed"></div>
-                        <h4>事项表决列表(*允许存在一条默认事项的表决方式，默认事项名称为空)</h4>
-                        <div class="form-group row input-dyna-add">
-                            <span class="col-sm-12" th:each="dat:${manageSystemItemsSel}"
-                                  th:if="${manageSystemItemsSel!=null}">
-                                <div>
-                                    <div class='col-sm-3'>
-                                        <input type='text'  name='itemsName' class='form-control m-t-sm col-sm-3'
-                                               placeholder='事项名称' th:value="${dat.itemsName}">
-                                    </div>
-                                    <div class='col-sm-3'>
-                                        <select class="form-control" id="votingFormula" name="votingFormula" >
-                                            <option>表决方式</option>
-                                            <option value="赞成票超过应到会成员人数的4/5" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过应到会成员人数的4/5'}">赞成票超过应到会成员人数的4/5</option>
-                                            <option value="赞成票超过应到会成员人数的1/2" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过应到会成员人数的1/2'}">赞成票超过应到会成员人数的1/2</option>
-                                            <option value="赞成票超过应到会成员人数的2/3" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过应到会成员人数的2/3'}">赞成票超过应到会成员人数的2/3</option>
-                                            <option value="赞成票超过到会成员人数的1/2" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过到会成员人数的1/2'}">赞成票超过到会成员人数的1/2</option>
-                                            <option value="赞成票超过应到会成员人数的4/5" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过应到会成员人数的4/5'}">赞成票超过应到会成员人数的4/5</option>
-                                            <option value="赞成票超过应到会成员人数的3/4" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过应到会成员人数的3/4'}">赞成票超过应到会成员人数的3/4</option>
-                                            <option value="赞成票超过到会成员人数的4/5" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过到会成员人数的4/5'}">赞成票超过到会成员人数的4/5</option>
-                                            <option value="赞成票超过到会成员人数的2/3" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过到会成员人数的2/3'}">赞成票超过到会成员人数的2/3</option>
-                                            <option value="全票通过" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '全票通过'}">全票通过</option>
-                                        </select>
-                                    </div>
-                                    <div class='col-sm-3'>
-                                        <input type='text'  name='peopleCount'
-                                               class='form-control m-t-sm col-sm-3' placeholder='人数占比'
-                                               th:value="${dat.peopleCount}">
-                                    </div>
 
-                                    <div class='col-sm-3'>
-                                        <button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>
-                                            <span class='glyphicon glyphicon-minus'></span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </span>
-                        </div>
 
                         <div class="clr"></div>
                         <div class="hr-line-dashed"></div>
@@ -248,34 +211,6 @@
         }
         myFileAction.do("fileuploader", "fileIds", "managesystem", ret1);
         myFileAction.do("fileuploader2", "fileIds", "managesystemMaterial", ret2);
-    })
-
-    function addInput() {
-        let input = $(
-            "<div><div class='col-sm-3'><input type='text'  name='itemsName'  class='form-control m-t-sm col-sm-3'  placeholder='事项名称'></div>" +
-            "<div class='col-sm-3'>" +
-            "<select class=\"form-control\" id=\"votingFormula\" name=\"votingFormula\" >\n" +
-            "<option>表决方式</option>\n" +
-            "<option value=\"赞成票超过应到会成员人数的4/5\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '赞成票超过应到会成员人数的4/5'}\">赞成票超过应到会成员人数的4/5</option>\n" +
-            "<option value=\"赞成票超过应到会成员人数的1/2\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '赞成票超过应到会成员人数的1/2'}\">赞成票超过应到会成员人数的1/2</option>\n" +
-            "<option value=\"赞成票超过应到会成员人数的2/3\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '赞成票超过应到会成员人数的2/3'}\">赞成票超过应到会成员人数的2/3</option>\n" +
-            "<option value=\"赞成票超过到会成员人数的1/2\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '赞成票超过到会成员人数的1/2'}\">赞成票超过到会成员人数的1/2</option>\n" +
-            "<option value=\"赞成票超过应到会成员人数的4/5\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '赞成票超过应到会成员人数的4/5'}\">赞成票超过应到会成员人数的4/5</option>\n" +
-            "<option value=\"赞成票超过应到会成员人数的3/4\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '赞成票超过应到会成员人数的3/4'}\">赞成票超过应到会成员人数的3/4</option>\n" +
-            "<option value=\"赞成票超过到会成员人数的4/5\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '赞成票超过到会成员人数的4/5'}\">赞成票超过到会成员人数的4/5</option>\n" +
-            "<option value=\"赞成票超过到会成员人数的2/3\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '赞成票超过到会成员人数的2/3'}\">赞成票超过到会成员人数的2/3</option>\n" +
-            "<option value=\"全票通过\" th:selected=\"${manageSystemItemsSel!=null}?${manageSystemItemsSel.votingFormula == '全票通过'}\">全票通过</option>\n" +
-            "</select></div>" +
-            "<div class='col-sm-3'><input type='text'  name='peopleCount'  class='form-control m-t-sm col-sm-3'  placeholder='人数占比'></div>" +
-            "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
-            "<span class='glyphicon glyphicon-minus'></span>" +
-            "</button></div></div>");
-        $(".input-dyna-add").append(input);
-    }
-
-    $("body").on("click", ".removeclass", function (e) {
-        $(this).parent().parent('div').remove();
-        return false;
     })
 
 </script>

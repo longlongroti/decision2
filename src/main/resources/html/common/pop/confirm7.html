@@ -1,0 +1,61 @@
+<div th:fragment="showConfirm" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="modal fade "  id="confirmModal7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">确认添加</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <div class="ibox-content">
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label my-font-bold">事项编码</label>
+                            <select class="form-control" id="itemsName" name="itemsName">
+
+                            </select>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label my-font-bold">表决方式</label>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="votingFormula" name="votingFormula">
+                                    <option value="赞成票超过应到会成员人数的4/5" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过应到会成员人数的4/5'}">赞成票超过应到会成员人数的4/5</option>
+                                    <option value="赞成票超过应到会成员人数的1/2" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过应到会成员人数的1/2'}">赞成票超过应到会成员人数的1/2</option>
+                                    <option value="赞成票超过应到会成员人数的2/3" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过应到会成员人数的2/3'}">赞成票超过应到会成员人数的2/3</option>
+                                    <option value="赞成票超过到会成员人数的1/2" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过到会成员人数的1/2'}">赞成票超过到会成员人数的1/2</option>
+                                    <option value="赞成票超过应到会成员人数的4/5" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过应到会成员人数的4/5'}">赞成票超过应到会成员人数的4/5</option>
+                                    <option value="赞成票超过应到会成员人数的3/4" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过应到会成员人数的3/4'}">赞成票超过应到会成员人数的3/4</option>
+                                    <option value="赞成票超过到会成员人数的4/5" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过到会成员人数的4/5'}">赞成票超过到会成员人数的4/5</option>
+                                    <option value="赞成票超过到会成员人数的2/3" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '赞成票超过到会成员人数的2/3'}">赞成票超过到会成员人数的2/3</option>
+                                    <option value="全票通过" th:selected="${manageSystemItemsSel!=null}?${dat.votingFormula == '全票通过'}">全票通过</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label my-font-bold">人数占比</label>
+                            <div class="col-sm-5">
+                                <input type='text'  name='peopleCount' id="peopleCount"  class='form-control m-t-sm col-sm-3' />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-default cancel" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary del" id="confirmAdd7">确认添加</button>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table id="tabledetails"></table>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
