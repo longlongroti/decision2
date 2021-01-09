@@ -89,7 +89,6 @@
     </div>
 </div>
 <div th:replace="common/pop/confirm::showConfirm"></div>
-<div th:replace="common/pop/confirm3::showConfirm"></div>
 
 <script th:src="@{/asserts/js/jquery.min.js}"></script>
 <script th:src="@{/asserts/js/bootstrap.min.js}"></script>
@@ -187,11 +186,9 @@
                                 editHtml = '<a href="javascript:;" class="btn btn-sm btn-success edit badge-pill mb-2" ><i class="fa fa-pencil"> </i>' + '编辑' + '</a>&nbsp;';
                             if (checkAuthorization('会议信息管理_删除'))
                                 delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
-                            if (checkAuthorization('会议信息管理_添加事项'))
-                                addHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adde badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加事项' + '</a>&nbsp;';
 
                             addSubjectHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adds badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '议题管理' + '</a>&nbsp;';
-                        let buttonhtml = editHtml + delHtml + addHtml+addSubjectHtml;
+                        let buttonhtml = editHtml + delHtml +addSubjectHtml;
                         return buttonhtml;
                     },
                     events: {
@@ -204,14 +201,6 @@
                             let url = '[[@{'/manageMeeting/delete'}]]';
                             let redirectUrl = '[[@{'/manageMeeting/go'}]]';
                             commonAction.delAction(id, url, redirectUrl, 'confirmModal')
-                        },
-                        'click .adde': function (e, value, row, index) {
-                            let id = row.uuid;
-                            let url = '[[@{'/manageMeeting/addDetailItem'}]]';
-                            let redirectUrl = '[[@{'/manageMeeting/go'}]]';
-                            let urls = '[[@{'/manageMeeting/listDetailItems'}]]';
-                            let delurl = '[[@{'/manageMeeting/deleteDetailItem'}]]';
-                            commonAction.addAction3(id, url, redirectUrl, 'confirmModal3',urls,delurl)
                         },
                         'click .adds': function (e, value, row, index) {
                             let id = row.uuid;
