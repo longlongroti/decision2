@@ -1,10 +1,7 @@
 package com.shanxi.coal.controller;
 
 import com.shanxi.coal.config.MyProperties;
-import com.shanxi.coal.dao.ManageEventsDetailsItemMapper;
-import com.shanxi.coal.dao.ManageEventsListMapper;
-import com.shanxi.coal.dao.ManageSystemMapper;
-import com.shanxi.coal.dao.XmlReportMapper;
+import com.shanxi.coal.dao.*;
 import com.shanxi.coal.domain.*;
 import com.shanxi.coal.utils.MyDateTimeUtils;
 import com.shanxi.coal.utils.MyUtils;
@@ -48,6 +45,10 @@ public class XmlController {
 
     @Resource
     ManageSystemMapper manageSystemMapper;
+    @Resource
+    ManageLeaderGroupMapper manageLeaderGroupMapper;
+    @Resource
+    ManageLeaderMapper manageLeaderMapper;
 
     public static File packageFileCatalogPwdZip(String p, String fname) throws Exception {
         String catalogPath = p + fname;
@@ -104,7 +105,7 @@ public class XmlController {
         jaxbMarshaller.marshal(xmlStaticsParent, new File(path + "/0013_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
-        insertReport(s, folder, path,"集团总部所属企业监管统计信息");
+        insertReport(s, folder, path, "集团总部所属企业监管统计信息");
         return "manageEventsList/list";
     }
 
@@ -133,7 +134,7 @@ public class XmlController {
         jaxbMarshaller.marshal(xml0014Parent, new File(path + "/0014_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
-        insertReport(s, folder, path,"集团所属企业决策制度");
+        insertReport(s, folder, path, "集团所属企业决策制度");
         return "ok";
     }
 
@@ -195,13 +196,11 @@ public class XmlController {
         jaxbMarshaller.marshal(xmlParent, new File(path + "/0004_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
-        insertReport(s, folder, path,"集团总部事项清单");
+        insertReport(s, folder, path, "集团总部事项清单");
         return "ok";
     }
 
-
-
-    private void insertReport(String response, String fileName, String path,String type) {
+    private void insertReport(String response, String fileName, String path, String type) {
         XmlReport xmlReport = new XmlReport();
         xmlReport.setUuid(UUID.randomUUID().toString());
         xmlReport.setFileName(fileName);
@@ -256,6 +255,84 @@ public class XmlController {
             }
         }
         return res;
+    }
+
+    @PostMapping("/sendLeader")
+    @ResponseBody
+    public String sendLeader(@RequestParam("id") String id) throws Exception {
+        List<ManageLeaderGroup> list = manageLeaderGroupMapper.listByUseId(id);
+        ManageLeader manageLeader = manageLeaderMapper.selectByPrimaryKey(id);
+        XMLParent xmlParent = new XMLParent();
+        xmlParent.setCompanyId(myProperties.getCreditCode());
+        xmlParent.setCompanyName(myProperties.getCompanyName());
+        xmlParent.setRemark("");
+        xmlParent.setSource("系统");
+        xmlParent.setOperType("add");
+        List<XMLGroupList> xmlGroupList = new ArrayList<>();
+        List<ManageLeaderGroup> a = new ArrayList<>();
+        List<ManageLeaderGroup> b = new ArrayList<>();
+        List<ManageLeaderGroup> c = new ArrayList<>();
+        List<ManageLeaderGroup> d = new ArrayList<>();
+        for (ManageLeaderGroup l : list) {
+            if (l.getLeaderGroup().equals("党委(党组)成员(党委会)")
+                    || l.getLeaderGroup().equals("党委(党组)成员(党组会)")
+                    || l.getLeaderGroup().equals("党委(党组)成员(党委(党组)会)")) {
+                a.add(l);
+            } else if (l.getLeaderGroup().equals("董事会成员")
+                    || l.getLeaderGroup().equals("股东会成员(股东会)")) {
+                b.add(l);
+            } else if (l.getLeaderGroup().equals("经理班子成员(总经理办公室)")
+                    || l.getLeaderGroup().equals("经理班子成员(经理层办公会)")) {
+                c.add(l);
+            } else if (l.getLeaderGroup().equals("(职代会)") ||
+                    l.getLeaderGroup().equals("(其他)")) {
+                d.add(l);
+            }
+        }
+        XMLGroupList xmlGroupList1 = new XMLGroupList();
+        xmlGroupList1.setGroupType("党委（党组）成员");
+        dup(xmlGroupList, a, xmlGroupList1, manageLeader);
+        XMLGroupList xmlGroupList2 = new XMLGroupList();
+        xmlGroupList2.setGroupType("董事会成员");
+        dup(xmlGroupList, b, xmlGroupList2, manageLeader);
+        XMLGroupList xmlGroupList3 = new XMLGroupList();
+        xmlGroupList3.setGroupType("经理班子成员");
+        dup(xmlGroupList, c, xmlGroupList3, manageLeader);
+        XMLGroupList xmlGroupList4 = new XMLGroupList();
+        xmlGroupList4.setGroupType("其他成员");
+        dup(xmlGroupList, d, xmlGroupList4, manageLeader);
+        xmlParent.setGroup(xmlGroupList);
+        JAXBContext jaxbContext = JAXBContext.newInstance(XMLParent.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        String folder = myProperties.getCreditCode() + "_0011_1000_" + MyDateTimeUtils.strNow("yyyyMMddHHmmss") + "_" + UUID.randomUUID().toString().replaceAll("-", "");
+        String path = myProperties.getXmlPath() + folder;
+        File f = new File(path);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+        jaxbMarshaller.marshal(xmlParent, new File(path + "/0011_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
+        File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
+        String s = doSend(zipFile);
+        insertReport(s, folder, path, "集团总部企业基本信息");
+        return "ok";
+    }
+
+    private void dup(List<XMLGroupList> xmlGroupList, List<ManageLeaderGroup> b, XMLGroupList xmlGroupList2, ManageLeader manageLeader) {
+        List<XMLMemberList> xmlMemberLists2 = new ArrayList<>();
+        for (ManageLeaderGroup l : b) {
+            XMLMemberList xmlMemberList = new XMLMemberList();
+            xmlMemberList.setName(manageLeader.getLeaderName());
+            xmlMemberList.setEndDate(l.getOfficeEndDate());
+            xmlMemberList.setMemberId(manageLeader.getUuid());
+            xmlMemberList.setPosition(l.getJobTitle());
+            xmlMemberList.setStartDate(l.getOfficeStartDate());
+            xmlMemberList.setRemark("");
+            xmlMemberList.setOperType("add");
+            xmlMemberLists2.add(xmlMemberList);
+        }
+        xmlGroupList2.setXMLMemberListList(xmlMemberLists2);
+        xmlGroupList.add(xmlGroupList2);
     }
 
 

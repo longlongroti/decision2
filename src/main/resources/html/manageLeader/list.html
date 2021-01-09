@@ -191,13 +191,15 @@
                     formatter: function (value, row) {
                         let editHtml = '';
                         let delHtml = '';
+                        let sendHtml = '';
                         if (row.status == 0 || row.status == 3) {
                             if (checkAuthorization('领导班子管理_编辑'))
                                 editHtml = '<a href="javascript:;" class="btn btn-sm btn-success edit badge-pill mb-2" ><i class="fa fa-pencil"> </i>' + '编辑' + '</a>&nbsp;';
                             if (checkAuthorization('领导班子管理_删除'))
                                 delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
                         }
-                        let buttonhtml = editHtml + delHtml;
+                        sendHtml= '<a href="javascript:;" class="btn btn-sm btn-warning send badge-pill mb-2"><i class="fa fa-send"> </i>' + '报送' + '</a>&nbsp;'
+                        let buttonhtml = editHtml + delHtml + sendHtml;
                         return buttonhtml;
                     },
                     events: {
@@ -211,7 +213,20 @@
                             let redirectUrl = '[[@{'/manageLeader/go'}]]';
                             commonAction.delAction(id, url, redirectUrl, 'confirmModal')
                         },
-                    }
+                    'click .send': function (e, value, row, index) {
+                        let url = '[[@{/xml/sendLeader}]]';
+                        var id = row.uuid;
+                        $.ajax({
+                            url: url,
+                            data: 'id=' + id,
+                            type: "post",
+                            success: function (data) {
+                                createTable();
+                            }
+                        });
+                    },
+
+                }
                 }
             ]
         });
