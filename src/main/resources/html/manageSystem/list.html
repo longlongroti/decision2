@@ -220,7 +220,8 @@
                         }
                         addHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adde badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加表决方式' + '</a>&nbsp;';
                         var sendHtml = '<a href="javascript:;" class="btn btn-warning send"><i class="fa fa-send"> </i> 报送</a>&nbsp;';
-                        let buttonhtml = editHtml + delHtml+addHtml+sendHtml;
+                        var sendHtml2 = '<a href="javascript:;" class="btn btn-warning send2"><i class="fa fa-send"> </i> 集团报送</a>&nbsp;';
+                        let buttonhtml = editHtml + delHtml+addHtml+sendHtml+sendHtml2;
                         return buttonhtml;
                     },
                     events: {
@@ -243,6 +244,18 @@
                             commonAction.addAction7(id, url, redirectUrl, 'confirmModal7',urls,delurl)
                         },'click .send': function (e, value, row, index) {
                             let url = '[[@{'/xml/send0014'}]]';
+                            debugger
+                            let id = row.uuid;
+                            $.ajax({
+                                url: url,
+                                data: 'id=' + id,
+                                type: "post",
+                                success: function (data) {
+                                    createTable();
+                                }
+                            });
+                        },'click .send2': function (e, value, row, index) {
+                            let url = '[[@{'/xml/send0005'}]]';
                             debugger
                             let id = row.uuid;
                             $.ajax({

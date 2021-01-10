@@ -49,6 +49,8 @@ public class XmlController {
     ManageLeaderGroupMapper manageLeaderGroupMapper;
     @Resource
     ManageLeaderMapper manageLeaderMapper;
+    @Resource
+    ManageSystemItemsMapper manageSystemItemsMapper;
 
     public static File packageFileCatalogPwdZip(String p, String fname) throws Exception {
         String catalogPath = p + fname;
@@ -135,6 +137,49 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团所属企业决策制度");
+        return "ok";
+    }
+
+    @PostMapping("/send0005")
+    @ResponseBody
+    public String send0005(@RequestParam("id") String id) throws Exception {
+        ManageSystem manageSystem = manageSystemMapper.selectByPrimaryKey(id);
+        List<ManageSystemItems> manageSystemItems = manageSystemItemsMapper.listByUseId(id);
+        XML0005Parent xml0005Parent = new XML0005Parent();
+        xml0005Parent.setCompanyId(myProperties.getCreditCode());
+        xml0005Parent.setCompanyName(myProperties.getCompanyName());
+        xml0005Parent.setEffectiveDate(manageSystem.getEffectiveDate());
+        xml0005Parent.setInvalidDate(manageSystem.getExpiryDate());
+        xml0005Parent.setRegulationId(manageSystem.getUuid());
+        xml0005Parent.setRegulationName(manageSystem.getSystemName());
+        xml0005Parent.setAuditFlag(manageSystem.getIsLegalApprove());
+        xml0005Parent.setMeetingTypeCode(MyUtils.name2code(manageSystem.getMeetingType()));
+        xml0005Parent.setRegulationTypeName(manageSystem.getSystemType());
+        xml0005Parent.setApprovalDate(manageSystem.getApproveDate());
+        List<XMLVoteMode> list = new ArrayList<>();
+        for (ManageSystemItems i : manageSystemItems) {
+            XMLVoteMode xmlVoteMode = new XMLVoteMode();
+            xmlVoteMode.setItemCode(i.getItemsName());
+            xmlVoteMode.setRate(i.getPeopleCount());
+            xmlVoteMode.setVoteMode(i.getVotingFormula());
+            list.add(xmlVoteMode);
+        }
+        xml0005Parent.setXmlVoteModeList(list);
+        xml0005Parent.setSource("系统");
+        xml0005Parent.setOperType("add");
+        JAXBContext jaxbContext = JAXBContext.newInstance(XML0005Parent.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        String folder = myProperties.getCreditCode() + "_0005_1000_" + MyDateTimeUtils.strNow("yyyyMMddHHmmss") + "_" + UUID.randomUUID().toString().replaceAll("-", "");
+        String path = myProperties.getXmlPath() + folder;
+        File f = new File(path);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+        jaxbMarshaller.marshal(xml0005Parent, new File(path + "/0005_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
+        File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
+        String s = doSend(zipFile);
+        insertReport(s, folder, path, "集团总部决策制度");
         return "ok";
     }
 
