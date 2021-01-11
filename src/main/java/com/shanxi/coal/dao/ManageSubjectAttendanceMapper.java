@@ -18,4 +18,6 @@ public interface ManageSubjectAttendanceMapper {
     int updateByPrimaryKey(ManageSubjectAttendance record);
 
     List<ManageSubjectAttendance> listBySubjectId(String subjectId);
+
+    int deleteBySubjectId(String subjectId);
 }

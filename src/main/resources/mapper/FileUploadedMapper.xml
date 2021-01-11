@@ -91,6 +91,10 @@
         delete from tbl_file_uploaded
         where uuid = #{uuid,jdbcType=CHAR}
     </delete>
+    <delete id="deleteByCategoryId" parameterType="java.lang.String">
+        delete from tbl_file_uploaded
+        where file_category_id = #{categoryId,jdbcType=CHAR}
+    </delete>
     <insert id="insert" parameterType="com.shanxi.coal.domain.FileUploaded">
     insert into tbl_file_uploaded (uuid, created_date, created_by,
       created_by_org, modified_by, modified_date,

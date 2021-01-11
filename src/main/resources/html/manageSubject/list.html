@@ -9,7 +9,7 @@
     <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
-
+    <link th:href="@{/asserts/css/jquery-file-upload.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
@@ -97,6 +97,7 @@
 <div th:replace="common/pop/confirm4::showConfirm"></div>
 <div th:replace="common/pop/confirm5::showConfirm"></div>
 <div th:replace="common/pop/confirm6::showConfirm"></div>
+<div th:replace="common/pop/confirm8::showConfirm"></div>
 
 <script th:src="@{/asserts/js/jquery.min.js}"></script>
 <script th:src="@{/asserts/js/bootstrap.min.js}"></script>
@@ -108,6 +109,7 @@
 <script th:src="@{/asserts/js/layer/layer.min.js}" type="text/javascript"></script>
 <script th:src="@{/asserts/js/laydate/laydate.js}"></script>
 <script th:replace="common/myJs::myCommonJs"></script>
+<script th:src="@{/asserts/js/jquery-file-upload.min.js?v=1.1}" type="text/javascript"></script>
 <script>
     $(function () {
         createTable();
@@ -149,7 +151,7 @@
             cache: false,
             pageSize: 10,//每页一条数据
             striped: true,  //表格显示条纹
-            detailView: true, //1，开启详情视树形图模式
+            // detailView: true, //1，开启详情视树形图模式
             // detailFormatter: "detailFormatter", //2，定义详情显示函数
             dataField: "list",
             queryParamsType: "undefined",
@@ -180,8 +182,8 @@
                         let addHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adde badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加事项' + '</a>&nbsp;';
                         let addAttendanceHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adda badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加列席人' + '</a>&nbsp;';
                         let addDeliberationHtml = '<a href="javascript:;" class="btn btn-sm btn-danger addd badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加审议结果' + '</a>&nbsp;';
-
-                        let buttonhtml = editHtml + delHtml + addHtml+addAttendanceHtml+addDeliberationHtml;
+                        let executionHtml = '<a href="javascript:;" class="btn btn-sm btn-danger add_execution badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加组织实施' + '</a>&nbsp;';
+                        let buttonhtml = editHtml + delHtml + addHtml+addAttendanceHtml+addDeliberationHtml+executionHtml;
                         return buttonhtml;
                     },
                     events: {
@@ -219,6 +221,13 @@
                             let delurl = '[[@{'/manageSubject/deleteDeliberation'}]]';
                             commonAction.addAction6(id, url, '', 'confirmModal6',urls,delurl)
                         },
+                        'click .add_execution': function (e, value, row, index) {
+                            let id = row.uuid;
+                            let url = '[[@{'/manageSubject/addExecution'}]]';
+                            let urls = '[[@{'/manageSubject/listExecution'}]]';
+                            let delurl = '[[@{'/manageSubject/deleteExecution'}]]';
+                            commonAction.addAction8(id, url, '', 'confirmModal8',urls,delurl)
+                        },
                     }
                 }
             ]
@@ -229,6 +238,22 @@
     $('#add_btn').click(function (){
         location.href = '[[@{'/manageSubject/add'}]]' + '?meetingId=' + $('#meetingId').val();
     });
+
+
+    function addInput() {
+        let input = $(
+            "<div class='form-group row'>"+
+            "<div class='col-sm-2'><input type='text'  name='dept'  class='form-control m-t-sm col-sm-2'  placeholder='落实责任部门'></div>" +
+            "<div class='col-sm-2'><input type='text'  name='name'  class='form-control m-t-sm col-sm-2'  placeholder='责任人'></div>" +
+            "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
+            "<span class='glyphicon glyphicon-minus'></span>" +
+            "</button></div></div>");
+        $(".input-dyna-add").append(input);
+    }
+    $("body").on("click", ".removeclass", function (e) {
+        $(this).parent().parent('div').remove();
+        return false;
+    })
 </script>
 </body>
 

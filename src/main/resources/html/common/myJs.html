@@ -390,6 +390,62 @@
                     }
                 });
             });
+        },
+        addAction8: function (id, url, redirect, pop,urls,delurl) {
+            $('#' + pop).modal("show");
+            //初始化 上传空间
+            myFileAction.do("fileuploader", "fileIds", "formalFile", []);
+            myFileAction.do("fileuploader2", "fileIds", "timeSchedule", []);
+            //初始化列表
+            creatb8(urls,id,delurl)
+            $("#confirmAdd8").click(function () {
+                //处理落实责任信息
+                let execution = {};
+                execution.subjectId = id;
+                execution.effect = $('#effect').val();
+                execution.status = $('#status').val();
+                execution.description = $('#description').val();
+                execution.remark = $('#remark').val();
+                execution.fileIds = $('#fileIds').val();
+                let dutyList = [];
+                let duty_depts = $('.input-dyna-add input[name="dept"]');
+                let duty_names = $('.input-dyna-add input[name="name"]');
+                if(duty_depts.length>0){
+                    for (let i = 0; i < duty_depts.length; i++) {
+                        let duty = {};
+                        duty.dept = duty_depts.eq(i).val();
+                        duty.name = duty_names.eq(i).val();
+                        dutyList.push(duty);
+                    }
+                }
+                let executionJson =JSON.stringify(execution);
+                executionJson = executionJson.replace(/\"/gi,'\'');
+
+                let dutyListJson =JSON.stringify(dutyList);
+                dutyListJson = dutyListJson.replace(/\"/gi,'\'');
+
+                $.ajax({
+                    url: url,
+                    data: {execution:executionJson,dutyList:dutyListJson},
+                    type: "post",
+                    success: function (data) {
+                        creatb8(urls,id,delurl);
+                        $("#confirmAdd8").attr('onclick','').unbind('click');
+                        $('#' + pop).modal("hide");
+                        $('#fileuploader').nextAll().each(function (){
+                            $(this).remove();
+                        });
+                        $('#fileuploader2').nextAll().each(function (){
+                            $(this).remove();
+                        });
+                        $('#effect').val(null);
+                        $('#status').val(null);
+                        $('#description').val(null);
+                        $('#remark').val(null);
+                        $('#fileIds').val(null);
+                    }
+                });
+            });
         }
     };
 
@@ -646,6 +702,57 @@
                                 type: "post",
                                 success: function (data) {
                                     creatb5(urls,id,delurl)
+                                }
+                            });
+                        }
+                    }
+                }
+            ]
+        });
+    }
+    function creatb8(urls,id,delurl){
+        $("#execution_tabledetails").bootstrapTable('destroy');
+        $("#execution_tabledetails").bootstrapTable({
+            url: urls,        //请求后台的URL（*）
+            method: 'post',
+            contentType: "application/x-www-form-urlencoded",
+            pagination: true,                   //是否显示分页（*）
+            cache: false,
+            pageSize: 10,//每页一条数据
+            striped: true,  //表格显示条纹
+            dataField: "list",
+            queryParamsType: "undefined",
+            queryParams: function queryParams(params) {   //设置查询参数
+                let param = {
+                    pageNumber: params.pageNumber,
+                    pageSize: params.pageSize,
+                    id: id
+                };
+                return param;
+            },
+            sidePagination: 'server',
+            pageNumber: 1,
+            columns: [
+                {field: "uuid", visible: false},
+                {field: "effect", title: "预期成效"},
+                {field: "status", title: "实施状态"},
+                {field: "description", title: "实施情况"},
+                {
+                    field: "cz", title: '操作', width: "23%",
+                    formatter: function (value, row) {
+                        let delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
+                        return delHtml;
+                    },
+                    events: {
+                        'click .del': function (e, value, row, index) {
+                            let ids = row.uuid;
+
+                            $.ajax({
+                                url: delurl,
+                                data: 'uuid=' + ids,
+                                type: "post",
+                                success: function (data) {
+                                    creatb8(urls,id,delurl)
                                 }
                             });
                         }

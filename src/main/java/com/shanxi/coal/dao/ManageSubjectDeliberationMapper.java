@@ -18,4 +18,6 @@ public interface ManageSubjectDeliberationMapper {
     int updateByPrimaryKey(ManageSubjectDeliberation record);
 
     List<ManageSubjectDeliberation> listBySubjectId(String subjectId);
+
+    int deleteBySubjectId(String subjectId);
 }

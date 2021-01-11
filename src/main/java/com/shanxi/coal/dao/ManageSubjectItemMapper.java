@@ -18,4 +18,6 @@ public interface ManageSubjectItemMapper {
     int updateByPrimaryKey(ManageSubjectItem record);
 
     List<ManageSubjectItem> listBySubjectId(String subjectId);
+
+    int deleteBySubjectId(String subjectId);
 }

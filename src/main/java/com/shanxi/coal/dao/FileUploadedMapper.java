@@ -32,4 +32,6 @@ public interface FileUploadedMapper {
     FileUploaded listSignature(@Param("fileCategoryId") String fileCategoryId);
 
     void updateSignatureBy(@Param("fileCategory") String toString, @Param("fileCategoryId") String uuid);
+
+    int deleteByCategoryId(String categoryId);
 }

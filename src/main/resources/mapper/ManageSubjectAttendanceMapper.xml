@@ -26,6 +26,11 @@
     delete from manage_subject_attendance
     where uuid = #{uuid,jdbcType=CHAR}
   </delete>
+
+  <delete id="deleteBySubjectId" parameterType="java.lang.String">
+    delete from manage_subject_attendance
+    where subject_id = #{subjectId,jdbcType=CHAR}
+  </delete>
   <insert id="insert" parameterType="com.shanxi.coal.domain.ManageSubjectAttendance">
     insert into manage_subject_attendance (uuid, subject_id, attendance_name, 
       positions)

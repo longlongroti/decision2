@@ -26,6 +26,11 @@
     delete from manage_subject_deliberation
     where uuid = #{uuid,jdbcType=CHAR}
   </delete>
+
+  <delete id="deleteBySubjectId" parameterType="java.lang.String">
+    delete from manage_subject_deliberation
+    where subject_id = #{subjectId,jdbcType=CHAR}
+  </delete>
   <insert id="insert" parameterType="com.shanxi.coal.domain.ManageSubjectDeliberation">
     insert into manage_subject_deliberation (uuid, subject_id, deliberation_personnel, 
       deliberation_result)

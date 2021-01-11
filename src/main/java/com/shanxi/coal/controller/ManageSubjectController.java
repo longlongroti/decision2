@@ -1,6 +1,8 @@
 package com.shanxi.coal.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shanxi.coal.dao.*;
 import com.shanxi.coal.domain.*;
 import com.shanxi.coal.service.CommonService;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.text.ParseException;
 import java.util.Date;
@@ -40,6 +43,12 @@ public class ManageSubjectController {
     AutoCodeMapper autoCodeMapper;
     @Resource
     CommonService commonService;
+    @Resource
+    ManageSubjectExecutionMapper executionMapper;
+    @Resource
+    ManageSubjectExecutionDutyMapper executionDutyMapper;
+    @Resource
+    FileUploadedMapper fileUploadedMapper;
 
     @PostMapping("/list")
     @ResponseBody
@@ -100,6 +109,17 @@ public class ManageSubjectController {
     @ResponseBody
     public String delete(@PathParam("uuid") String uuid) {
         subjectMapper.deleteByPrimaryKey(uuid);
+        itemMapper.deleteBySubjectId(uuid);
+        attendanceMapper.deleteBySubjectId(uuid);
+        deliberationMapper.deleteBySubjectId(uuid);
+        List<ManageSubjectExecution> executionList = executionMapper.listBySubjectId(uuid);
+        executionList.forEach(execution->{
+            executionMapper.deleteByPrimaryKey(execution.getUuid());
+            executionDutyMapper.deleteByExecutionId(execution.getUuid());
+            fileUploadedMapper.deleteByCategoryId(execution.getUuid());
+        });
+
+
         return "ok";
     }
 
@@ -185,6 +205,54 @@ public class ManageSubjectController {
     public String listDeliberation(@PathParam("id") String id) {
         List<ManageSubjectDeliberation> deliberationList = deliberationMapper.listBySubjectId(id);
         PageInfo<ManageSubjectDeliberation> pageInfo = new PageInfo<ManageSubjectDeliberation>(deliberationList);
+        return MyUtils.pageInfoToJson(pageInfo);
+    }
+
+    //组织实施
+    @PostMapping("/addExecution")
+    @ResponseBody
+    public String addExecution(HttpServletRequest request) {
+        String execution = request.getParameter("execution");
+        String dutyList = request.getParameter("dutyList");
+        try {
+            Gson gson = new Gson();
+            ManageSubjectExecution subjectExecution = gson.fromJson(execution,ManageSubjectExecution.class);
+            subjectExecution.setUuid(UUID.randomUUID().toString());
+            ManageMeetingSubject subject = subjectMapper.selectByPrimaryKey(subjectExecution.getSubjectId());
+            subjectExecution.setSubjectCode(subject.getSubjectCode());
+            executionMapper.insert(subjectExecution);
+            List<ManageSubjectExecutionDuty> duties = gson.fromJson(dutyList,new TypeToken<List<ManageSubjectExecutionDuty>>(){}.getType());
+            //落实责任信息保存
+            duties.forEach(duty->{
+                duty.setExecutionId(subjectExecution.getUuid());
+                duty.setUuid(UUID.randomUUID().toString());
+                executionDutyMapper.insert(duty);
+            });
+            //文件上传
+            if (liquibase.util.StringUtils.isNotEmpty(subjectExecution.getFileIds())) {
+                commonService.batchUpdateFileId(subjectExecution.getFileIds(), subjectExecution.getUuid());
+            }
+            return "ok";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "fail";
+    }
+
+    @PostMapping("/deleteExecution")
+    @ResponseBody
+    public String deleteExecution(@PathParam("uuid") String uuid) {
+        executionMapper.deleteByPrimaryKey(uuid);
+        executionDutyMapper.deleteByExecutionId(uuid);
+        fileUploadedMapper.deleteByCategoryId(uuid);
+        return "ok";
+    }
+
+    @PostMapping("/listExecution")
+    @ResponseBody
+    public String listExecution(@PathParam("id") String id) {
+        List<ManageSubjectExecution> executionList = executionMapper.listBySubjectId(id);
+        PageInfo<ManageSubjectExecution> pageInfo = new PageInfo<>(executionList);
         return MyUtils.pageInfoToJson(pageInfo);
     }
 
