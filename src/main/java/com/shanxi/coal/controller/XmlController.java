@@ -25,6 +25,8 @@ import javax.annotation.Resource;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +67,8 @@ public class XmlController {
     ManageSubjectDeliberationMapper manageSubjectDeliberationMapper;
     @Resource
     ManageSubjectItemMapper manageSubjectItemMapper;
+    @Resource
+    FileUploadedMapper fileUploadedMapper;
 
     public static File packageFileCatalogPwdZip(String p, String fname) throws Exception {
         String catalogPath = p + fname;
@@ -76,7 +80,7 @@ public class XmlController {
             if (childrenFiles != null) {
                 for (File f : childrenFiles) {
                     if (f.isDirectory())
-                        zipFile.addFolder(new File(f.getAbsolutePath()), ZipUtil.getZipParameters());
+                        zipFile.addFolder(new File(f.getAbsolutePath()));
                     else
                         zipFile.addFile(f.getAbsolutePath());
                 }
@@ -163,6 +167,7 @@ public class XmlController {
     public String send0005(@RequestParam("id") String id) throws Exception {
         ManageSystem manageSystem = manageSystemMapper.selectByPrimaryKey(id);
         List<ManageSystemItems> manageSystemItems = manageSystemItemsMapper.listByUseId(id);
+        List<FileUploaded> fileUploadeds = fileUploadedMapper.listByCategoryId(id);
         XML0005Parent xml0005Parent = new XML0005Parent();
         xml0005Parent.setCompanyId(myProperties.getCreditCode());
         xml0005Parent.setCompanyName(myProperties.getCompanyName());
@@ -194,11 +199,63 @@ public class XmlController {
         if (!f.exists()) {
             f.mkdirs();
         }
+        File f1 = new File(path + "/正式文件");
+        if (!f1.exists()) {
+            f1.mkdirs();
+        }
+        File f2 = new File(path + "/佐证材料");
+        if (!f2.exists()) {
+            f2.mkdirs();
+        }
+        for (FileUploaded fs : fileUploadeds) {
+            if (fs.getFileCategory().equals("managesystem"))
+                copyFile(fs.getFilePath(), f1.getAbsolutePath());
+            else if(fs.getFileCategory().equals("managesystemMaterial"))
+                copyFile(fs.getFilePath(), f2.getAbsolutePath());
+        }
+
         jaxbMarshaller.marshal(xml0005Parent, new File(path + "/0005_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团总部决策制度");
         return "ok";
+    }
+
+
+    private static void copyFile(String srcPath, String destDir) {
+        File srcFile = new File(srcPath);
+        if (!srcFile.exists()) { // 源文件不存在
+            System.out.println("源文件不存在");
+            return ;
+        }
+        // 获取待复制文件的文件名
+        String fileName = srcPath
+                .substring(srcPath.lastIndexOf(File.separator));
+        String destPath = destDir + fileName;
+        if (destPath.equals(srcPath)) { // 源文件路径和目标文件路径重复
+            System.out.println("源文件路径和目标文件路径重复!");
+            return ;
+        }
+        File destFile = new File(destPath);
+        if (destFile.exists() && destFile.isFile()) { // 该路径下已经有一个同名文件
+            System.out.println("目标目录下已有同名文件!");
+            return ;
+        }
+
+        File destFileDir = new File(destDir);
+        destFileDir.mkdirs();
+        try {
+            FileInputStream fis = new FileInputStream(srcPath);
+            FileOutputStream fos = new FileOutputStream(destFile);
+            byte[] buf = new byte[1024];
+            int c;
+            while ((c = fis.read(buf)) != -1) {
+                fos.write(buf, 0, c);
+            }
+            fis.close();
+            fos.close();
+        } catch (IOException e) {
+        }
     }
 
     @PostMapping("/send0006")
