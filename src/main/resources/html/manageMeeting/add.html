@@ -207,14 +207,15 @@
         let ret = [[${manageMeetingSel!=null}?${manageMeetingSel.fileUploads}]];
         let ret1 = [];
         let ret2 = [];
-        for (let i = 0; i < ret.length; i++) {
-            if(ret[i].fileCategory == 'meeting'){
-                ret1.push(ret[i]);
-            }else{
-                ret2.push(ret[i]);
+        if(ret){
+            for (let i = 0; i < ret.length; i++) {
+                if(ret[i].fileCategory == 'meeting'){
+                    ret1.push(ret[i]);
+                }else{
+                    ret2.push(ret[i]);
+                }
             }
         }
-
         myFileAction.do("fileuploader", "fileIds", "meeting", ret1);
         myFileAction.do("fileuploader2", "fileIds", "meetingNotice", ret2);
 
