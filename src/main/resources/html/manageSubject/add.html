@@ -35,7 +35,8 @@
 
                 <div class="ibox-content">
                     <form th:action="@{/manageSubject/add}" th:method="post">
-                        <input id="uuid" name="uuid"  th:value="${manageMeetingSubject!=null}?${manageMeetingSubject.uuid}" type="hidden"/>
+                        <input id="uuid" name="uuid"
+                               th:value="${manageMeetingSubject!=null}?${manageMeetingSubject.uuid}" type="hidden"/>
                         <input id="meetingId" name="meetingId" th:value="${meetingId}" type="hidden"/>
                         <input id="fileIds" name="fileIds" type="hidden" value=""/>
                         <!--第一行-->
@@ -74,22 +75,34 @@
                         <!--第三行-->
                         <fieldset>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label my-font-bold" >是否通过</label>
+                                <label class="col-sm-2 col-form-label my-font-bold">是否通过</label>
                                 <div class="col-sm-5">
-                                    <select class="form-control" id="passFlag" name="passFlag" >
+                                    <select class="form-control" id="passFlag" name="passFlag">
                                         <option></option>
-                                        <option value="是" th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.passFlag == '是'}">是</option>
-                                        <option value="否" th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.passFlag == '否'}">否</option>
+                                        <option value="是"
+                                                th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.passFlag == '是'}">
+                                            是
+                                        </option>
+                                        <option value="否"
+                                                th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.passFlag == '否'}">
+                                            否
+                                        </option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label my-font-bold" >是否需报国资委审批</label>
+                                <label class="col-sm-2 col-form-label my-font-bold">是否需报国资委审批</label>
                                 <div class="col-sm-5">
-                                    <select class="form-control" id="approvalFlag" name="approvalFlag" >
+                                    <select class="form-control" id="approvalFlag" name="approvalFlag">
                                         <option></option>
-                                        <option value="是" th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.approvalFlag == '是'}" >是</option>
-                                        <option value="否" th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.approvalFlag == '否'}" >否</option>
+                                        <option value="是"
+                                                th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.approvalFlag == '是'}">
+                                            是
+                                        </option>
+                                        <option value="否"
+                                                th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.approvalFlag == '否'}">
+                                            否
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -98,12 +111,18 @@
                         <!--第四行-->
                         <fieldset>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label my-font-bold" >是否听取意见</label>
+                                <label class="col-sm-2 col-form-label my-font-bold">是否听取意见</label>
                                 <div class="col-sm-5">
-                                    <select class="form-control" id="adoptFlag" name="adoptFlag" >
+                                    <select class="form-control" id="adoptFlag" name="adoptFlag">
                                         <option></option>
-                                        <option value="是" th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.adoptFlag == '是'}" >是</option>
-                                        <option value="否" th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.adoptFlag == '否'}" >否</option>
+                                        <option value="是"
+                                                th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.adoptFlag == '是'}">
+                                            是
+                                        </option>
+                                        <option value="否"
+                                                th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.adoptFlag == '否'}">
+                                            否
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -120,12 +139,18 @@
                         <!--第五行-->
                         <fieldset>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label my-font-bold" >是否需要督办</label>
+                                <label class="col-sm-2 col-form-label my-font-bold">是否需要督办</label>
                                 <div class="col-sm-5">
-                                    <select class="form-control" id="superviseFlag" name="superviseFlag" >
+                                    <select class="form-control" id="superviseFlag" name="superviseFlag">
                                         <option></option>
-                                        <option value="是" th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.superviseFlag == '是'}" >是</option>
-                                        <option value="否" th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.superviseFlag == '否'}" >否</option>
+                                        <option value="是"
+                                                th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.superviseFlag == '是'}">
+                                            是
+                                        </option>
+                                        <option value="否"
+                                                th:selected="${manageMeetingSubject!=null}?${manageMeetingSubject.superviseFlag == '否'}">
+                                            否
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -190,11 +215,13 @@
         let ret = [[${manageMeetingSubject!=null}?${manageMeetingSubject.fileUploads}]];
         let ret1 = [];
         let ret2 = [];
-        for (let i = 0; i < ret.length; i++) {
-            if(ret[i].fileCategory == 'subjectAdvice'){
-                ret1.push(ret[i]);
-            }else{
-                ret2.push(ret[i]);
+        if (ret) {
+            for (let i = 0; i < ret.length; i++) {
+                if (ret[i].fileCategory == 'subjectAdvice') {
+                    ret1.push(ret[i]);
+                } else {
+                    ret2.push(ret[i]);
+                }
             }
         }
         myFileAction.do("fileuploader", "fileIds", "subjectAdvice", ret1);

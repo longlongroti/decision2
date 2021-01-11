@@ -263,6 +263,7 @@ public class XmlController {
             ManageLeader manageLeader = manageLeaderMapper.selectByPrimaryKey(manageMeeting1.getCompereId());
             host = manageLeader != null ? manageLeader.getLeaderName() : "";
         }
+        List<FileUploaded> fileUploadeds = fileUploadedMapper.listByCategoryId(id);
         XMLMeetingParent xmlMeetingParent = new XMLMeetingParent();
         xmlMeetingParent.setCompanyId(myProperties.getCreditCode());
         xmlMeetingParent.setCompanyName(myProperties.getCompanyName());
@@ -341,6 +342,43 @@ public class XmlController {
         if (!f.exists()) {
             f.mkdirs();
         }
+        File f1 = new File(path + "/会议纪要");
+        if (!f1.exists()) {
+            f1.mkdirs();
+        }
+        File f2 = new File(path + "/会议通知");
+        if (!f2.exists()) {
+            f2.mkdirs();
+        }
+        for (FileUploaded fs : fileUploadeds) {
+            if (fs.getFileCategory().equals("meeting"))
+                copyFile(fs.getFilePath(), f1.getAbsolutePath());
+            else if (fs.getFileCategory().equals("meetingNotice"))
+                copyFile(fs.getFilePath(), f2.getAbsolutePath());
+        }
+
+        File f3 = new File(path + "/会议议题");
+        if (!f3.exists()) {
+            f3.mkdirs();
+        }
+        File f4 = new File(f3.getAbsolutePath() + "/听取意见");
+        if (!f4.exists()) {
+            f4.mkdirs();
+        }
+        File f5 = new File(f3.getAbsolutePath() + "/议题材料");
+        if (!f5.exists()) {
+            f5.mkdirs();
+        }
+        for(ManageMeetingSubject m:manageMeetingSubjects){
+            List<FileUploaded> fileUploadeds2 = fileUploadedMapper.listByCategoryId( m.getUuid());
+            for(FileUploaded fs:fileUploadeds2){
+                if (fs.getFileCategory().equals("subjectAdvice"))
+                    copyFile(fs.getFilePath(), f4.getAbsolutePath());
+                else if (fs.getFileCategory().equals("subjectMaterial"))
+                    copyFile(fs.getFilePath(), f5.getAbsolutePath());
+            }
+        }
+
         jaxbMarshaller.marshal(xmlMeetingParent, new File(path + "/0006_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
