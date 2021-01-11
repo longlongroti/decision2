@@ -415,7 +415,7 @@ public class XmlController {
         jaxbMarshaller.marshal(xml0019, new File(path + "/0019_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
-        insertReport(s, folder, path, "集团总部决策会议");
+        insertReport(s, folder, path, "集团及所属企业会议编码及议题编码");
         return "ok";
     }
 
