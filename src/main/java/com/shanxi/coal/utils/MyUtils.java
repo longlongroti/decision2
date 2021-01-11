@@ -248,6 +248,32 @@ public class MyUtils {
         }
     }
 
+    public static String code2name(String meetingType) {
+        switch (meetingType) {
+            case "0":
+                return "党委会";
+            case "1":
+                return "职代会";
+            case "2":
+                return "党组会";
+            case "3":
+                return "董事会";
+            case "4":
+                return "经理层办公室会";
+            case "5":
+                return "股东会";
+            case "6":
+                return "党委(党组)会";
+            case "7":
+                return "其他";
+            case "8":
+                return "总经理办公会";
+            default:
+                return "";
+        }
+    }
+
+
     public static String name2code(String decisionSequence) {
         switch (decisionSequence) {
             case "党委会":
@@ -272,6 +298,8 @@ public class MyUtils {
                 return "";
         }
     }
+
+
 
     public static void insertCode(String sxbm, String a, String b, Integer c, AutoCodeMapper autoCodeMapper) {
         AutoCode autoCode = new AutoCode();

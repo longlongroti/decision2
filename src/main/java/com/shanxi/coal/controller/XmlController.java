@@ -51,6 +51,20 @@ public class XmlController {
     ManageLeaderMapper manageLeaderMapper;
     @Resource
     ManageSystemItemsMapper manageSystemItemsMapper;
+    @Resource
+    ManageMeetingMapper manageMeetingMapper;
+    @Resource
+    ManageMeetingItemsMapper manageMeetingItemsMapper;
+    @Resource
+    ManageMeetingAttendeeMapper manageMeetingAttendeeMapper;
+    @Resource
+    ManageMeetingSubjectMapper manageMeetingSubjectMapper;
+    @Resource
+    ManageSubjectAttendanceMapper manageSubjectAttendanceMapper;
+    @Resource
+    ManageSubjectDeliberationMapper manageSubjectDeliberationMapper;
+    @Resource
+    ManageSubjectItemMapper manageSubjectItemMapper;
 
     public static File packageFileCatalogPwdZip(String p, String fname) throws Exception {
         String catalogPath = p + fname;
@@ -180,6 +194,100 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团总部决策制度");
+        return "ok";
+    }
+
+    @PostMapping("/send0006")
+    @ResponseBody
+    public String send0006(@RequestParam("id") String id) throws Exception {
+        ManageMeeting manageMeeting1 = manageMeetingMapper.selectByPrimaryKey(id);
+        String host = "";
+        if (StringUtils.isNotBlank(manageMeeting1.getCompereId())) {
+            ManageLeader manageLeader = manageLeaderMapper.selectByPrimaryKey(manageMeeting1.getCompereId());
+            host = manageLeader != null ? manageLeader.getLeaderName() : "";
+        }
+        XMLMeetingParent xmlMeetingParent = new XMLMeetingParent();
+        xmlMeetingParent.setCompanyId(myProperties.getCreditCode());
+        xmlMeetingParent.setCompanyName(myProperties.getCompanyName());
+        xmlMeetingParent.setMeetingCode(MyUtils.code2code(manageMeeting1.getMeetingType()));
+        xmlMeetingParent.setMeetingForm(MyUtils.code2name(manageMeeting1.getMeetingType()));
+        xmlMeetingParent.setMeetingId(manageMeeting1.getUuid());
+        xmlMeetingParent.setMeetingName(manageMeeting1.getMeetingName());
+        xmlMeetingParent.setMeetingTime(manageMeeting1.getMeetingTime());
+        xmlMeetingParent.setMeetingTypeCode(manageMeeting1.getMeetingType());
+        xmlMeetingParent.setMeetingTypeName(manageMeeting1.getMeetingType());
+        xmlMeetingParent.setModerator(host);
+        xmlMeetingParent.setReleaseTime(manageMeeting1.getSummaryTime());
+        xmlMeetingParent.setSource("系统");
+        xmlMeetingParent.setOperType("add");
+        List<XMLMeetingAttendee> xmlMeetingAttendees = new ArrayList<>();
+        List<ManageMeetingAttendee> manageMeetingAttendees = manageMeetingAttendeeMapper.listByMeetingId(manageMeeting1.getUuid());
+        for (ManageMeetingAttendee m : manageMeetingAttendees) {
+            XMLMeetingAttendee xmlMeetingAttendee = new XMLMeetingAttendee();
+            xmlMeetingAttendee.setAttendeeName(m.getManageLeader() != null ? m.getManageLeader().getLeaderName() : "");
+            xmlMeetingAttendee.setReason("");
+            xmlMeetingAttendees.add(xmlMeetingAttendee);
+        }
+        xmlMeetingParent.setXmlMeetingAttendees(xmlMeetingAttendees);
+        List<XMLSubjectList> lists = new ArrayList<>();
+        List<ManageMeetingSubject> manageMeetingSubjects = manageMeetingSubjectMapper.listByMeetingId(id);
+        for (ManageMeetingSubject s : manageMeetingSubjects) {
+            List<XMLSubjectRelationList> xmlSubjectRelationLists = new ArrayList<>();
+            List<XMLSubjectAttendanceList> xmlSubjectAttendanceLists = new ArrayList<>();
+            List<XMLSubjectDeliberationList> xmlSubjectDeliberationLists = new ArrayList<>();
+            List<String> code = new ArrayList<>();
+            List<ManageSubjectItem> manageSubjectItem = manageSubjectItemMapper.listBySubjectId(s.getUuid());
+            for(ManageSubjectItem m:manageSubjectItem){
+                code.add(m.getItemCode());
+            }
+            List<ManageSubjectAttendance> manageSubjectAttendances = manageSubjectAttendanceMapper.listBySubjectId(s.getUuid());
+            for(ManageSubjectAttendance a:manageSubjectAttendances){
+                XMLSubjectAttendanceList xmlSubjectAttendanceList = new XMLSubjectAttendanceList();
+                xmlSubjectAttendanceList.setAttendanceName(a.getAttendanceName());
+                xmlSubjectAttendanceList.setPosition(a.getPositions());
+                xmlSubjectAttendanceLists.add(xmlSubjectAttendanceList);
+            }
+            List<ManageSubjectDeliberation> manageSubjectDeliberations = manageSubjectDeliberationMapper.listBySubjectId(s.getUuid());
+            for(ManageSubjectDeliberation d : manageSubjectDeliberations){
+                XMLSubjectDeliberationList xmlSubjectDeliberationList = new XMLSubjectDeliberationList();
+                xmlSubjectDeliberationList.setDeliberationPersonnel(d.getDeliberationPersonnel());
+                xmlSubjectDeliberationList.setDeliberationResult(d.getDeliberationResult());
+                xmlSubjectDeliberationLists.add(xmlSubjectDeliberationList);
+            }
+            XMLSubjectList xmlSubjectList = new XMLSubjectList(
+                    s.getUuid(),
+                    s.getSubjectName(),
+                    s.getSubjectCode(),
+                    s.getSourceName(),
+                    s.getSpecialName(),
+                    s.getPassFlag(),
+                    s.getApprovalFlag(),
+                    s.getAdoptFlag(),
+                    s.getSubjectResult(),
+                    s.getSuperviseFlag(),
+                    s.getRemark(),
+                    "add",
+                    code,
+                    xmlSubjectRelationLists,
+                    xmlSubjectAttendanceLists,
+                    xmlSubjectDeliberationLists
+            );
+            lists.add(xmlSubjectList);
+        }
+        xmlMeetingParent.setXmlSubjectLists(lists);
+        JAXBContext jaxbContext = JAXBContext.newInstance(XMLMeetingParent.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        String folder = myProperties.getCreditCode() + "_0006_1000_" + MyDateTimeUtils.strNow("yyyyMMddHHmmss") + "_" + UUID.randomUUID().toString().replaceAll("-", "");
+        String path = myProperties.getXmlPath() + folder;
+        File f = new File(path);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+        jaxbMarshaller.marshal(xmlMeetingParent, new File(path + "/0006_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
+        File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
+        String s = doSend(zipFile);
+        insertReport(s, folder, path, "集团总部决策会议");
         return "ok";
     }
 

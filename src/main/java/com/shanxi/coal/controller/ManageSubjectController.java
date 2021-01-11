@@ -136,12 +136,8 @@ public class ManageSubjectController {
         attendance.setSubjectId(subjectId);
         List<ManageLeaderGroup> leaderGroupList = leaderGroupMapper.listByUseId(attendanceInfo.split("@_@")[0]);
         String positions = "";
-        for (ManageLeaderGroup group : leaderGroupList) {
-            if ("".equals(positions)) {
-                positions = group.getJobTitle();
-            } else {
-                positions += "," + group.getJobTitle();
-            }
+        if (!leaderGroupList.isEmpty()) {
+            positions = leaderGroupList.get(0).getJobTitle();
         }
         attendance.setAttendanceName(attendanceInfo.split("@_@")[1]);
         attendance.setPositions(positions);

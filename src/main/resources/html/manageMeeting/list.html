@@ -181,6 +181,7 @@
                         let delHtml = '';
                         let addHtml = '';
                         let addSubjectHtml = '';
+                        var sendHtml = '<a href="javascript:;" class="btn btn-warning send"><i class="fa fa-send"> </i> 集团报送</a>&nbsp;';
 
                             if (checkAuthorization('会议信息管理_编辑'))
                                 editHtml = '<a href="javascript:;" class="btn btn-sm btn-success edit badge-pill mb-2" ><i class="fa fa-pencil"> </i>' + '编辑' + '</a>&nbsp;';
@@ -188,7 +189,7 @@
                                 delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
 
                             addSubjectHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adds badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '议题管理' + '</a>&nbsp;';
-                        let buttonhtml = editHtml + delHtml +addSubjectHtml;
+                        let buttonhtml = editHtml + delHtml +addSubjectHtml+ sendHtml;
                         return buttonhtml;
                     },
                     events: {
@@ -205,6 +206,18 @@
                         'click .adds': function (e, value, row, index) {
                             let id = row.uuid;
                             location.href = '[[@{'/manageSubject/list'}]]' + '?uuid=' + id;
+                        },'click .send': function (e, value, row, index) {
+                            let url = '[[@{'/xml/send0006'}]]';
+                            debugger
+                            let id = row.uuid;
+                            $.ajax({
+                                url: url,
+                                data: 'id=' + id,
+                                type: "post",
+                                success: function (data) {
+                                    createTable();
+                                }
+                            });
                         }
                     }
                 }

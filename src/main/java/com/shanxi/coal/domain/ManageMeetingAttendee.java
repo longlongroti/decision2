@@ -8,6 +8,16 @@ public class ManageMeetingAttendee extends CommonBean implements Serializable {
 
     private String leaderId;
 
+    private ManageLeader manageLeader;
+
+    public ManageLeader getManageLeader() {
+        return manageLeader;
+    }
+
+    public void setManageLeader(ManageLeader manageLeader) {
+        this.manageLeader = manageLeader;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public String getMeetingId() {

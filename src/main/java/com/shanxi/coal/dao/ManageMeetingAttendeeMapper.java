@@ -1,6 +1,7 @@
 package com.shanxi.coal.dao;
 
 import com.shanxi.coal.domain.ManageMeetingAttendee;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface ManageMeetingAttendeeMapper {
     void insertBatch(List<ManageMeetingAttendee> list);
 
     void deleteByMeetingId(String uuid);
+
+    List<ManageMeetingAttendee> listByMeetingId(@Param("meetingId") String meetingId);
 }
