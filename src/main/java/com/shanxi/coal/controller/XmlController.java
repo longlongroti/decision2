@@ -356,7 +356,6 @@ public class XmlController {
             else if (fs.getFileCategory().equals("meetingNotice"))
                 copyFile(fs.getFilePath(), f2.getAbsolutePath());
         }
-
         File f3 = new File(path + "/会议议题");
         if (!f3.exists()) {
             f3.mkdirs();
@@ -369,17 +368,51 @@ public class XmlController {
         if (!f5.exists()) {
             f5.mkdirs();
         }
-        for(ManageMeetingSubject m:manageMeetingSubjects){
-            List<FileUploaded> fileUploadeds2 = fileUploadedMapper.listByCategoryId( m.getUuid());
-            for(FileUploaded fs:fileUploadeds2){
+        for (ManageMeetingSubject m : manageMeetingSubjects) {
+            List<FileUploaded> fileUploadeds2 = fileUploadedMapper.listByCategoryId(m.getUuid());
+            for (FileUploaded fs : fileUploadeds2) {
                 if (fs.getFileCategory().equals("subjectAdvice"))
                     copyFile(fs.getFilePath(), f4.getAbsolutePath());
                 else if (fs.getFileCategory().equals("subjectMaterial"))
                     copyFile(fs.getFilePath(), f5.getAbsolutePath());
             }
         }
-
         jaxbMarshaller.marshal(xmlMeetingParent, new File(path + "/0006_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
+        File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
+        String s = doSend(zipFile);
+        insertReport(s, folder, path, "集团总部决策会议");
+        return "ok";
+    }
+
+    @PostMapping("/send0019")
+    @ResponseBody
+    public String send0019(@RequestParam("id") String id) throws Exception {
+        ManageMeeting manageMeeting1 = manageMeetingMapper.selectByPrimaryKey(id);
+        XML0019 xml0019 = new XML0019();
+        xml0019.setCompanyId(myProperties.getCreditCode());
+        xml0019.setCompanyName(myProperties.getCompanyName());
+        xml0019.setMeetingCode(MyUtils.code2code(manageMeeting1.getMeetingType()));
+        xml0019.setMeetingId(manageMeeting1.getUuid());
+        xml0019.setSource("系统");
+        List<XML0019Subject> lists = new ArrayList<>();
+        List<ManageMeetingSubject> manageMeetingSubjects = manageMeetingSubjectMapper.listByMeetingId(id);
+        for (ManageMeetingSubject s : manageMeetingSubjects) {
+            XML0019Subject xml0019Subject = new XML0019Subject();
+            xml0019Subject.setSubjectCode(s.getSubjectCode());
+            xml0019Subject.setSubjectId(s.getUuid());
+            lists.add(xml0019Subject);
+        }
+        xml0019.setXmlSubjectLists(lists);
+        JAXBContext jaxbContext = JAXBContext.newInstance(XML0019.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        String folder = myProperties.getCreditCode() + "_0019_1000_" + MyDateTimeUtils.strNow("yyyyMMddHHmmss") + "_" + UUID.randomUUID().toString().replaceAll("-", "");
+        String path = myProperties.getXmlPath() + folder;
+        File f = new File(path);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+        jaxbMarshaller.marshal(xml0019, new File(path + "/0019_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团总部决策会议");
