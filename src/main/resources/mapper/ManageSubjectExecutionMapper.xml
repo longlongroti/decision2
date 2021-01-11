@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shanxi.coal.dao.ManageSubjectExecutionMapper">
+  <resultMap id="BaseResultMap" type="com.shanxi.coal.domain.ManageSubjectExecution">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="subject_id" jdbcType="VARCHAR" property="subjectId" />
+    <result column="subject_code" jdbcType="VARCHAR" property="subjectCode" />
+    <result column="effect" jdbcType="VARCHAR" property="effect" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    uuid, subject_id, subject_code, effect, status, description, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_subject_execution
+    where uuid = #{uuid,jdbcType=CHAR}
+  </select>
+
+  <select id="listBySubjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_subject_execution
+    where subject_id = #{subjectId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from manage_subject_execution
+    where uuid = #{uuid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.shanxi.coal.domain.ManageSubjectExecution">
+    insert into manage_subject_execution (uuid, subject_id, subject_code, 
+      effect, status, description, 
+      remark)
+    values (#{uuid,jdbcType=CHAR}, #{subjectId,jdbcType=VARCHAR}, #{subjectCode,jdbcType=VARCHAR}, 
+      #{effect,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageSubjectExecution">
+    insert into manage_subject_execution
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="subjectCode != null">
+        subject_code,
+      </if>
+      <if test="effect != null">
+        effect,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=CHAR},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectCode != null">
+        #{subjectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="effect != null">
+        #{effect,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageSubjectExecution">
+    update manage_subject_execution
+    <set>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectCode != null">
+        subject_code = #{subjectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="effect != null">
+        effect = #{effect,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shanxi.coal.domain.ManageSubjectExecution">
+    update manage_subject_execution
+    set subject_id = #{subjectId,jdbcType=VARCHAR},
+      subject_code = #{subjectCode,jdbcType=VARCHAR},
+      effect = #{effect,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where uuid = #{uuid,jdbcType=CHAR}
+  </update>
+</mapper>
