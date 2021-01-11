@@ -293,5 +293,8 @@
          select * from manage_events_details_item
     WHERE status =0
     </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from manage_events_details_item
+    </select>
 
 </mapper>

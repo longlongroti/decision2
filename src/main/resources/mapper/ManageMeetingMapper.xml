@@ -334,4 +334,7 @@
     from manage_meeting
     where uuid = #{uuid,jdbcType=CHAR}
   </select>
+    <select id="count" resultType="java.lang.Integer">
+      select count(*) from manage_meeting
+    </select>
 </mapper>

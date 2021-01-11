@@ -87,6 +87,10 @@ public class XmlController {
 
     @GetMapping("/send0013")
     public String send0013() throws Exception {
+        int count1 = manageSystemMapper.count();
+        int count2 = manageEventsDetailsItemMapper.count();
+        int count3 = manageMeetingMapper.count();
+        int count4 = manageMeetingSubjectMapper.count();
         XMLStaticsParent xmlStaticsParent = new XMLStaticsParent();
         XMLStaticsCompany xmlStaticsCompany = new XMLStaticsCompany();
         xmlStaticsCompany.setCompanyId(myProperties.getCreditCode());
@@ -98,13 +102,13 @@ public class XmlController {
         xmlStaticsCompany.setManageCode("M01");
         xmlStaticsCompany.setConditionCode("C01");
         xmlStaticsCompany.setStructureCode("S01");
-        xmlStaticsCompany.setRegulationCount("0");
-        xmlStaticsCompany.setItemCount("0");
-        xmlStaticsCompany.setMeetingCount("0");
-        xmlStaticsCompany.setSubjectCount("0");
+        xmlStaticsCompany.setRegulationCount(String.valueOf(count1));
+        xmlStaticsCompany.setItemCount(String.valueOf(count2));
+        xmlStaticsCompany.setMeetingCount(String.valueOf(count3));
+        xmlStaticsCompany.setSubjectCount(String.valueOf(count4));
         xmlStaticsCompany.setExceptionCount("0");
-        xmlStaticsCompany.setExecutionCount("0");
-        xmlStaticsCompany.setRate("0");
+        xmlStaticsCompany.setExecutionCount("100%");
+        xmlStaticsCompany.setRate(String.valueOf(count1));
         xmlStaticsCompany.setRemark("");
         xmlStaticsCompany.setSource("系统");
         xmlStaticsCompany.setOperType("add");
@@ -237,18 +241,18 @@ public class XmlController {
             List<XMLSubjectDeliberationList> xmlSubjectDeliberationLists = new ArrayList<>();
             List<String> code = new ArrayList<>();
             List<ManageSubjectItem> manageSubjectItem = manageSubjectItemMapper.listBySubjectId(s.getUuid());
-            for(ManageSubjectItem m:manageSubjectItem){
+            for (ManageSubjectItem m : manageSubjectItem) {
                 code.add(m.getItemCode());
             }
             List<ManageSubjectAttendance> manageSubjectAttendances = manageSubjectAttendanceMapper.listBySubjectId(s.getUuid());
-            for(ManageSubjectAttendance a:manageSubjectAttendances){
+            for (ManageSubjectAttendance a : manageSubjectAttendances) {
                 XMLSubjectAttendanceList xmlSubjectAttendanceList = new XMLSubjectAttendanceList();
                 xmlSubjectAttendanceList.setAttendanceName(a.getAttendanceName());
                 xmlSubjectAttendanceList.setPosition(a.getPositions());
                 xmlSubjectAttendanceLists.add(xmlSubjectAttendanceList);
             }
             List<ManageSubjectDeliberation> manageSubjectDeliberations = manageSubjectDeliberationMapper.listBySubjectId(s.getUuid());
-            for(ManageSubjectDeliberation d : manageSubjectDeliberations){
+            for (ManageSubjectDeliberation d : manageSubjectDeliberations) {
                 XMLSubjectDeliberationList xmlSubjectDeliberationList = new XMLSubjectDeliberationList();
                 xmlSubjectDeliberationList.setDeliberationPersonnel(d.getDeliberationPersonnel());
                 xmlSubjectDeliberationList.setDeliberationResult(d.getDeliberationResult());

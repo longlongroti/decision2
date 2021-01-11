@@ -20,4 +20,6 @@ public interface ManageMeetingSubjectMapper {
     List<ManageMeetingSubject> listByMeetingId(String meetingId);
 
     ManageMeetingSubject selectById(String uuid);
+
+    int count();
 }

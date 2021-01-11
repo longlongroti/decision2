@@ -68,8 +68,11 @@
     from manage_meeting_subject
     where meeting_id = #{meetingId,jdbcType=VARCHAR}
   </select>
+    <select id="count" resultType="java.lang.Integer">
+      select count(*) from manage_meeting_subject
+    </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from manage_meeting_subject
     where uuid = #{uuid,jdbcType=CHAR}
   </delete>

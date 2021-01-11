@@ -272,4 +272,7 @@
     from manage_system
     where uuid = #{uuid,jdbcType=CHAR}
   </select>
+    <select id="count" resultType="java.lang.Integer">
+      select count(*) from manage_system
+    </select>
 </mapper>

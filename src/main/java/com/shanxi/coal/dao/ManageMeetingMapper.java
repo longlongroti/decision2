@@ -22,4 +22,6 @@ public interface ManageMeetingMapper {
     ManageMeeting selectById(String uuid);
 
     ManageMeeting selectAttendeesExtra(String uuid);
+
+    int count();
 }

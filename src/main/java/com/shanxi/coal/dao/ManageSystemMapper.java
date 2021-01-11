@@ -20,4 +20,6 @@ public interface ManageSystemMapper {
     List<ManageSystem> getList(ManageSystem where);
 
     ManageSystem selectById(String uuid);
+
+    Integer count();
 }

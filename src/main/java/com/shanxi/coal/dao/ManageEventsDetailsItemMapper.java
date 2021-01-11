@@ -31,4 +31,6 @@ public interface ManageEventsDetailsItemMapper {
     List<ManageEventsDetailItem> listByItemId(String uuid);
 
     List<ManageEventsDetailItem> listAllPending();
+
+    int count();
 }
