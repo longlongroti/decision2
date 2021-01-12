@@ -18,4 +18,6 @@ public interface ManageSubjectExecutionMapper {
     int updateByPrimaryKey(ManageSubjectExecution record);
 
     List<ManageSubjectExecution> listBySubjectId(String subjectId);
+
+    ManageSubjectExecution getExecutionBySubjectId(String subjectId);
 }

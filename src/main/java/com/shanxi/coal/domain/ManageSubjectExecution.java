@@ -22,7 +22,17 @@ public class ManageSubjectExecution implements Serializable {
 
     private String fileIds;
 
+    private List<ManageSubjectExecutionDuty> manageSubjectExecutionDuties;
+
     private static final long serialVersionUID = 1L;
+
+    public List<ManageSubjectExecutionDuty> getManageSubjectExecutionDuties() {
+        return manageSubjectExecutionDuties;
+    }
+
+    public void setManageSubjectExecutionDuties(List<ManageSubjectExecutionDuty> manageSubjectExecutionDuties) {
+        this.manageSubjectExecutionDuties = manageSubjectExecutionDuties;
+    }
 
     public List<FileUploaded> getFileUploads() {
         return fileUploads;

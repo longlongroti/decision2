@@ -93,6 +93,8 @@
         </div>
     </div>
 </div>
+
+
 <div th:replace="common/pop/confirm::showConfirm"></div>
 <div th:replace="common/pop/confirm4::showConfirm"></div>
 <div th:replace="common/pop/confirm5::showConfirm"></div>
@@ -110,6 +112,7 @@
 <script th:src="@{/asserts/js/laydate/laydate.js}"></script>
 <script th:replace="common/myJs::myCommonJs"></script>
 <script th:src="@{/asserts/js/jquery-file-upload.min.js?v=1.1}" type="text/javascript"></script>
+
 <script>
     $(function () {
         createTable();
@@ -223,10 +226,11 @@
                         },
                         'click .add_execution': function (e, value, row, index) {
                             let id = row.uuid;
+                            let subjectCode = row.subjectCode;
                             let url = '[[@{'/manageSubject/addExecution'}]]';
-                            let urls = '[[@{'/manageSubject/listExecution'}]]';
+                            let dataurl = '[[@{'/manageSubject/getExecutionBySubjectId'}]]';
                             let delurl = '[[@{'/manageSubject/deleteExecution'}]]';
-                            commonAction.addAction8(id, url, '', 'confirmModal8',urls,delurl)
+                            commonAction.addAction8(id, subjectCode,url, dataurl, 'confirmModal8')
                         },
                     }
                 }
@@ -242,18 +246,22 @@
 
     function addInput() {
         let input = $(
-            "<div class='form-group row'>"+
+            "<span class='col-sm-12' ><div class='form-group row'>"+
             "<div class='col-sm-2'><input type='text'  name='dept'  class='form-control m-t-sm col-sm-2'  placeholder='落实责任部门'></div>" +
             "<div class='col-sm-2'><input type='text'  name='name'  class='form-control m-t-sm col-sm-2'  placeholder='责任人'></div>" +
             "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
             "<span class='glyphicon glyphicon-minus'></span>" +
-            "</button></div></div>");
+            "</button></div></div></span>");
         $(".input-dyna-add").append(input);
     }
     $("body").on("click", ".removeclass", function (e) {
         $(this).parent().parent('div').remove();
         return false;
     })
+
+
+
+
 </script>
 </body>
 

@@ -16,6 +16,14 @@
     from manage_subject_execution_duty
     where uuid = #{uuid,jdbcType=CHAR}
   </select>
+
+  <select id="listByExecutionId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_subject_execution_duty
+    where execution_id = #{executionId,jdbcType=CHAR}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from manage_subject_execution_duty
     where uuid = #{uuid,jdbcType=CHAR}

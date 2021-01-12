@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:shiro="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <script th:fragment="myCommonJs" th:inline="javascript">
     $(function () {
         $(".prettyTime").each(function () {
@@ -391,17 +392,103 @@
                 });
             });
         },
-        addAction8: function (id, url, redirect, pop,urls,delurl) {
+        addAction8: function (id,subjectCode, url, dataUrl, pop) {
             $('#' + pop).modal("show");
+            $('#fileuploader_div').html(null);
+            let fileuploaderHtml = $('<div class="clr"></div>\n' +
+                '                        <div class="hr-line-dashed"></div>\n' +
+                '                        <div class="form-group row">\n' +
+                '                            <label class="col-sm-2 col-form-label   my-font-bold"\n' +
+                '                                   for="fileuploader">正式文件</label>\n' +
+                '                        </div>\n' +
+                '                        <div class="form-group row">\n' +
+                '                            <div class="col-sm-8 ">\n' +
+                '                                <div id="fileuploader">Upload</div>\n' +
+                '                            </div>\n' +
+                '                        </div>\n' +
+                '                        <div class="clr"></div>\n' +
+                '                        <div class="hr-line-dashed"></div>\n' +
+                '                        <div class="form-group row">\n' +
+                '                            <label class="col-sm-2 col-form-label   my-font-bold"\n' +
+                '                                   for="fileuploader2">时间进度</label>\n' +
+                '                        </div>\n' +
+                '                        <div class="form-group row">\n' +
+                '                            <div class="col-sm-8 ">\n' +
+                '                                <div id="fileuploader2">Upload</div>\n' +
+                '                            </div>\n' +
+                '                        </div>');
+            $('#fileuploader_div').append(fileuploaderHtml);
+
+            $('.input-dyna-add .removeclass').nextAll().each(function (){
+                $(this).click();
+            });
+            $('#effect').val(null);
+            $('#status').val(null);
+            $('#description').val(null);
+            $('#remark').val(null);
+            $('#fileIds').val(null);
+            $('#uuid').val(null);
+            $(".input-dyna-add").html(null);
+
+            $('#subjectCode').val(subjectCode)
             //初始化 上传空间
-            myFileAction.do("fileuploader", "fileIds", "formalFile", []);
-            myFileAction.do("fileuploader2", "fileIds", "timeSchedule", []);
-            //初始化列表
-            creatb8(urls,id,delurl)
+            //初始化表单
+            $.ajax({
+                url: dataUrl,
+                data: {subjectId:id},
+                type: "post",
+                dataType:'json',
+                success: function (result) {
+                    let data = result.data;
+                    let files1 = [];
+                    let files2 = [];
+                    if(result.flag == 1){
+                        for (let i = 0; i < data.fileUploads.length; i++) {
+                            if(data.fileUploads[i].fileCategory == 'formalFile'){
+                                files1.push(data.fileUploads[i]);
+                            }else{
+                                files2.push(data.fileUploads[i]);
+                            }
+                        }
+                        //反填数据
+                        $('#effect').val(data.effect);
+                        $('#status').val(data.status);
+                        $('#description').val(data.description);
+                        $('#remark').val(data.remark);
+                        $('#uuid').val(data.uuid);
+                        let inputs = '';
+                        $(".input-dyna-add").html(null);
+                        if(data.manageSubjectExecutionDuties.length>0){
+                            for (let i = 0; i < data.manageSubjectExecutionDuties.length; i++) {
+                                let input ="<span class='col-sm-12' >"+
+                                    "<div class='form-group row'>"+
+                                    "<div class='col-sm-2'><input type='text'  name='dept'  class='form-control m-t-sm col-sm-2' value='"+data.manageSubjectExecutionDuties[i].dept+"'  placeholder='落实责任部门'></div>" +
+                                    "<div class='col-sm-2'><input type='text'  name='name'  class='form-control m-t-sm col-sm-2' value='"+data.manageSubjectExecutionDuties[i].name+"' placeholder='责任人'></div>" +
+                                    "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
+                                    "<span class='glyphicon glyphicon-minus'></span>" +
+                                    "</button></div></div></span>";
+                                inputs += input;
+                            }
+                        }else {
+                            inputs = "<span class='col-sm-12' ><div class='form-group row'>"+
+                                "<div class='col-sm-2'><input type='text'  name='dept'  class='form-control m-t-sm col-sm-2'  placeholder='落实责任部门'></div>" +
+                                "<div class='col-sm-2'><input type='text'  name='name'  class='form-control m-t-sm col-sm-2'  placeholder='责任人'></div>" +
+                                "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
+                                "<span class='glyphicon glyphicon-minus'></span>" +
+                                "</button></div></div></span>";
+                        }
+                        $(".input-dyna-add").append(inputs);
+                    }
+                    myFileAction.do("fileuploader", "fileIds", "formalFile", files1);
+                    myFileAction.do("fileuploader2", "fileIds", "timeSchedule", files2);
+                }
+            });
             $("#confirmAdd8").click(function () {
                 //处理落实责任信息
                 let execution = {};
                 execution.subjectId = id;
+                execution.uuid = $('#uuid').val();
+                execution.subjectCode = $('#subjectCode').val();
                 execution.effect = $('#effect').val();
                 execution.status = $('#status').val();
                 execution.description = $('#description').val();
@@ -429,26 +516,14 @@
                     data: {execution:executionJson,dutyList:dutyListJson},
                     type: "post",
                     success: function (data) {
-                        creatb8(urls,id,delurl);
                         $("#confirmAdd8").attr('onclick','').unbind('click');
                         $('#' + pop).modal("hide");
-                        $('#fileuploader').nextAll().each(function (){
-                            $(this).remove();
-                        });
-                        $('#fileuploader2').nextAll().each(function (){
-                            $(this).remove();
-                        });
-                        $('#effect').val(null);
-                        $('#status').val(null);
-                        $('#description').val(null);
-                        $('#remark').val(null);
-                        $('#fileIds').val(null);
+
                     }
                 });
             });
         }
     };
-
     function creatb1(){
         $.ajax({
             url: [[@{'/manageEventsList/listAllDetailItems'}]],
@@ -710,57 +785,57 @@
             ]
         });
     }
-    function creatb8(urls,id,delurl){
-        $("#execution_tabledetails").bootstrapTable('destroy');
-        $("#execution_tabledetails").bootstrapTable({
-            url: urls,        //请求后台的URL（*）
-            method: 'post',
-            contentType: "application/x-www-form-urlencoded",
-            pagination: true,                   //是否显示分页（*）
-            cache: false,
-            pageSize: 10,//每页一条数据
-            striped: true,  //表格显示条纹
-            dataField: "list",
-            queryParamsType: "undefined",
-            queryParams: function queryParams(params) {   //设置查询参数
-                let param = {
-                    pageNumber: params.pageNumber,
-                    pageSize: params.pageSize,
-                    id: id
-                };
-                return param;
-            },
-            sidePagination: 'server',
-            pageNumber: 1,
-            columns: [
-                {field: "uuid", visible: false},
-                {field: "effect", title: "预期成效"},
-                {field: "status", title: "实施状态"},
-                {field: "description", title: "实施情况"},
-                {
-                    field: "cz", title: '操作', width: "23%",
-                    formatter: function (value, row) {
-                        let delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
-                        return delHtml;
-                    },
-                    events: {
-                        'click .del': function (e, value, row, index) {
-                            let ids = row.uuid;
-
-                            $.ajax({
-                                url: delurl,
-                                data: 'uuid=' + ids,
-                                type: "post",
-                                success: function (data) {
-                                    creatb8(urls,id,delurl)
-                                }
-                            });
-                        }
-                    }
-                }
-            ]
-        });
-    }
+    // function creatb8(urls,id,delurl){
+    //     $("#execution_tabledetails").bootstrapTable('destroy');
+    //     $("#execution_tabledetails").bootstrapTable({
+    //         url: urls,        //请求后台的URL（*）
+    //         method: 'post',
+    //         contentType: "application/x-www-form-urlencoded",
+    //         pagination: true,                   //是否显示分页（*）
+    //         cache: false,
+    //         pageSize: 10,//每页一条数据
+    //         striped: true,  //表格显示条纹
+    //         dataField: "list",
+    //         queryParamsType: "undefined",
+    //         queryParams: function queryParams(params) {   //设置查询参数
+    //             let param = {
+    //                 pageNumber: params.pageNumber,
+    //                 pageSize: params.pageSize,
+    //                 id: id
+    //             };
+    //             return param;
+    //         },
+    //         sidePagination: 'server',
+    //         pageNumber: 1,
+    //         columns: [
+    //             {field: "uuid", visible: false},
+    //             {field: "effect", title: "预期成效"},
+    //             {field: "status", title: "实施状态"},
+    //             {field: "description", title: "实施情况"},
+    //             {
+    //                 field: "cz", title: '操作', width: "23%",
+    //                 formatter: function (value, row) {
+    //                     let delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
+    //                     return delHtml;
+    //                 },
+    //                 events: {
+    //                     'click .del': function (e, value, row, index) {
+    //                         let ids = row.uuid;
+    //
+    //                         $.ajax({
+    //                             url: delurl,
+    //                             data: 'uuid=' + ids,
+    //                             type: "post",
+    //                             success: function (data) {
+    //                                 creatb8(urls,id,delurl)
+    //                             }
+    //                         });
+    //                     }
+    //                 }
+    //             }
+    //         ]
+    //     });
+    // }
 
     function creta(urls,id,delurl){
         $("#tabledetails").bootstrapTable('destroy');
@@ -985,7 +1060,6 @@
                     }else{
                         $('#' + idField).val(data);
                     }
-
                 }
             });
         }

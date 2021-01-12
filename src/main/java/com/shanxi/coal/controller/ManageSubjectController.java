@@ -16,9 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 议题
@@ -217,16 +215,22 @@ public class ManageSubjectController {
         try {
             Gson gson = new Gson();
             ManageSubjectExecution subjectExecution = gson.fromJson(execution,ManageSubjectExecution.class);
-            subjectExecution.setUuid(UUID.randomUUID().toString());
-            ManageMeetingSubject subject = subjectMapper.selectByPrimaryKey(subjectExecution.getSubjectId());
-            subjectExecution.setSubjectCode(subject.getSubjectCode());
-            executionMapper.insert(subjectExecution);
+            if(liquibase.util.StringUtils.isNotEmpty(subjectExecution.getUuid())){
+                executionMapper.updateByPrimaryKeySelective(subjectExecution);
+            }else{
+                subjectExecution.setUuid(UUID.randomUUID().toString());
+                executionMapper.insert(subjectExecution);
+            }
+
             List<ManageSubjectExecutionDuty> duties = gson.fromJson(dutyList,new TypeToken<List<ManageSubjectExecutionDuty>>(){}.getType());
             //落实责任信息保存
+            executionDutyMapper.deleteByExecutionId(subjectExecution.getUuid());
             duties.forEach(duty->{
-                duty.setExecutionId(subjectExecution.getUuid());
-                duty.setUuid(UUID.randomUUID().toString());
-                executionDutyMapper.insert(duty);
+                if(liquibase.util.StringUtils.isNotEmpty(duty.getDept()) && liquibase.util.StringUtils.isNotEmpty(duty.getName()) ){
+                    duty.setExecutionId(subjectExecution.getUuid());
+                    duty.setUuid(UUID.randomUUID().toString());
+                    executionDutyMapper.insert(duty);
+                }
             });
             //文件上传
             if (liquibase.util.StringUtils.isNotEmpty(subjectExecution.getFileIds())) {
@@ -254,6 +258,20 @@ public class ManageSubjectController {
         List<ManageSubjectExecution> executionList = executionMapper.listBySubjectId(id);
         PageInfo<ManageSubjectExecution> pageInfo = new PageInfo<>(executionList);
         return MyUtils.pageInfoToJson(pageInfo);
+    }
+    @PostMapping("/getExecutionBySubjectId")
+    @ResponseBody
+    public Map<String,Object> getExecutionBySubjectId(HttpServletRequest request){
+        Map<String,Object> dataMap = new HashMap<>();
+        String subjectId = request.getParameter("subjectId");
+        ManageSubjectExecution execution = executionMapper.getExecutionBySubjectId(subjectId);
+        dataMap.put("data",execution);
+        if(execution == null){
+            dataMap.put("flag",0);
+        }else{
+            dataMap.put("flag",1);
+        }
+        return dataMap;
     }
 
 

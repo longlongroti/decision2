@@ -10,6 +10,19 @@
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
+  <resultMap id="BaseResultMap2" type="com.shanxi.coal.domain.ManageSubjectExecution">
+    <id column="uuid" jdbcType="CHAR" property="uuid" />
+    <result column="subject_id" jdbcType="VARCHAR" property="subjectId" />
+    <result column="subject_code" jdbcType="VARCHAR" property="subjectCode" />
+    <result column="effect" jdbcType="VARCHAR" property="effect" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <collection property="fileUploads" column="uuid"
+                select="com.shanxi.coal.dao.FileUploadedMapper.listByCategoryId"></collection>
+    <collection property="manageSubjectExecutionDuties" column="uuid"
+                select="com.shanxi.coal.dao.ManageSubjectExecutionDutyMapper.listByExecutionId"></collection>
+  </resultMap>
   <sql id="Base_Column_List">
     uuid, subject_id, subject_code, effect, status, description, remark
   </sql>
@@ -21,6 +34,12 @@
   </select>
 
   <select id="listBySubjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_subject_execution
+    where subject_id = #{subjectId,jdbcType=CHAR}
+  </select>
+  <select id="getExecutionBySubjectId" parameterType="java.lang.String" resultMap="BaseResultMap2">
     select
     <include refid="Base_Column_List" />
     from manage_subject_execution
