@@ -223,10 +223,10 @@
                         },
                         'click .add_execution': function (e, value, row, index) {
                             let id = row.uuid;
+                            let subjectCode = row.subjectCode;
                             let url = '[[@{'/manageSubject/addExecution'}]]';
-                            let urls = '[[@{'/manageSubject/listExecution'}]]';
-                            let delurl = '[[@{'/manageSubject/deleteExecution'}]]';
-                            commonAction.addAction8(id, url, '', 'confirmModal8',urls,delurl)
+                            let dataUrl = '[[@{'/manageSubject/getExecutionBySubjectId'}]]';
+                            commonAction.addAction8(id,subjectCode, url, dataUrl, 'confirmModal8')
                         },
                     }
                 }
@@ -242,12 +242,12 @@
 
     function addInput() {
         let input = $(
-            "<div class='form-group row'>"+
+            "<span class='col-sm-12' ><div class='form-group row'>"+
             "<div class='col-sm-2'><input type='text'  name='dept'  class='form-control m-t-sm col-sm-2'  placeholder='落实责任部门'></div>" +
             "<div class='col-sm-2'><input type='text'  name='name'  class='form-control m-t-sm col-sm-2'  placeholder='责任人'></div>" +
             "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
             "<span class='glyphicon glyphicon-minus'></span>" +
-            "</button></div></div>");
+            "</button></div></div></span>");
         $(".input-dyna-add").append(input);
     }
     $("body").on("click", ".removeclass", function (e) {
