@@ -552,7 +552,10 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团总部事项清单");
-        return "ok";
+        String ret = getResult(s);
+        manageEventsList.setStatus(ret.equals("ok") ? 99 : 44);
+        manageEventsListMapper.updateByPrimaryKeySelective(manageEventsList);
+        return ret;
     }
 
     private void insertReport(String response, String fileName, String path, String type) {

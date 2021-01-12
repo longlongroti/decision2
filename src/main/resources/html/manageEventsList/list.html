@@ -64,7 +64,7 @@
                         </shiro:hasPermission>
                             <a class="btn btn-warning pull-right btn-sm badge-pill mb-1"
                                th:href="@{/xml/send0013}"><i
-                                    class="fa fa-plus"> </i>上报监管信息</a>
+                                    class="fa fa-send"> </i>上报监管信息</a>
 
                     </div>
                 </div>
@@ -168,7 +168,11 @@
             columns: [
                 {field: "uuid", visible: false},
                 {field: "listName", title: "事项名称"},
-                {field: "versionNumber", title: "事项编码"},
+                {field: "versionNumber", title: "版本号"},
+                {field: "status",title: "上传状态",
+                    formatter: function (value, row) {
+                        return formatter.formatAuditStatus(value);
+                    }},
                 {
                     field: "cz", title: '操作', width: "23%",
                     formatter: function (value, row) {
@@ -181,7 +185,7 @@
                                 delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
                             if (checkAuthorization('事项清单管理_添加事项'))
                                 addHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adde badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加事项' + '</a>&nbsp;';
-                        var sendHtml = '<a href="javascript:;" class="btn btn-warning send"><i class="fa fa-send"> </i> 报送</a>&nbsp;';
+                        var sendHtml = '<a href="javascript:;" class="btn btn-warning send"><i class="fa fa-send"> </i> 事项清单报送</a>&nbsp;';
                         let buttonhtml = editHtml + delHtml + addHtml+sendHtml;
                         return buttonhtml;
                     },
@@ -195,6 +199,10 @@
                                 data: 'id=' + id,
                                 type: "post",
                                 success: function (data) {
+                                    if(data=="ok")
+                                        layer.alert(data, {title: '上传成功', icon: 1});
+                                    else
+                                        layer.alert(data, {title: '上传失败', icon: 2});
                                     createTable();
                                 }
                             });
