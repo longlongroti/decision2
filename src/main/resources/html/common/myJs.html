@@ -336,6 +336,7 @@
                         creatb3(urls,id,delurl);
                         $("#confirmAdd4").attr('onclick','').unbind('click');
                         $('#' + pop).modal("hide");
+
                     }
                 });
             });
@@ -375,14 +376,6 @@
                     data: 'deliberation=' + $("#deliberation").val()+ "&subjectId="+ id+'&deliberationResult='+$("#deliberationResult").val(),
                     type: "post",
                     success: function (data) {
-                        // if (!redirect) {
-                        //     return;
-                        // }
-                        // if (typeof redirect == 'function') {
-                        //     redirect();
-                        // } else {
-                        //     location.href = redirect
-                        // }
                         creatb5(urls,id,delurl);
                         $("#confirmAdd6").attr('onclick','').unbind('click');
                         $('#' + pop).modal("hide");
@@ -522,6 +515,33 @@
             });
         }
     };
+
+    $('#confirmModal8').on('hide.bs.modal', function () {
+        location.reload();
+    })
+    $('#confirmModal7').on('hide.bs.modal', function () {
+        location.reload();
+    })
+    $('#confirmModal6').on('hide.bs.modal', function () {
+        location.reload();
+    })
+    $('#confirmModal5').on('hide.bs.modal', function () {
+        location.reload();
+    })
+    $('#confirmModal4').on('hide.bs.modal', function () {
+        location.reload();
+    })
+    $('#confirmModal2').on('hide.bs.modal', function () {
+        location.reload();
+    })
+    $('#confirmModal').on('hide.bs.modal', function () {
+        location.reload();
+    })
+    $('#showConfirmEquipment1').on('hide.bs.modal', function () {
+        location.reload();
+    })
+
+
     function creatb1(){
         $.ajax({
             url: [[@{'/manageEventsList/listAllDetailItems'}]],
