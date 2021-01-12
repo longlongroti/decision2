@@ -1016,6 +1016,8 @@
             $("#" + inputElement).uploadFile({
                 url: uploadUrl + "?type=" + type,                 //文件上传url
                 returnType: 'json',              //服务返回数据
+                acceptFiles:'pdf,ofd',
+                allowedTypes: "pdf,ofd",
                 showDone: true,                     //是否显示"Done"(完成)按钮
                 showDelete: true,                  //是否显示"Delete"(删除)按钮
                 onLoad: function (obj) {
@@ -1035,6 +1037,7 @@
                             $('#' + idField).val(arrId);
                         }
                     }
+                    console.log(obj);
                 },
                 deleteCallback: function (data, pd) {
                     $.ajax({
@@ -1057,6 +1060,7 @@
                     if($('#' + idField).val() != '' && $('#' + idField).val() != null){
                         $('#' + idField).val($('#' + idField).val()+','+data);
                     }else{
+
                         $('#' + idField).val(data);
                     }
                 }
