@@ -202,12 +202,14 @@
         let ret = [[${manageSystemSel!=null}?${manageSystemSel.fileUploads}]];
         let ret1 = [];
         let ret2 = [];
+        if(ret){
         for (let i = 0; i < ret.length; i++) {
             if(ret[i].fileCategory == 'managesystem'){
                 ret1.push(ret[i]);
             }else{
                 ret2.push(ret[i]);
             }
+        }
         }
         myFileAction.do("fileuploader", "fileIds", "managesystem", ret1);
         myFileAction.do("fileuploader2", "fileIds", "managesystemMaterial", ret2);
