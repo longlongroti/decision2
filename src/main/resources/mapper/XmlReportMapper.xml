@@ -29,6 +29,13 @@
     from xml_report
     where uuid = #{uuid,jdbcType=CHAR}
   </select>
+  <select id="list" resultMap="BaseResultMap" parameterType="com.shanxi.coal.domain.XmlReport">
+    select * from xml_report
+    <where>
+      <include refid="Common.condition_sql"/>
+    </where>
+    order by created_date desc
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from xml_report
     where uuid = #{uuid,jdbcType=CHAR}

@@ -1,5 +1,10 @@
 package com.shanxi.coal.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.shanxi.coal.config.MyProperties;
 import com.shanxi.coal.dao.*;
 import com.shanxi.coal.domain.*;
@@ -24,10 +29,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
+import javax.xml.stream.XMLReporter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -68,6 +75,10 @@ public class XmlController {
     ManageSubjectItemMapper manageSubjectItemMapper;
     @Resource
     FileUploadedMapper fileUploadedMapper;
+    @Resource
+    ManageSubjectExecutionMapper manageSubjectExecutionMapper;
+    @Resource
+    ManageSubjectExecutionDutyMapper manageSubjectExecutionDutyMapper;
 
     public static File packageFileCatalogPwdZip(String p, String fname) throws Exception {
         String catalogPath = p + fname;
@@ -121,6 +132,23 @@ public class XmlController {
             fos.close();
         } catch (IOException e) {
         }
+    }
+
+    @GetMapping("/go")
+    public String go() {
+        return "log/list";
+    }
+
+    @PostMapping("/list")
+    @ResponseBody
+    public String list(@RequestParam("pageNumber") Integer pageNumber,
+                       @RequestParam("pageSize") Integer pageSize) throws ParseException {
+        PageHelper.startPage(pageNumber, pageSize);
+        XmlReport where = new XmlReport();
+        MyUtils.buildCommonWhere(where);
+        List<XmlReport> xmlReporters = xmlReportMapper.list(where);
+        PageInfo<XmlReport> pageInfo = new PageInfo<XmlReport>(xmlReporters);
+        return MyUtils.pageInfoToJson(pageInfo);
     }
 
     @GetMapping("/send0013")
@@ -251,6 +279,68 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团总部决策制度");
+        String ret = getResult(s);
+        manageSystem.setStatus(ret.equals("ok") ? 99 : 44);
+        manageSystemMapper.updateByPrimaryKeySelective(manageSystem);
+        return ret;
+    }
+
+    @PostMapping("/send0012")
+    @ResponseBody
+    public String send0012(@RequestParam("id") String id) throws Exception {
+//        manageSubjectExecutionMapper.selectByPrimaryKey(id);
+//        ManageSystem manageSystem = manageSystemMapper.selectByPrimaryKey(id);
+//        List<ManageSystemItems> manageSystemItems = manageSystemItemsMapper.listByUseId(id);
+//        List<FileUploaded> fileUploadeds = fileUploadedMapper.listByCategoryId(id);
+//        XML0005Parent xml0005Parent = new XML0005Parent();
+//        xml0005Parent.setCompanyId(myProperties.getCreditCode());
+//        xml0005Parent.setCompanyName(myProperties.getCompanyName());
+//        xml0005Parent.setEffectiveDate(manageSystem.getEffectiveDate());
+//        xml0005Parent.setInvalidDate(manageSystem.getExpiryDate());
+//        xml0005Parent.setRegulationId(manageSystem.getUuid());
+//        xml0005Parent.setRegulationName(manageSystem.getSystemName());
+//        xml0005Parent.setAuditFlag(manageSystem.getIsLegalApprove());
+//        xml0005Parent.setMeetingTypeCode(MyUtils.name2code(manageSystem.getMeetingType()));
+//        xml0005Parent.setRegulationTypeName(manageSystem.getSystemType());
+//        xml0005Parent.setApprovalDate(manageSystem.getApproveDate());
+//        List<XMLVoteMode> list = new ArrayList<>();
+//        for (ManageSystemItems i : manageSystemItems) {
+//            XMLVoteMode xmlVoteMode = new XMLVoteMode();
+//            xmlVoteMode.setItemCode(i.getItemsName());
+//            xmlVoteMode.setRate(i.getPeopleCount());
+//            xmlVoteMode.setVoteMode(i.getVotingFormula());
+//            list.add(xmlVoteMode);
+//        }
+//        xml0005Parent.setXmlVoteModeList(list);
+//        xml0005Parent.setSource("系统");
+//        xml0005Parent.setOperType("add");
+//        JAXBContext jaxbContext = JAXBContext.newInstance(XML0005Parent.class);
+//        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+//        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//        String folder = myProperties.getCreditCode() + "_0005_1000_" + MyDateTimeUtils.strNow("yyyyMMddHHmmss") + "_" + UUID.randomUUID().toString().replaceAll("-", "");
+//        String path = myProperties.getXmlPath() + folder;
+//        File f = new File(path);
+//        if (!f.exists()) {
+//            f.mkdirs();
+//        }
+//        File f1 = new File(path + "/正式文件");
+//        if (!f1.exists()) {
+//            f1.mkdirs();
+//        }
+//        File f2 = new File(path + "/佐证材料");
+//        if (!f2.exists()) {
+//            f2.mkdirs();
+//        }
+//        for (FileUploaded fs : fileUploadeds) {
+//            if (fs.getFileCategory().equals("managesystem"))
+//                copyFile(fs.getFilePath(), f1.getAbsolutePath());
+//            else if (fs.getFileCategory().equals("managesystemMaterial"))
+//                copyFile(fs.getFilePath(), f2.getAbsolutePath());
+//        }
+//        jaxbMarshaller.marshal(xml0005Parent, new File(path + "/0005_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
+//        File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
+//        String s = doSend(zipFile);
+//        insertReport(s, folder, path, "集团总部决策制度");
         return "ok";
     }
 
@@ -381,7 +471,10 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团总部决策会议");
-        return "ok";
+        String ret = getResult(s);
+        manageMeeting1.setStatus(ret.equals("ok") ? 99 : 44);
+        manageMeetingMapper.updateByPrimaryKeySelective(manageMeeting1);
+        return ret;
     }
 
     @PostMapping("/send0019")
@@ -416,7 +509,10 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团及所属企业会议编码及议题编码");
-        return "ok";
+        String ret = getResult(s);
+        manageMeeting1.setStatus1(ret.equals("ok") ? 99 : 44);
+        manageMeetingMapper.updateByPrimaryKeySelective(manageMeeting1);
+        return ret;
     }
 
     @PostMapping("/send")
@@ -486,13 +582,17 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团总部事项清单");
-        return "ok";
+        String ret = getResult(s);
+        manageEventsList.setStatus(ret.equals("ok") ? 99 : 44);
+        manageEventsListMapper.updateByPrimaryKeySelective(manageEventsList);
+        return ret;
     }
 
     private void insertReport(String response, String fileName, String path, String type) {
         XmlReport xmlReport = new XmlReport();
         xmlReport.setUuid(UUID.randomUUID().toString());
         xmlReport.setFileName(fileName);
+        xmlReport.setCreatedBy(MyUtils.getSessionUser().getUuid());
         xmlReport.setUrl(myProperties.getXml0011url());
         xmlReport.setType(type);
         xmlReport.setResponse(response);
@@ -604,7 +704,17 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团总部企业基本信息");
-        return "ok";
+        String ret = getResult(s);
+        manageLeader.setStatus(ret.equals("ok") ? 99 : 44);
+        manageLeaderMapper.updateByPrimaryKeySelective(manageLeader);
+        return ret;
+    }
+
+    private String getResult(String s) {
+        Gson g = new Gson();
+        JsonObject obj = g.fromJson(s, JsonObject.class);
+        Object a = obj.get("serviceFlag");
+        return a == null || !((JsonElement) a).getAsString().equals("1") ? "error" : "ok";
     }
 
     private void dup(List<XMLGroupList> xmlGroupList, List<ManageLeaderGroup> b, XMLGroupList xmlGroupList2, ManageLeader manageLeader) {

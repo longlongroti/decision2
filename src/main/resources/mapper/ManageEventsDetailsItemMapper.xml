@@ -291,7 +291,7 @@
   </select>
     <select id="listAllPending" resultMap="BaseResultMap">
          select * from manage_events_details_item
-    WHERE status =0
+    WHERE status =0 and created_by = #{createdBy,jdbcType=VARCHAR}
     </select>
     <select id="count" resultType="java.lang.Integer">
         select count(*) from manage_events_details_item

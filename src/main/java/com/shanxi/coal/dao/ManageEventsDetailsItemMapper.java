@@ -30,7 +30,7 @@ public interface ManageEventsDetailsItemMapper {
 
     List<ManageEventsDetailItem> listByItemId(String uuid);
 
-    List<ManageEventsDetailItem> listAllPending();
+    List<ManageEventsDetailItem> listAllPending(String createdBy);
 
     int count();
 }

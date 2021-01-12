@@ -167,13 +167,11 @@
             return val;
         }, formatAuditStatus: function (val) {
             if (val == 0) {
-                return '<font color="#d3d3d3"><i class="fa fa-warning"></i>' + [[#{message.audit.status.pending}]] + '</font>'
-            } else if (val == 1) {
-                return '<font color="#556b2f"><i class="fa fa-hand-o-right"></i>' + [[#{message.audit.status.auditing}]] + '</font>'
-            } else if (val == 2) {
-                return '<font color="#1e90ff"><i class="fa fa-thumbs-up"></i>' + [[#{message.audit.status.audited}]] + '</font>'
-            } else if (val == 3) {
-                return '<font color="red"><i class="fa fa-times"></i>' + [[#{message.audit.status.rejected}]] + '</font>'
+                return '<font color="#d3d3d3"><i class="fa fa-warning"></i>待上报</font>'
+            } else if (val == 99) {
+                return '<font color="blue"><i class="fa fa-thumbs-up"></i>上报成功</font>'
+            } else if (val == 44) {
+                return '<font color="red"><i class="fa fa-thumbs-down"></i>上报失败</font>'
             }
             return val;
         }, formatMaintainType: function (val) {
@@ -530,7 +528,7 @@
             type: "post",
             success: function (data) {
                 data = eval('(' + data + ')');
-                console.log(data)
+                $("#eventCode").empty();
                 for( var i in data){
                     let val =data[i].eventCode+ ">>>" + data[i].eventName ;
                     $("#eventCode").append('<option value="' + data[i].eventCode + '">' + val + '</option>')
@@ -544,6 +542,7 @@
             type: "post",
             success: function (data) {
                 data = eval('(' + data + ')');
+                $("#itemsName").empty();
                 for( var i in data){
                     let val =data[i].eventCode+ ">>>" + data[i].eventName ;
                     $("#itemsName").append('<option value="' + data[i].eventCode + '">' + val + '</option>')

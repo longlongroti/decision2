@@ -129,7 +129,7 @@ public class ManageMeetingController {
                        @RequestParam("pageSize") Integer pageSize) throws ParseException {
         PageHelper.startPage(pageNumber, pageSize);
         ManageMeeting where = new ManageMeeting();
-        where.setStatus(0);
+        MyUtils.buildCommonWhere(where);
         where.setMeetingName(StringUtils.isNotEmpty(name) ? name : null);
         where.setMeetingType(StringUtils.isNotEmpty(meetingType) ? meetingType : null);
         List<ManageMeeting> manageMeetings = manageMeetingMapper.getList(where);

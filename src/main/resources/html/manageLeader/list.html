@@ -177,28 +177,28 @@
             pageNumber: 1,
             columns: [
                 {field: "uuid",visible: false},
-                /*{field: "createdDate",title: "创建时间",
+                {field: "createdDate",title: "创建时间",
                     formatter: function (val, row, index) {
                         return formatter.formatDate(val);
                     }
-                },*/
+                },
                 {field: "leaderSort",title: "序号"},
                 {field: "leaderName",title: "领导姓名"},
                {field: "remark",title: "备注"},
-                /* {field: "aa",title: "任职开始时间"},
-                {field: "aa",title: "任职结束时间"},*/
+                {field: "status",title: "上传状态",
+                    formatter: function (value, row) {
+                        return formatter.formatAuditStatus(value);
+                    }},
                 {field: "cz",title: '操作',width: "23%",
                     formatter: function (value, row) {
                         let editHtml = '';
                         let delHtml = '';
                         let sendHtml = '';
-                        if (row.status == 0 || row.status == 3) {
                             if (checkAuthorization('领导班子管理_编辑'))
                                 editHtml = '<a href="javascript:;" class="btn btn-sm btn-success edit badge-pill mb-2" ><i class="fa fa-pencil"> </i>' + '编辑' + '</a>&nbsp;';
                             if (checkAuthorization('领导班子管理_删除'))
                                 delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
-                        }
-                        sendHtml= '<a href="javascript:;" class="btn btn-sm btn-warning send badge-pill mb-2"><i class="fa fa-send"> </i>' + '报送' + '</a>&nbsp;'
+                        sendHtml= '<a href="javascript:;" class="btn btn-sm btn-warning send badge-pill mb-2"><i class="fa fa-send"> </i>' + '企业基本信息报送' + '</a>&nbsp;'
                         let buttonhtml = editHtml + delHtml + sendHtml;
                         return buttonhtml;
                     },
@@ -221,6 +221,10 @@
                             data: 'id=' + id,
                             type: "post",
                             success: function (data) {
+                                if(data=="ok")
+                                    layer.alert(data, {title: '上传成功', icon: 1});
+                                else
+                                    layer.alert(data, {title: '上传失败', icon: 2});
                                 createTable();
                             }
                         });
