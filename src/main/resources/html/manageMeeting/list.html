@@ -181,9 +181,8 @@
                         let delHtml = '';
                         let addHtml = '';
                         let addSubjectHtml = '';
-                        var sendHtml = '<a href="javascript:;" class="btn btn-warning send"><i class="fa fa-send"> </i> 集团决策会议报送</a>&nbsp;';
-                        var sendHtml2 = '<a href="javascript:;" class="btn btn-warning send2"><i class="fa fa-send"> </i> 集团会议及议题编码报送</a>&nbsp;';
-
+                        let sendHtml = '<a href="javascript:;" class="btn btn-warning send"><i class="fa fa-send"> </i> 决策会议报送</a>&nbsp;';
+                        let sendHtml2 = '<a href="javascript:;" class="btn btn-warning send2"><i class="fa fa-send"> </i> 会议及议题编码报送</a>&nbsp;';
                             if (checkAuthorization('会议信息管理_编辑'))
                                 editHtml = '<a href="javascript:;" class="btn btn-sm btn-success edit badge-pill mb-2" ><i class="fa fa-pencil"> </i>' + '编辑' + '</a>&nbsp;';
                             if (checkAuthorization('会议信息管理_删除'))
