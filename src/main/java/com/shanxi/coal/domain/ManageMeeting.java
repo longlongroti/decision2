@@ -4,31 +4,31 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ManageMeeting extends CommonBean implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private Integer status1;
     private String meetingType;
-
     private String meetingName;
-
     private String versionNum;
-
     private String serialNum;
-
     private String meetingForm;
-
     private String meetingTime;
-
     private String summaryTime;
-
     private String meetingSite;
-
     private String compereId;
-
     private String compereName;
-
     private String attendees;
-
     private List<FileUploaded> fileUploads;
-
     private String fileIds;
+    private List<ManageMeetingAttendee> manageMeetingAttendee;
+    private List<ManageMeetingItems> manageMeetingItems;
+
+    public Integer getStatus1() {
+        return status1;
+    }
+
+    public void setStatus1(Integer status1) {
+        this.status1 = status1;
+    }
 
     public String getFileIds() {
         return fileIds;
@@ -45,10 +45,6 @@ public class ManageMeeting extends CommonBean implements Serializable {
     public void setFileUploads(List<FileUploaded> fileUploads) {
         this.fileUploads = fileUploads;
     }
-
-    private List<ManageMeetingAttendee> manageMeetingAttendee;
-
-    private List<ManageMeetingItems> manageMeetingItems;
 
     public List<ManageMeetingItems> getManageMeetingItems() {
         return manageMeetingItems;
@@ -73,8 +69,6 @@ public class ManageMeeting extends CommonBean implements Serializable {
     public void setAttendees(String attendees) {
         this.attendees = attendees;
     }
-
-    private static final long serialVersionUID = 1L;
 
     public String getMeetingType() {
         return meetingType;

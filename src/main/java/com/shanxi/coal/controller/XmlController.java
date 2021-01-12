@@ -258,7 +258,10 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团总部决策制度");
-        return "ok";
+        String ret = getResult(s);
+        manageSystem.setStatus(ret.equals("ok") ? 99 : 44);
+        manageSystemMapper.updateByPrimaryKeySelective(manageSystem);
+        return ret;
     }
 
     @PostMapping("/send0012")
@@ -447,7 +450,10 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团总部决策会议");
-        return "ok";
+        String ret = getResult(s);
+        manageMeeting1.setStatus(ret.equals("ok") ? 99 : 44);
+        manageMeetingMapper.updateByPrimaryKeySelective(manageMeeting1);
+        return ret;
     }
 
     @PostMapping("/send0019")
@@ -482,7 +488,10 @@ public class XmlController {
         File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
         String s = doSend(zipFile);
         insertReport(s, folder, path, "集团及所属企业会议编码及议题编码");
-        return "ok";
+        String ret = getResult(s);
+        manageMeeting1.setStatus1(ret.equals("ok") ? 99 : 44);
+        manageMeetingMapper.updateByPrimaryKeySelective(manageMeeting1);
+        return ret;
     }
 
     @PostMapping("/send")

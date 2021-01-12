@@ -207,6 +207,10 @@
                 {field: "effectiveDate",title: "生效日期"},
                 {field: "expiryDate",title: "失效日期"},
                 {field: "createdByOrg",title: "企业名称"},
+                {field: "status",title: "上传状态",
+                    formatter: function (value, row) {
+                        return formatter.formatAuditStatus(value);
+                    }},
                 {field: "cz",title: '操作',width: "23%",
                     formatter: function (value, row) {
                         let editHtml = '';
@@ -219,9 +223,9 @@
                                 delHtml = '<a href="javascript:;" class="btn btn-sm btn-danger del badge-pill mb-2"><i class="fa fa-trash"> </i>' + '删除' + '</a>&nbsp;';
                         }
                         addHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adde badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加表决方式' + '</a>&nbsp;';
-                        var sendHtml = '<a href="javascript:;" class="btn btn-warning send"><i class="fa fa-send"> </i> 报送</a>&nbsp;';
-                        var sendHtml2 = '<a href="javascript:;" class="btn btn-warning send2"><i class="fa fa-send"> </i> 集团报送</a>&nbsp;';
-                        let buttonhtml = editHtml + delHtml+addHtml+sendHtml+sendHtml2;
+                        // var sendHtml = '<a href="javascript:;" class="btn btn-warning send"><i class="fa fa-send"> </i> 报送</a>&nbsp;';
+                        var sendHtml2 = '<a href="javascript:;" class="btn btn-warning send2"><i class="fa fa-send"> </i> 决策制度报送</a>&nbsp;';
+                        let buttonhtml = editHtml + delHtml+addHtml+sendHtml2;
                         return buttonhtml;
                     },
                     events: {
@@ -242,19 +246,21 @@
                             let urls = '[[@{'/manageSystem/listDetailItems'}]]';
                             let delurl = '[[@{'/manageSystem/deleteDetailItem'}]]';
                             commonAction.addAction7(id, url, redirectUrl, 'confirmModal7',urls,delurl)
-                        },'click .send': function (e, value, row, index) {
-                            let url = '[[@{'/xml/send0014'}]]';
-                            debugger
-                            let id = row.uuid;
-                            $.ajax({
-                                url: url,
-                                data: 'id=' + id,
-                                type: "post",
-                                success: function (data) {
-                                    createTable();
-                                }
-                            });
-                        },'click .send2': function (e, value, row, index) {
+                        },
+                        // 'click .send': function (e, value, row, index) {
+                        //     let url = '[[@{'/xml/send0014'}]]';
+                        //     debugger
+                        //     let id = row.uuid;
+                        //     $.ajax({
+                        //         url: url,
+                        //         data: 'id=' + id,
+                        //         type: "post",
+                        //         success: function (data) {
+                        //             createTable();
+                        //         }
+                        //     });
+                        // },
+                        'click .send2': function (e, value, row, index) {
                             let url = '[[@{'/xml/send0005'}]]';
                             debugger
                             let id = row.uuid;
@@ -263,6 +269,10 @@
                                 data: 'id=' + id,
                                 type: "post",
                                 success: function (data) {
+                                    if(data=="ok")
+                                        layer.alert(data, {title: '上传成功', icon: 1});
+                                    else
+                                        layer.alert(data, {title: '上传失败', icon: 2});
                                     createTable();
                                 }
                             });
