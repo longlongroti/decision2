@@ -1,5 +1,7 @@
 package com.shanxi.coal.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -27,10 +29,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
+import javax.xml.stream.XMLReporter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -128,6 +132,23 @@ public class XmlController {
             fos.close();
         } catch (IOException e) {
         }
+    }
+
+    @GetMapping("/go")
+    public String go() {
+        return "log/list";
+    }
+
+    @PostMapping("/list")
+    @ResponseBody
+    public String list(@RequestParam("pageNumber") Integer pageNumber,
+                       @RequestParam("pageSize") Integer pageSize) throws ParseException {
+        PageHelper.startPage(pageNumber, pageSize);
+        XmlReport where = new XmlReport();
+        MyUtils.buildCommonWhere(where);
+        List<XmlReport> xmlReporters = xmlReportMapper.list(where);
+        PageInfo<XmlReport> pageInfo = new PageInfo<XmlReport>(xmlReporters);
+        return MyUtils.pageInfoToJson(pageInfo);
     }
 
     @GetMapping("/send0013")
@@ -571,6 +592,7 @@ public class XmlController {
         XmlReport xmlReport = new XmlReport();
         xmlReport.setUuid(UUID.randomUUID().toString());
         xmlReport.setFileName(fileName);
+        xmlReport.setCreatedBy(MyUtils.getSessionUser().getUuid());
         xmlReport.setUrl(myProperties.getXml0011url());
         xmlReport.setType(type);
         xmlReport.setResponse(response);

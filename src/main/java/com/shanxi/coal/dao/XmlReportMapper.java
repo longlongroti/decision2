@@ -1,6 +1,9 @@
 package com.shanxi.coal.dao;
 
+import com.shanxi.coal.domain.ManageLeader;
 import com.shanxi.coal.domain.XmlReport;
+
+import java.util.List;
 
 public interface XmlReportMapper {
     int deleteByPrimaryKey(String uuid);
@@ -14,4 +17,6 @@ public interface XmlReportMapper {
     int updateByPrimaryKeySelective(XmlReport record);
 
     int updateByPrimaryKey(XmlReport record);
+
+    List<XmlReport> list(XmlReport where);
 }
