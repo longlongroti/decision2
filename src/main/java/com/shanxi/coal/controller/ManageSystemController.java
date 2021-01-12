@@ -145,8 +145,7 @@ public class ManageSystemController {
         PageHelper.startPage(pageNumber, pageSize);
         ManageSystem where = new ManageSystem();
         MyUtils.buildCommonWhere(where);
-        where.setStatus(0);
-        where.setSystemType(systemType);
+        where.setSystemType(StringUtils.isNotEmpty(systemType) ? systemType : null);
         List<ManageSystem> manageSystems = manageSystemMapper.getList(where);
         PageInfo<ManageSystem> pageInfo = new PageInfo<ManageSystem>(manageSystems);
         return MyUtils.pageInfoToJson(pageInfo);

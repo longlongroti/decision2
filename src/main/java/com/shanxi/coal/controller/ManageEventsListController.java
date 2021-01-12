@@ -136,7 +136,6 @@ public class ManageEventsListController {
         PageHelper.startPage(pageNumber, pageSize);
         ManageEventsList where = new ManageEventsList();
         MyUtils.buildCommonWhere(where);
-        where.setStatus(0);
         where.setVersionNumber(StringUtils.isNotEmpty(checkYear) ? checkYear : null);
         List<ManageEventsList> manageEventsLists = manageEventsListMapper.getList(where);
         PageInfo<ManageEventsList> pageInfo = new PageInfo<ManageEventsList>(manageEventsLists);
@@ -178,7 +177,7 @@ public class ManageEventsListController {
     @PostMapping("/listAllDetailItems")
     @ResponseBody
     public String listAllDetailItems() throws ParseException {
-        List<ManageEventsDetailItem> manageEventsDetailItems = manageEventsDetailsItemMapper.listAllPending();
+        List<ManageEventsDetailItem> manageEventsDetailItems = manageEventsDetailsItemMapper.listAllPending(MyUtils.getSessionUser().getUuid());
         return MyUtils.objectToJson(manageEventsDetailItems);
     }
 
@@ -228,10 +227,11 @@ public class ManageEventsListController {
                 ManageEventsDetailItem manageEventsDetailItem = new ManageEventsDetailItem();
                 manageEventsDetailItem.setUuid(UUID.randomUUID().toString());
                 manageEventsDetailItem.setDecisionSequence(seq1);
+                manageEventsDetailItem.setCreatedBy(MyUtils.getSessionUser().getUuid());
                 manageEventsDetailItem.setDecisionSequence2(seq2);
                 manageEventsDetailItem.setDecisionSequence3(seq3);
                 manageEventsDetailItem.setEventId(itemid);
-                AutoCode autoCode = autoCodeMapper.selectBy("sxbm",dicEventsCatalog.getCatalogCode(), MyDateTimeUtils.strNow("yyyyMM"));
+                AutoCode autoCode = autoCodeMapper.selectBy("sxbm", dicEventsCatalog.getCatalogCode(), MyDateTimeUtils.strNow("yyyyMM"));
                 String code = "";
                 String a = "";
                 String b = "";
@@ -251,13 +251,12 @@ public class ManageEventsListController {
                 manageEventsDetailItem.setIsLegalReview(islegal);
                 manageEventsDetailItem.setParentId(parentId);
                 manageEventsDetailsItemMapper.insertSelective(manageEventsDetailItem);
-                MyUtils.insertCode("sxbm", a, b, c,autoCodeMapper);
+                MyUtils.insertCode("sxbm", a, b, c, autoCodeMapper);
                 return "ok";
             }
         }
         return "error";
     }
-
 
 
 }

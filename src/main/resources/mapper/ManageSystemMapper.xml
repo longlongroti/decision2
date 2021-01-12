@@ -257,11 +257,11 @@
   <select id="getList" parameterType="com.shanxi.coal.domain.ManageSystem" resultMap="BaseResultMap">
     select * from manage_system
     <where>
-      is_del=0
+      <include refid="Common.condition_sql"/>
       <if test = "systemType != null">
         AND system_type LIKE concat(concat('%',#{systemType,jdbcType=VARCHAR}),'%')
       </if>
-      <!--<include refid="Common.condition_sql"/>-->
+
     </where>
     order by created_date desc
   </select>

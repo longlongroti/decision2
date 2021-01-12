@@ -453,7 +453,7 @@
             type: "post",
             success: function (data) {
                 data = eval('(' + data + ')');
-                console.log(data)
+                $("#eventCode").empty();
                 for( var i in data){
                     let val =data[i].eventCode+ ">>>" + data[i].eventName ;
                     $("#eventCode").append('<option value="' + data[i].eventCode + '">' + val + '</option>')
@@ -467,6 +467,7 @@
             type: "post",
             success: function (data) {
                 data = eval('(' + data + ')');
+                $("#itemsName").empty();
                 for( var i in data){
                     let val =data[i].eventCode+ ">>>" + data[i].eventName ;
                     $("#itemsName").append('<option value="' + data[i].eventCode + '">' + val + '</option>')

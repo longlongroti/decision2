@@ -322,7 +322,7 @@
   <select id="getList" parameterType="com.shanxi.coal.domain.ManageMeeting" resultMap="BaseResultMap3">
     select * from manage_meeting
     <where>
-      is_del=0
+      <include refid="Common.condition_sql"/>
       <if test="meetingName != null">
         and meeting_name  LIKE concat(concat('%',#{meetingName,jdbcType=VARCHAR}),'%')
       </if>

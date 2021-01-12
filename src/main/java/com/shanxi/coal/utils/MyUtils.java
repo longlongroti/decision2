@@ -89,8 +89,8 @@ public class MyUtils {
 
     public static CommonBean buildCommonWhere(CommonBean commonBean) {
         commonBean.setCreatedBy(getSessionUser().getUuid());
-        List<String> strings = buildCommonDataPower();
-        commonBean.setSupervisedOrg(strings);
+//        List<String> strings = buildCommonDataPower();
+//        commonBean.setSupervisedOrg(strings);
         return commonBean;
     }
 
