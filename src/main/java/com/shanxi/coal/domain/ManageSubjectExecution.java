@@ -22,6 +22,16 @@ public class ManageSubjectExecution implements Serializable {
 
     private String fileIds;
 
+    private Integer state;
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
     private List<ManageSubjectExecutionDuty> manageSubjectExecutionDuties;
 
     private static final long serialVersionUID = 1L;

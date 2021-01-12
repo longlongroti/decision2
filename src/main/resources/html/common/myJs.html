@@ -166,7 +166,7 @@
             }
             return val;
         }, formatAuditStatus: function (val) {
-            if (val == 0) {
+            if (val == 0||val==null) {
                 return '<font color="#d3d3d3"><i class="fa fa-warning"></i>待上报</font>'
             } else if (val == 99) {
                 return '<font color="blue"><i class="fa fa-thumbs-up"></i>上报成功</font>'

@@ -173,7 +173,10 @@
                 {field: "subjectName", title: "议题名称"},
                 {field: "subjectCode", title: "议题编码"},
                 {field: "sourceName", title: "任务来源"},
-                {field: "specialName", title: "专项名称"},
+                {field: "specialName", title: "专项名称"},{field: "status",title: "上传状态",
+                    formatter: function (value, row) {
+                        return formatter.formatAuditStatus(value);
+                    }},
                 {
                     field: "cz", title: '操作',
                     formatter: function (value, row) {
@@ -183,7 +186,8 @@
                         let addAttendanceHtml = '<a href="javascript:;" class="btn btn-sm btn-danger adda badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加列席人' + '</a>&nbsp;';
                         let addDeliberationHtml = '<a href="javascript:;" class="btn btn-sm btn-danger addd badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加审议结果' + '</a>&nbsp;';
                         let executionHtml = '<a href="javascript:;" class="btn btn-sm btn-danger add_execution badge-pill mb-2"><i class="fa fa-dedent"> </i>' + '添加组织实施' + '</a>&nbsp;';
-                        let buttonhtml = editHtml + delHtml + addHtml+addAttendanceHtml+addDeliberationHtml+executionHtml;
+                        let sendHtml = '<a href="javascript:;" class="btn btn-warning send"><i class="fa fa-send"> </i> 组织实施报送</a>&nbsp;';
+                        let buttonhtml = editHtml + delHtml + addHtml+addAttendanceHtml+addDeliberationHtml+executionHtml+sendHtml;
                         return buttonhtml;
                     },
                     events: {
@@ -227,7 +231,23 @@
                             let url = '[[@{'/manageSubject/addExecution'}]]';
                             let dataUrl = '[[@{'/manageSubject/getExecutionBySubjectId'}]]';
                             commonAction.addAction8(id,subjectCode, url, dataUrl, 'confirmModal8')
-                        },
+                        },'click .send': function (e, value, row, index) {
+                        let url = '[[@{'/xml/send0012'}]]';
+                        debugger
+                        let id = row.uuid;
+                        $.ajax({
+                            url: url,
+                            data: 'id=' + id,
+                            type: "post",
+                            success: function (data) {
+                                if(data=="ok")
+                                    layer.alert(data, {title: '上传成功', icon: 1});
+                                else
+                                    layer.alert(data, {title: '上传失败', icon: 2});
+                                createTable();
+                            }
+                        });
+                    }
                     }
                 }
             ]

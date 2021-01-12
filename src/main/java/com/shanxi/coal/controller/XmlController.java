@@ -288,60 +288,63 @@ public class XmlController {
     @PostMapping("/send0012")
     @ResponseBody
     public String send0012(@RequestParam("id") String id) throws Exception {
-//        manageSubjectExecutionMapper.selectByPrimaryKey(id);
-//        ManageSystem manageSystem = manageSystemMapper.selectByPrimaryKey(id);
-//        List<ManageSystemItems> manageSystemItems = manageSystemItemsMapper.listByUseId(id);
-//        List<FileUploaded> fileUploadeds = fileUploadedMapper.listByCategoryId(id);
-//        XML0005Parent xml0005Parent = new XML0005Parent();
-//        xml0005Parent.setCompanyId(myProperties.getCreditCode());
-//        xml0005Parent.setCompanyName(myProperties.getCompanyName());
-//        xml0005Parent.setEffectiveDate(manageSystem.getEffectiveDate());
-//        xml0005Parent.setInvalidDate(manageSystem.getExpiryDate());
-//        xml0005Parent.setRegulationId(manageSystem.getUuid());
-//        xml0005Parent.setRegulationName(manageSystem.getSystemName());
-//        xml0005Parent.setAuditFlag(manageSystem.getIsLegalApprove());
-//        xml0005Parent.setMeetingTypeCode(MyUtils.name2code(manageSystem.getMeetingType()));
-//        xml0005Parent.setRegulationTypeName(manageSystem.getSystemType());
-//        xml0005Parent.setApprovalDate(manageSystem.getApproveDate());
-//        List<XMLVoteMode> list = new ArrayList<>();
-//        for (ManageSystemItems i : manageSystemItems) {
-//            XMLVoteMode xmlVoteMode = new XMLVoteMode();
-//            xmlVoteMode.setItemCode(i.getItemsName());
-//            xmlVoteMode.setRate(i.getPeopleCount());
-//            xmlVoteMode.setVoteMode(i.getVotingFormula());
-//            list.add(xmlVoteMode);
-//        }
-//        xml0005Parent.setXmlVoteModeList(list);
-//        xml0005Parent.setSource("系统");
-//        xml0005Parent.setOperType("add");
-//        JAXBContext jaxbContext = JAXBContext.newInstance(XML0005Parent.class);
-//        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-//        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-//        String folder = myProperties.getCreditCode() + "_0005_1000_" + MyDateTimeUtils.strNow("yyyyMMddHHmmss") + "_" + UUID.randomUUID().toString().replaceAll("-", "");
-//        String path = myProperties.getXmlPath() + folder;
-//        File f = new File(path);
-//        if (!f.exists()) {
-//            f.mkdirs();
-//        }
-//        File f1 = new File(path + "/正式文件");
-//        if (!f1.exists()) {
-//            f1.mkdirs();
-//        }
-//        File f2 = new File(path + "/佐证材料");
-//        if (!f2.exists()) {
-//            f2.mkdirs();
-//        }
-//        for (FileUploaded fs : fileUploadeds) {
-//            if (fs.getFileCategory().equals("managesystem"))
-//                copyFile(fs.getFilePath(), f1.getAbsolutePath());
-//            else if (fs.getFileCategory().equals("managesystemMaterial"))
-//                copyFile(fs.getFilePath(), f2.getAbsolutePath());
-//        }
-//        jaxbMarshaller.marshal(xml0005Parent, new File(path + "/0005_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
-//        File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
-//        String s = doSend(zipFile);
-//        insertReport(s, folder, path, "集团总部决策制度");
-        return "ok";
+        ManageMeetingSubject manageMeetingSubject = manageMeetingSubjectMapper.selectByPrimaryKey(id);
+        List<ManageSubjectExecution> manageSubjectExecutions = manageSubjectExecutionMapper.listBySubjectId(id);
+        if (!manageSubjectExecutions.isEmpty()) {
+            List<FileUploaded> fileUploadeds = fileUploadedMapper.listByCategoryId(manageSubjectExecutions.get(0).getUuid());
+            List<ManageSubjectExecutionDuty> manageSubjectExecutionDuties = manageSubjectExecutionDutyMapper.listByExecutionId(manageSubjectExecutions.get(0).getUuid());
+            XML0012 xml0012 = new XML0012();
+            xml0012.setCompanyId(myProperties.getCreditCode());
+            xml0012.setCompanyName(myProperties.getCompanyName());
+            xml0012.setDescription(manageSubjectExecutions.get(0).getDescription());
+            xml0012.setEffect(manageSubjectExecutions.get(0).getEffect());
+            xml0012.setExecutionId(manageSubjectExecutions.get(0).getUuid());
+            xml0012.setOperType("add");
+            xml0012.setRemark("");
+            xml0012.setSource("系统");
+            xml0012.setStatus(manageSubjectExecutions.get(0).getStatus());
+            xml0012.setSubjectCode(manageSubjectExecutions.get(0).getSubjectCode());
+            List<XML0012Duty> list = new ArrayList<>();
+            for (ManageSubjectExecutionDuty s : manageSubjectExecutionDuties) {
+                XML0012Duty xml0012Duty = new XML0012Duty();
+                xml0012Duty.setDept(s.getDept());
+                xml0012Duty.setName(s.getName());
+                list.add(xml0012Duty);
+            }
+            xml0012.setXml0012Duties(list);
+            JAXBContext jaxbContext = JAXBContext.newInstance(XML0012.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            String folder = myProperties.getCreditCode() + "_0012_1000_" + MyDateTimeUtils.strNow("yyyyMMddHHmmss") + "_" + UUID.randomUUID().toString().replaceAll("-", "");
+            String path = myProperties.getXmlPath() + folder;
+            File f = new File(path);
+            if (!f.exists()) {
+                f.mkdirs();
+            }
+            File f1 = new File(path + "/正式文件");
+            if (!f1.exists()) {
+                f1.mkdirs();
+            }
+            File f2 = new File(path + "/时间进度");
+            if (!f2.exists()) {
+                f2.mkdirs();
+            }
+            for (FileUploaded fs : fileUploadeds) {
+                if (fs.getFileCategory().equals("formalFile"))
+                    copyFile(fs.getFilePath(), f1.getAbsolutePath());
+                else if (fs.getFileCategory().equals("timeSchedule"))
+                    copyFile(fs.getFilePath(), f2.getAbsolutePath());
+            }
+            jaxbMarshaller.marshal(xml0012, new File(path + "/0012_1000_" + MyDateTimeUtils.strNow("yyyyMMdd") + "_0001.xml"));
+            File zipFile = packageFileCatalogPwdZip(myProperties.getXmlPath(), folder);
+            String s = doSend(zipFile);
+            insertReport(s, folder, path, "集团总部组织实施");
+            String ret = getResult(s);
+            manageMeetingSubject.setStatus(ret.equals("ok") ? 99 : 44);
+            manageMeetingSubjectMapper.updateByPrimaryKeySelective(manageMeetingSubject);
+            return ret;
+        }
+        return "error";
     }
 
     @PostMapping("/send0006")

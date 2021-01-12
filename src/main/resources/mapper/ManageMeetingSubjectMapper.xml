@@ -216,7 +216,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.shanxi.coal.domain.ManageMeetingSubject">
     update manage_meeting_subject
     <set>
-      <if test="createdDate != null and createdDate != ''">
+      <if test="createdDate != null ">
         created_date = #{createdDate,jdbcType=TIMESTAMP},
       </if>
       <if test="createdBy != null and createdBy != '' ">
@@ -228,7 +228,7 @@
       <if test="modifiedBy != null and modifiedBy != '' ">
         modified_by = #{modifiedBy,jdbcType=VARCHAR},
       </if>
-      <if test="modifiedDate != null and modifiedDate != '' ">
+      <if test="modifiedDate != null ">
         modified_date = #{modifiedDate,jdbcType=TIMESTAMP},
       </if>
       <if test="isDel != null and isDel != '' ">
