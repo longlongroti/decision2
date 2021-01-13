@@ -97,7 +97,7 @@ public class UserController {
             UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, password);
             return userLogin(userName, password, response, model, subject, usernamePasswordToken);
         }
-        return "redirect:/go/dashboard";
+        return "redirect:/page/index";
     }
 
     private String userLogin(@RequestParam("userName") String userName, @RequestParam("password") String password, HttpServletResponse response, Model model, Subject subject, UsernamePasswordToken usernamePasswordToken) {
