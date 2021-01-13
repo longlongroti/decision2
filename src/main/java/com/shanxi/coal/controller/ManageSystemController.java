@@ -154,15 +154,8 @@ public class ManageSystemController {
     @PostMapping("/delete")
     @ResponseBody
     public String delete(@PathParam("uuid") String uuid) {
-        ManageSystem manageSystem = manageSystemMapper.selectByPrimaryKey(uuid);
-        List<String> list = manageSystemItemsMapper.listByParentId(uuid);
-        for (int i = 0; i < list.size(); i++) {
-            ManageSystemItems manageSystemItems = manageSystemItemsMapper.selectByPrimaryKey(list.get(i));
-            manageSystemItems.setIsDel(1);
-            manageSystemItemsMapper.updateByPrimaryKey(manageSystemItems);
-        }
-        manageSystem.setIsDel(1);
-        manageSystemMapper.updateByPrimaryKeySelective(manageSystem);
+        manageSystemItemsMapper.deleteByParentId(uuid);
+        manageSystemMapper.deleteByPrimaryKey(uuid);
         return "ok";
     }
 

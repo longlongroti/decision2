@@ -215,7 +215,7 @@
                             let id = row.uuid;
                             let url = '[[@{'/manageEventsList/delete'}]]';
                             let redirectUrl = '[[@{'/manageEventsList/go'}]]';
-                            commonAction.addAction(id, url, redirectUrl, 'confirmModal')
+                            commonAction.delAction(id, url, redirectUrl, 'confirmModal')
                         },
                         'click .adde': function (e, value, row, index) {
                             let id = row.uuid;

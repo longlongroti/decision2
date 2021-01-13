@@ -192,15 +192,8 @@ public class ManageEventsListController {
     @PostMapping("/delete")
     @ResponseBody
     public String delete(@PathParam("uuid") String uuid) {
-        ManageEventsList manageEventsList = manageEventsListMapper.selectByPrimaryKey(uuid);
-        List<ManageEventsDetails> list = manageEventsDetailsMapper.listByParentId(uuid);
-        for (int i = 0; i < list.size(); i++) {
-            ManageEventsDetails manageEventsDetails = manageEventsDetailsMapper.selectByPrimaryKey(list.get(i).getUuid());
-            manageEventsDetails.setIsDel(1);
-            manageEventsDetailsMapper.updateByPrimaryKey(manageEventsDetails);
-        }
-        manageEventsList.setIsDel(1);
-        manageEventsListMapper.updateByPrimaryKeySelective(manageEventsList);
+        manageEventsDetailsMapper.deleteByMainId(uuid);
+        manageEventsListMapper.deleteByPrimaryKey(uuid);
         return "ok";
     }
 

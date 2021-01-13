@@ -138,12 +138,7 @@ public class ManageMeetingController {
     @PostMapping("/delete")
     @ResponseBody
     public String delete(@PathParam("uuid") String uuid) {
-        ManageMeeting manageMeeting = manageMeetingMapper.selectByPrimaryKey(uuid);
-        if (manageMeeting != null) {
-            manageMeeting.setIsDel(1);
-            manageMeetingMapper.updateByPrimaryKeySelective(manageMeeting);
-            manageMeetingAttendeeMapper.deleteByMeetingId(manageMeeting.getUuid());
-        }
+        manageMeetingMapper.deleteByPrimaryKey(uuid);
         return "ok";
     }
 
