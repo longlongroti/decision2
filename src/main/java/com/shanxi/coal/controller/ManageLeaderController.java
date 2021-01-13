@@ -45,6 +45,7 @@ public class ManageLeaderController {
     ManageLeaderGroupMapper manageLeaderGroupMapper;
     @Resource
     CommonService commonService;
+
     @GetMapping("/go")
     public String go() {
         return "manageLeader/list";
@@ -72,13 +73,27 @@ public class ManageLeaderController {
     }
 
     @PostMapping("/add")
-    public String add(ManageLeader manageLeader, @RequestParam("leaderGroup") String leaderGroup,
-                         @RequestParam("jobTitle") String jobTitle, @RequestParam("officeStartDate") String officeStartDate,
-                         @RequestParam("officeEndDate") String officeEndDate, Model model1) {
-        String[] leaderGroups = leaderGroup.split(",");
-        String[] jobTitles = jobTitle.split(",");
-        String[] officeStartDates = officeStartDate.split(",");
-        String[] officeEndDates = officeEndDate.split(",");
+    public String add(ManageLeader manageLeader,
+                      @RequestParam(value = "leaderGroup", required = false) String leaderGroup,
+                      @RequestParam(value = "jobTitle", required = false) String jobTitle,
+                      @RequestParam(value = "officeStartDate", required = false) String officeStartDate,
+                      @RequestParam(value = "officeEndDate", required = false) String officeEndDate, Model model1) {
+        String[] leaderGroups = null;
+        if (StringUtils.isNotEmpty(leaderGroup)) {
+            leaderGroups = leaderGroup.split(",");
+        }
+        String[] jobTitles = null;
+        if (StringUtils.isNotEmpty(jobTitle)) {
+            jobTitles = jobTitle.split(",");
+        }
+        String[] officeStartDates = null;
+        if (StringUtils.isNotEmpty(officeStartDate)) {
+            officeStartDates = officeStartDate.split(",");
+        }
+        String[] officeEndDates = null;
+        if (StringUtils.isNotEmpty(officeEndDate)) {
+            officeEndDates = officeEndDate.split(",");
+        }
         MyUtils.setCommonBean(manageLeader);
         manageLeaderMapper.insertSelective(manageLeader);
         if (StringUtils.isNotEmpty(manageLeader.getFileIds())) {
@@ -89,14 +104,26 @@ public class ManageLeaderController {
 
     @PutMapping("/add")
     public String update(ManageLeader manageLeader,
-                         @RequestParam("leaderGroup") String leaderGroup,
-                         @RequestParam("jobTitle") String jobTitle,
-                         @RequestParam("officeStartDate") String officeStartDate,
-                         @RequestParam("officeEndDate") String officeEndDate) {
-        String[] leaderGroups = leaderGroup.split(",");
-        String[] jobTitles = jobTitle.split(",");
-        String[] officeStartDates = officeStartDate.split(",");
+                         @RequestParam(value = "leaderGroup", required = false) String leaderGroup,
+                         @RequestParam(value = "jobTitle", required = false) String jobTitle,
+                         @RequestParam(value = "officeStartDate", required = false) String officeStartDate,
+                         @RequestParam(value = "officeEndDate", required = false) String officeEndDate) {
+        String[] leaderGroups = null;
+        if (StringUtils.isNotEmpty(leaderGroup)) {
+            leaderGroups = leaderGroup.split(",");
+        }
+        String[] jobTitles = null;
+        if (StringUtils.isNotEmpty(jobTitle)) {
+            jobTitles = jobTitle.split(",");
+        }
+        String[] officeStartDates = null;
+        if (StringUtils.isNotEmpty(officeStartDate)) {
+            officeStartDates = officeStartDate.split(",");
+        }
         String[] officeEndDates = officeEndDate.split(",");
+        if (StringUtils.isNotEmpty(officeEndDate)) {
+            officeEndDates = officeEndDate.split(",");
+        }
         manageLeaderMapper.updateByPrimaryKeySelective(manageLeader);
         if (StringUtils.isNotEmpty(manageLeader.getFileIds())) {
             commonService.batchUpdateFileId(manageLeader.getFileIds(), manageLeader.getUuid());
@@ -108,21 +135,25 @@ public class ManageLeaderController {
 
     private String insertDetail(String[] leaderGroups, String[] jobTitles, String[] officeStartDates,
                                 String[] officeEndDates, String mainUUid) {
-        for (int i = 0; i < leaderGroups.length; i++) {
-            ManageLeaderGroup manageLeaderGroup = new ManageLeaderGroup();
-            manageLeaderGroup.setUuid(UUID.randomUUID().toString());
-            manageLeaderGroup.setLeaderId(mainUUid);
-            manageLeaderGroup.setLeaderGroup(checkNullAndReturn(leaderGroups, i));
-            manageLeaderGroup.setJobTitle(checkNullAndReturn(jobTitles, i));
-            manageLeaderGroup.setOfficeStartDate(checkNullAndReturn(officeStartDates, i));
-            manageLeaderGroup.setOfficeEndDate(checkNullAndReturn(officeEndDates, i));
-            manageLeaderGroupMapper.insertSelective(manageLeaderGroup);
+        if(leaderGroups!=null) {
+            for (int i = 0; i < leaderGroups.length; i++) {
+                ManageLeaderGroup manageLeaderGroup = new ManageLeaderGroup();
+                manageLeaderGroup.setUuid(UUID.randomUUID().toString());
+                manageLeaderGroup.setLeaderId(mainUUid);
+                manageLeaderGroup.setLeaderGroup(checkNullAndReturn(leaderGroups, i));
+                manageLeaderGroup.setJobTitle(checkNullAndReturn(jobTitles, i));
+                manageLeaderGroup.setOfficeStartDate(checkNullAndReturn(officeStartDates, i));
+                manageLeaderGroup.setOfficeEndDate(checkNullAndReturn(officeEndDates, i));
+                manageLeaderGroupMapper.insertSelective(manageLeaderGroup);
+            }
         }
-
         return "redirect:/manageLeader/go";
     }
 
     public String checkNullAndReturn(String[] array, int idx) {
+        if(array ==null){
+            return "";
+        }
         String result = "";
         if (array.length != 0 && array.length >= idx + 1) {
             if (array[idx] != null && array[idx] != "") {
@@ -135,20 +166,21 @@ public class ManageLeaderController {
     @PostMapping("/list")
     @ResponseBody
     public String list(@RequestParam("pageNumber") Integer pageNumber,
-                        @RequestParam("name") String name,
+                       @RequestParam("name") String name,
                        @RequestParam("pageSize") Integer pageSize) throws ParseException {
         PageHelper.startPage(pageNumber, pageSize);
         ManageLeader where = new ManageLeader();
         MyUtils.buildCommonWhere(where);
         where.setStatus(0);
-        where.setLeaderName(StringUtils.isNotEmpty(name)?name:null);
+        where.setLeaderName(StringUtils.isNotEmpty(name) ? name : null);
         List<ManageLeader> manageLeader = manageLeaderMapper.getList(where);
         PageInfo<ManageLeader> pageInfo = new PageInfo<ManageLeader>(manageLeader);
         return MyUtils.pageInfoToJson(pageInfo);
     }
+
     @PostMapping("/leaderList")
     @ResponseBody
-    public List<ManageLeader>  leaderList(){
+    public List<ManageLeader> leaderList() {
         List<ManageLeader> manageLeader = manageLeaderMapper.getLeaders();
         return manageLeader;
     }
@@ -167,7 +199,6 @@ public class ManageLeaderController {
         manageLeaderMapper.updateByPrimaryKeySelective(manageLeader);
         return "ok";
     }
-
 
     @GetMapping("/exportExcel.xlsx")
     public void exportExcel(HttpServletResponse response) throws ParseException, IOException {
@@ -196,9 +227,9 @@ public class ManageLeaderController {
             ExcelReader excelReader = EasyExcel.read(file.getInputStream()).build();
             ReadSheet readSheet0 =
                     EasyExcel.readSheet(0).head(ManageLeader.class).registerReadListener(new ManageLeaderListener(manageLeaderMapper)).build();
-             ReadSheet readSheet2 =
+            ReadSheet readSheet2 =
                     EasyExcel.readSheet(1).head(ManageLeaderGroup.class).registerReadListener(new ManageLeaderGroupListener(manageLeaderGroupMapper)).build();
-            excelReader.read(readSheet0,  readSheet2 );
+            excelReader.read(readSheet0, readSheet2);
             // 这里千万别忘记关闭，读的时候会创建临时文件，到时磁盘会崩的
             excelReader.finish();
             return MyUtils.objectToJson("成功");

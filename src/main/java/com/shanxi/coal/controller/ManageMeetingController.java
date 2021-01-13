@@ -30,8 +30,6 @@ public class ManageMeetingController {
     @Resource
     ManageMeetingAttendeeMapper manageMeetingAttendeeMapper;
     @Resource
-    ManageMeetingItemsMapper manageMeetingItemsMapper;
-    @Resource
     CommonService commonService;
     @Resource
     AutoCodeMapper autoCodeMapper;
@@ -146,38 +144,6 @@ public class ManageMeetingController {
             manageMeetingMapper.updateByPrimaryKeySelective(manageMeeting);
             manageMeetingAttendeeMapper.deleteByMeetingId(manageMeeting.getUuid());
         }
-        return "ok";
-    }
-
-    @PostMapping("/addDetailItem")
-    @ResponseBody
-    public String addDetailItem(@PathParam("eventCode") String eventCode,
-                                @PathParam("parentId") String parentId,
-                                @PathParam("pass") String pass) {
-        ManageMeetingItems manageMeetingItems = new ManageMeetingItems();
-        manageMeetingItems.setUuid(UUID.randomUUID().toString());
-        manageMeetingItems.setEventCode(eventCode);
-        manageMeetingItems.setPass(pass);
-        manageMeetingItems.setParentId(parentId);
-        manageMeetingItemsMapper.insertSelective(manageMeetingItems);
-        return "ok";
-    }
-
-    @PostMapping("/listDetailItems")
-    @ResponseBody
-    public String listDetailItems(@RequestParam("pageNumber") Integer pageNumber,
-                                  @RequestParam("pageSize") Integer pageSize,
-                                  @RequestParam("id") String id) throws ParseException {
-        PageHelper.startPage(pageNumber, pageSize);
-        List<ManageMeetingItems> manageMeetingItems = manageMeetingItemsMapper.listByParentId(id);
-        PageInfo<ManageMeetingItems> pageInfo = new PageInfo<ManageMeetingItems>(manageMeetingItems);
-        return MyUtils.pageInfoToJson(pageInfo);
-    }
-
-    @PostMapping("/deleteDetailItem")
-    @ResponseBody
-    public String deleteDetailItem(@PathParam("uuid") String uuid) {
-        manageMeetingItemsMapper.deleteByPrimaryKey(uuid);
         return "ok";
     }
 

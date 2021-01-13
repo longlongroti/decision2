@@ -20,7 +20,7 @@ public class ManageMeeting extends CommonBean implements Serializable {
     private List<FileUploaded> fileUploads;
     private String fileIds;
     private List<ManageMeetingAttendee> manageMeetingAttendee;
-    private List<ManageMeetingItems> manageMeetingItems;
+    private List<ManageMeetingSubject> manageMeetingSubjects;
 
     public Integer getStatus1() {
         return status1;
@@ -46,12 +46,12 @@ public class ManageMeeting extends CommonBean implements Serializable {
         this.fileUploads = fileUploads;
     }
 
-    public List<ManageMeetingItems> getManageMeetingItems() {
-        return manageMeetingItems;
+    public List<ManageMeetingSubject> getManageMeetingSubjects() {
+        return manageMeetingSubjects;
     }
 
-    public void setManageMeetingItems(List<ManageMeetingItems> manageMeetingItems) {
-        this.manageMeetingItems = manageMeetingItems;
+    public void setManageMeetingSubjects(List<ManageMeetingSubject> manageMeetingSubjects) {
+        this.manageMeetingSubjects = manageMeetingSubjects;
     }
 
     public List<ManageMeetingAttendee> getManageMeetingAttendee() {

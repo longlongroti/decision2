@@ -72,8 +72,8 @@
     <result column="compere_id" jdbcType="VARCHAR" property="compereId" />
     <result column="compere_name" jdbcType="VARCHAR" property="compereName" />
 
-    <collection property="manageMeetingItems" column="uuid"
-                select="com.shanxi.coal.dao.ManageMeetingItemsMapper.listByParentId"></collection>
+    <collection property="manageMeetingSubjects" column="uuid"
+                select="com.shanxi.coal.dao.ManageMeetingSubjectMapper.listByMeetingId"></collection>
   </resultMap>
   <sql id="Base_Column_List">
     uuid, created_date, created_by, created_by_org, modified_by, modified_date, is_del, 

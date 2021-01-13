@@ -62,8 +62,6 @@ public class XmlController {
     @Resource
     ManageMeetingMapper manageMeetingMapper;
     @Resource
-    ManageMeetingItemsMapper manageMeetingItemsMapper;
-    @Resource
     ManageMeetingAttendeeMapper manageMeetingAttendeeMapper;
     @Resource
     ManageMeetingSubjectMapper manageMeetingSubjectMapper;
