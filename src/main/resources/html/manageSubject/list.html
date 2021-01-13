@@ -19,53 +19,6 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
     <input id="meetingId"  th:value="${meetingId}" type="hidden"/>
-    <!--<div class="row">
-        <div class="col-sm-12">
-           <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>搜索</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="ibox-content" id="query-search-div">
-                    <div class="row">
-                        <div class="col-sm-12 mt-4">
-                            <div class="form-group row">
-                                <label class="col-sm-1 col-form-label my-font-bold">会议类型</label>
-                                <div class="col-sm-4">
-                                    <select class="form-control" id="meetingType" name="meetingType" >
-                                        <option></option>
-                                        <option value="0" >党委会</option>
-                                        <option value="1" >职代会</option>
-                                        <option value="2" >党组会</option>
-                                        <option value="3" >董事会</option>
-                                        <option value="4" >经理层办公室会</option>
-                                        <option value="5" >股东会</option>
-                                        <option value="6" >党委(党组)会</option>
-                                        <option value="7" >其他</option>
-                                        <option value="8" >总经理办公会</option>
-                                    </select>
-                                </div>
-                                <label class="col-sm-1 my-font-bold">会议名称</label>
-                                <div class="col-sm-2"><input id="name" name="name" type="text" class="form-control"></div>
-                                <div class="col-sm-2">
-                                    <div class="form-group text-right">
-                                        <button class="btn btn-sm btn-success" type="button" onclick="createTable()">
-                                            查询
-                                        </button>
-                                        <button class="btn btn-sm btn-info" onclick="refreshQuery()">重置</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
 
     <div class="row">
         <div class="col-sm-12">
@@ -93,11 +46,29 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade "  id="executionConfirmModal" tabindex="-1" role="dialog" aria-labelledby=""
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" >组织实施信息</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="ibox-content">
+                <iframe id="addExecution" style="height: 500px;width: 850px"></iframe>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-default cancel" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div th:replace="common/pop/confirm::showConfirm"></div>
 <div th:replace="common/pop/confirm4::showConfirm"></div>
 <div th:replace="common/pop/confirm5::showConfirm"></div>
 <div th:replace="common/pop/confirm6::showConfirm"></div>
-<div th:replace="common/pop/confirm8::showConfirm"></div>
 
 <script th:src="@{/asserts/js/jquery.min.js}"></script>
 <script th:src="@{/asserts/js/bootstrap.min.js}"></script>
@@ -228,9 +199,9 @@
                         'click .add_execution': function (e, value, row, index) {
                             let id = row.uuid;
                             let subjectCode = row.subjectCode;
-                            let url = '[[@{'/manageSubject/addExecution'}]]';
-                            let dataUrl = '[[@{'/manageSubject/getExecutionBySubjectId'}]]';
-                            commonAction.addAction8(id,subjectCode, url, dataUrl, 'confirmModal8')
+                            let addExecutionUrl = '[[@{'/manageSubject/addExecution'}]]?subjectId='+id+"&subjectCode="+subjectCode;
+                            $('#executionConfirmModal').modal("show");
+                            $('#addExecution').attr('src', addExecutionUrl);
                         },'click .send': function (e, value, row, index) {
                         let url = '[[@{'/xml/send0012'}]]';
                         debugger
@@ -260,20 +231,6 @@
     });
 
 
-    function addInput() {
-        let input = $(
-            "<span class='col-sm-12' ><div class='form-group row'>"+
-            "<div class='col-sm-2'><input type='text'  name='dept'  class='form-control m-t-sm col-sm-2'  placeholder='落实责任部门'></div>" +
-            "<div class='col-sm-2'><input type='text'  name='name'  class='form-control m-t-sm col-sm-2'  placeholder='责任人'></div>" +
-            "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
-            "<span class='glyphicon glyphicon-minus'></span>" +
-            "</button></div></div></span>");
-        $(".input-dyna-add").append(input);
-    }
-    $("body").on("click", ".removeclass", function (e) {
-        $(this).parent().parent('div').remove();
-        return false;
-    })
 </script>
 </body>
 

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+
+    <title>制度信息-</title>
+    <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/font-awesome.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/footable/footable.core.css}" rel="stylesheet">
+
+    <link th:href="@{/asserts/css/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/asserts/js/layer/laydate/skins/default/laydate.css}" rel="stylesheet">
+    <link th:href="@{/asserts/js/layer/laydate/need/laydate.css}" rel="stylesheet">
+    <link th:href="@{/asserts/css/jquery-file-upload.min.css}" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+
+    <div class="row">
+        <div class="ibox-content">
+            <form >
+                <input id="uuid" name="uuid"
+                       th:value="${execution!=null}?${execution.uuid}" type="hidden"/>
+                <input id="subjectId" name="subjectId" th:value="${subjectId}" type="hidden"/>
+                <input id="fileIds" name="fileIds" type="hidden" value=""/>
+                <input id="subjectCode" name="subjectCode" type="hidden" th:value="${subjectCode}"/>
+                <!--第一行-->
+                <fieldset>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label my-font-bold">预期成效</label>
+                        <div class="col-sm-5">
+                            <input class="form-control" id="effect" name="effect"
+                                   th:value="${execution!=null}?${execution.effect}"
+                                   th:placeholder="预期成效">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!--第二行-->
+                <fieldset>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label my-font-bold">实施状态</label>
+                        <div class="col-sm-5">
+                            <select class="form-control" id="status" name="status">
+                                <option></option>
+                                <option value="完成" th:selected="${execution!=null}?${execution.status == '完成'}">完成</option>
+                                <option value="未完成" th:selected="${execution!=null}?${execution.status == '未完成'}">未完成</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label my-font-bold">实施情况</label>
+                        <div class="col-sm-5">
+                            <input class="form-control" id="description" name="description"
+                                   th:value="${execution!=null}?${execution.description}"
+                                   th:placeholder="实施情况">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label my-font-bold">备注</label>
+                        <div class="col-sm-5">
+                            <input class="form-control" id="remark" name="remark"
+                                   th:value="${execution!=null}?${execution.remark}"
+                                   th:placeholder="备注">
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <!--第三行-->
+                <fieldset>
+                    <div class="clr"></div>
+                    <div class="hr-line-dashed"></div>
+                    <h4>所属领导班子列表</h4>
+                    <div class="form-group row input-dyna-add" >
+                        <div th:if="${execution!=null}">
+                            <span class='col-sm-12' th:each=" duty: ${execution.manageSubjectExecutionDuties}" >
+                            <div class='form-group row'>
+                                    <div class='col-sm-2'><input type='text'  name='dept' th:value="${duty.dept}"  class='form-control m-t-sm col-sm-2'  placeholder='落实责任部门'></div>
+                                    <div class='col-sm-2'><input type='text'  name='name' th:value="${duty.name}" class='form-control m-t-sm col-sm-2'  placeholder='责任人'></div>
+                                    <div class='col-sm-3'>
+                                        <button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>
+                                            <span class='glyphicon glyphicon-minus'></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <input type="button" class="btn btn-success" onclick="addInput()" value="添加" />
+                </fieldset>
+                <fieldset>
+                    <div class="hr-line-dashed" style="margin: 0 0 15px 0;"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label   my-font-bold"
+                               for="fileuploader">正式文件</label>
+                        <div class="col-sm-8 ">
+                            <div id="fileuploader">上传</div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed" style="margin: 0 0 15px 0;"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label   my-font-bold"
+                               for="fileuploader2">时间进度</label>
+                        <div class="col-sm-8 ">
+                            <div id="fileuploader2">上传</div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="form-group row">
+                    <div class="col-sm-4 col-sm-offset-2">
+                        <button class="btn btn-primary btn-sm badge-pill fa fa-save" onclick="saveExecution()" type="button">
+                            [[${execution!=null}?保存编辑:保存新增]]
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/asserts/js/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/layer/layer.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap-table/bootstrap-table.min.js?v=1.1?v=1.1}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/bootstrap-table/locale/bootstrap-table-zh-CN.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/tree-view/js/bootstrap-treeview-cl.js}" type="text/javascript"></script>
+<!--<script th:src="@{/asserts/js/plugins/iCheck/icheck.min.js}" type="text/javascript"></script>-->
+<script th:src="@{/asserts/js/layer/laydate/laydate.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/plugins/validate/jquery.validate.min.js}" type="text/javascript"></script>
+<script th:src="@{/asserts/js/plugins/validate/messages_zh.min.js}" type="text/javascript"></script>
+<script th:replace="common/myJs::myCommonJs"></script>
+<script th:src="@{/asserts/js/jquery-file-upload.min.js?v=1.1}" type="text/javascript"></script>
+<a th:href="${#httpServletRequest.getScheme() + '://' + #httpServletRequest.getServerName() + ':' + #request.getServerPort()  + #request.getContextPath() + '/'} "
+   id="contextPath" style="display: none"></a>
+
+<script th:inline="javascript">
+    var contextPath = $('#contextPath').attr('href');
+    $(function () {
+        let ret = [[${execution!=null}?${execution.fileUploads}]];
+        let ret1 = [];
+        let ret2 = [];
+        if (ret) {
+            for (let i = 0; i < ret.length; i++) {
+                if (ret[i].fileCategory == 'formalFile') {
+                    ret1.push(ret[i]);
+                } else {
+                    ret2.push(ret[i]);
+                }
+            }
+        }
+        myFileAction.do("fileuploader", "fileIds", "formalFile", ret1);
+        myFileAction.do("fileuploader2", "fileIds", "timeSchedule", ret2);
+    })
+    let addUrl = '[[@{'/manageSubject/addExecution'}]]';
+    function addInput() {
+        let input = $(
+            "<span class='col-sm-12' ><div class='form-group row'>"+
+            "<div class='col-sm-2'><input type='text'  name='dept'  class='form-control m-t-sm col-sm-2'  placeholder='落实责任部门'></div>" +
+            "<div class='col-sm-2'><input type='text'  name='name'  class='form-control m-t-sm col-sm-2'  placeholder='责任人'></div>" +
+            "<div class='col-sm-3'><button class='removeclass btn btn-default m-t-sm col-sm-2' type='button'>" +
+            "<span class='glyphicon glyphicon-minus'></span>" +
+            "</button></div></div></span>");
+        $(".input-dyna-add").append(input);
+    }
+    $("body").on("click", ".removeclass", function (e) {
+        $(this).parent().parent('div').remove();
+        return false;
+    })
+
+    function saveExecution(){
+        //处理落实责任信息
+        let execution = {};
+        execution.subjectId =  $('#subjectId').val();;
+        execution.uuid = $('#uuid').val();
+        execution.subjectCode = $('#subjectCode').val();
+        execution.effect = $('#effect').val();
+        execution.status = $('#status').val();
+        execution.description = $('#description').val();
+        execution.remark = $('#remark').val();
+        execution.fileIds = $('#fileIds').val();
+        let dutyList = [];
+        let duty_depts = $('.input-dyna-add input[name="dept"]');
+        let duty_names = $('.input-dyna-add input[name="name"]');
+        if(duty_depts.length>0){
+            for (let i = 0; i < duty_depts.length; i++) {
+                let duty = {};
+                duty.dept = duty_depts.eq(i).val();
+                duty.name = duty_names.eq(i).val();
+                dutyList.push(duty);
+            }
+        }
+        let executionJson =JSON.stringify(execution);
+        executionJson = executionJson.replace(/\"/gi,'\'');
+
+        let dutyListJson =JSON.stringify(dutyList);
+        dutyListJson = dutyListJson.replace(/\"/gi,'\'');
+
+
+        $.ajax({
+            url: contextPath + 'manageSubject/addExecution',
+            data: {execution:executionJson,dutyList:dutyListJson},
+            type: "post",
+            success: function (data) {
+                alert("保存成功");
+            }
+        });
+    }
+
+
+</script>
+
+</body>
+</html>

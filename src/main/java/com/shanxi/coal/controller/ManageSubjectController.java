@@ -242,6 +242,14 @@ public class ManageSubjectController {
         }
         return "fail";
     }
+    @GetMapping("/addExecution")
+    public String addExecution(Model model,@PathParam("subjectId") String subjectId,@PathParam("subjectCode") String subjectCode){
+        ManageSubjectExecution execution = executionMapper.getExecutionBySubjectId(subjectId);
+        model.addAttribute("execution",execution);
+        model.addAttribute("subjectId",subjectId);
+        model.addAttribute("subjectCode",subjectCode);
+        return "manageSubject/addExecution";
+    }
 
     @PostMapping("/deleteExecution")
     @ResponseBody
