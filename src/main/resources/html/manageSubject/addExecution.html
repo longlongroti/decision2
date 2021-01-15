@@ -213,7 +213,11 @@
             data: {execution:executionJson,dutyList:dutyListJson},
             type: "post",
             success: function (data) {
-                alert("保存成功");
+                if(data == 'ok'){
+                    layer.alert('保存成功');
+                }else{
+                    layer.alert('保存失败');
+                }
             }
         });
     }
