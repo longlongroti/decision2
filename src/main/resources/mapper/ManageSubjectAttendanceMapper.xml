@@ -5,10 +5,11 @@
     <id column="uuid" jdbcType="CHAR" property="uuid" />
     <result column="subject_id" jdbcType="CHAR" property="subjectId" />
     <result column="attendance_name" jdbcType="VARCHAR" property="attendanceName" />
+    <result column="attendance_id" jdbcType="VARCHAR" property="attendanceId" />
     <result column="positions" jdbcType="VARCHAR" property="positions" />
   </resultMap>
   <sql id="Base_Column_List">
-    uuid, subject_id, attendance_name, positions
+    uuid, subject_id, attendance_id,attendance_name, positions
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -32,9 +33,9 @@
     where subject_id = #{subjectId,jdbcType=CHAR}
   </delete>
   <insert id="insert" parameterType="com.shanxi.coal.domain.ManageSubjectAttendance">
-    insert into manage_subject_attendance (uuid, subject_id, attendance_name, 
+    insert into manage_subject_attendance (uuid, subject_id, attendance_name, attendance_id,
       positions)
-    values (#{uuid,jdbcType=CHAR}, #{subjectId,jdbcType=CHAR}, #{attendanceName,jdbcType=VARCHAR}, 
+    values (#{uuid,jdbcType=CHAR}, #{subjectId,jdbcType=CHAR}, #{attendanceName,jdbcType=VARCHAR}, #{attendanceId,jdbcType=CHAR},
       #{positions,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageSubjectAttendance">

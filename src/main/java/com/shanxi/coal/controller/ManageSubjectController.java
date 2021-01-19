@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * 议题
@@ -47,6 +48,8 @@ public class ManageSubjectController {
     ManageSubjectExecutionDutyMapper executionDutyMapper;
     @Resource
     FileUploadedMapper fileUploadedMapper;
+    @Resource
+    ManageMeetingAttendeeMapper manageMeetingAttendeeMapper;
 
     @PostMapping("/list")
     @ResponseBody
@@ -159,6 +162,7 @@ public class ManageSubjectController {
         }
         attendance.setAttendanceName(attendanceInfo.split("@_@")[1]);
         attendance.setPositions(positions);
+        attendance.setAttendanceId(attendanceInfo.split("@_@")[0]);
         attendance.setUuid(UUID.randomUUID().toString());
         attendanceMapper.insert(attendance);
         return "ok";
@@ -179,15 +183,29 @@ public class ManageSubjectController {
         return MyUtils.pageInfoToJson(pageInfo);
     }
 
+    @GetMapping("/addDeliberation")
+    public String addDeliberation(@PathParam("subjectId") String subjectId,Model model){
+        List<Map<String,String>> list = listReviewer(subjectId);
+        model.addAttribute("reviewerList",list);
+        return "manageSubject/addDeliberation";
+    }
+
     @PostMapping("/addDeliberation")
     @ResponseBody
-    public String addDeliberation(@PathParam("subjectId") String subjectId, @PathParam("deliberation") String deliberation, @PathParam("deliberationResult") String deliberationResult) {
-        ManageSubjectDeliberation subjectDeliberation = new ManageSubjectDeliberation();
-        subjectDeliberation.setSubjectId(subjectId);
-        subjectDeliberation.setDeliberationPersonnel(deliberation);
-        subjectDeliberation.setDeliberationResult(deliberationResult);
-        subjectDeliberation.setUuid(UUID.randomUUID().toString());
-        deliberationMapper.insert(subjectDeliberation);
+    public String addDeliberation(@PathParam("subjectId") String subjectId, @PathParam("deliberations") String deliberations, @PathParam("deliberationResult") String deliberationResult) {
+        if(liquibase.util.StringUtils.isNotEmpty(deliberations)){
+            Stream.of(deliberations.split(",")).forEach(deliberation->{
+                ManageSubjectDeliberation subjectDeliberation = new ManageSubjectDeliberation();
+                subjectDeliberation.setSubjectId(subjectId);
+                subjectDeliberation.setDeliberationId(deliberation.split("@_@")[0]);
+                subjectDeliberation.setDeliberationPersonnel(deliberation.split("@_@")[1]);
+                subjectDeliberation.setDeliberationResult(deliberationResult);
+                subjectDeliberation.setUuid(UUID.randomUUID().toString());
+                deliberationMapper.insert(subjectDeliberation);
+            });
+        }else{
+            return "fal";
+        }
         return "ok";
     }
 
@@ -204,6 +222,27 @@ public class ManageSubjectController {
         List<ManageSubjectDeliberation> deliberationList = deliberationMapper.listBySubjectId(id);
         PageInfo<ManageSubjectDeliberation> pageInfo = new PageInfo<ManageSubjectDeliberation>(deliberationList);
         return MyUtils.pageInfoToJson(pageInfo);
+    }
+
+    public List<Map<String,String>> listReviewer(String subjectId){
+        List<Map<String,String>> list = new ArrayList<>();
+        ManageMeetingSubject subject = subjectMapper.selectByPrimaryKey(subjectId);
+        List<ManageMeetingAttendee> manageMeetingAttendeeList = manageMeetingAttendeeMapper.listByMeetingId(subject.getMeetingId());
+        List<ManageSubjectAttendance> subjectAttendanceList = attendanceMapper.listBySubjectId(subjectId);
+        Map<String,String> dataMap = new HashMap<>();
+        manageMeetingAttendeeList.forEach(meetingAttendee->{
+            dataMap.put(meetingAttendee.getManageLeader().getUuid(),meetingAttendee.getManageLeader().getLeaderName());
+        });
+        subjectAttendanceList.forEach(subjectAttendance->{
+            dataMap.put(subjectAttendance.getAttendanceId(),subjectAttendance.getAttendanceName());
+        });
+        dataMap.keySet().forEach(key->{
+            Map<String,String> map = new HashMap<>();
+            map.put("id",key+"@_@"+dataMap.get(key));
+            map.put("name",dataMap.get(key));
+            list.add(map);
+        });
+        return list;
     }
 
     //组织实施

@@ -32,10 +32,9 @@
     where subject_id = #{subjectId,jdbcType=CHAR}
   </delete>
   <insert id="insert" parameterType="com.shanxi.coal.domain.ManageSubjectDeliberation">
-    insert into manage_subject_deliberation (uuid, subject_id, deliberation_personnel, 
+    insert into manage_subject_deliberation (uuid, subject_id,deliberation_id, deliberation_personnel,
       deliberation_result)
-    values (#{uuid,jdbcType=CHAR}, #{subjectId,jdbcType=CHAR}, #{deliberationPersonnel,jdbcType=VARCHAR}, 
-      #{deliberationResult,jdbcType=VARCHAR})
+    values (#{uuid,jdbcType=CHAR}, #{subjectId,jdbcType=CHAR},#{deliberationId,jdbcType=CHAR}, #{deliberationPersonnel,jdbcType=VARCHAR},#{deliberationResult,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.shanxi.coal.domain.ManageSubjectDeliberation">
     insert into manage_subject_deliberation

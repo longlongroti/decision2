@@ -23,4 +23,5 @@ public interface ManageMeetingAttendeeMapper {
     void deleteByMeetingId(String uuid);
 
     List<ManageMeetingAttendee> listByMeetingId(@Param("meetingId") String meetingId);
+
 }

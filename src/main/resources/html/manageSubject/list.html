@@ -14,6 +14,7 @@
     <link th:href="@{/asserts/css/style.min.css}" rel="stylesheet">
     <link th:href="@{/asserts/css/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet">
 
+
 </head>
 
 <body class="gray-bg">
@@ -64,11 +65,27 @@
         </div>
     </div>
 </div>
+<div class="modal fade "  id="deliberationConfirmModal" tabindex="-1" role="dialog" aria-labelledby=""
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" >组织实施信息</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="ibox-content">
+                <iframe id="addDeliberation" style="height: 500px;width: 850px"></iframe>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-default cancel" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div th:replace="common/pop/confirm::showConfirm"></div>
 <div th:replace="common/pop/confirm4::showConfirm"></div>
 <div th:replace="common/pop/confirm5::showConfirm"></div>
-<div th:replace="common/pop/confirm6::showConfirm"></div>
 
 <script th:src="@{/asserts/js/jquery.min.js}"></script>
 <script th:src="@{/asserts/js/bootstrap.min.js}"></script>
@@ -81,6 +98,7 @@
 <script th:src="@{/asserts/js/laydate/laydate.js}"></script>
 <script th:replace="common/myJs::myCommonJs"></script>
 <script th:src="@{/asserts/js/jquery-file-upload.min.js?v=1.1}" type="text/javascript"></script>
+
 <script>
     $(function () {
         createTable();
@@ -194,7 +212,10 @@
                             let url = '[[@{'/manageSubject/addDeliberation'}]]';
                             let urls = '[[@{'/manageSubject/listDeliberation'}]]';
                             let delurl = '[[@{'/manageSubject/deleteDeliberation'}]]';
-                            commonAction.addAction6(id, url, '', 'confirmModal6',urls,delurl)
+                            let addDeliberationUrl = '[[@{'/manageSubject/addDeliberation'}]]?subjectId='+id;
+                            $('#deliberationConfirmModal').modal("show");
+                            $('#addDeliberation').attr('src', addDeliberationUrl);
+                            // commonAction.addAction6(id, url, '', 'confirmModal6',urls,delurl)
                         },
                         'click .add_execution': function (e, value, row, index) {
                             let id = row.uuid;

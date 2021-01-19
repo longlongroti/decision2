@@ -11,6 +11,8 @@ public class ManageSubjectAttendance implements Serializable {
 
     private String positions;
 
+    private String attendanceId;
+
     private static final long serialVersionUID = 1L;
 
     public String getUuid() {
@@ -43,5 +45,13 @@ public class ManageSubjectAttendance implements Serializable {
 
     public void setPositions(String positions) {
         this.positions = positions == null ? null : positions.trim();
+    }
+
+    public String getAttendanceId() {
+        return attendanceId;
+    }
+
+    public void setAttendanceId(String attendanceId) {
+        this.attendanceId = attendanceId;
     }
 }

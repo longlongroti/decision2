@@ -11,6 +11,8 @@ public class ManageSubjectDeliberation implements Serializable {
 
     private String deliberationResult;
 
+    private String deliberationId;
+
     private static final long serialVersionUID = 1L;
 
     public String getUuid() {
@@ -43,5 +45,13 @@ public class ManageSubjectDeliberation implements Serializable {
 
     public void setDeliberationResult(String deliberationResult) {
         this.deliberationResult = deliberationResult == null ? null : deliberationResult.trim();
+    }
+
+    public String getDeliberationId() {
+        return deliberationId;
+    }
+
+    public void setDeliberationId(String deliberationId) {
+        this.deliberationId = deliberationId;
     }
 }
