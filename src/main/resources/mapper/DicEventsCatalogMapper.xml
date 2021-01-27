@@ -202,7 +202,7 @@
 </select>
 
   <select id="listAll"  parameterType="java.lang.String" resultMap="BaseResultMap">
-    select * from dic_events_catalog
+    select * from dic_events_catalog order by status asc
   </select>
     <select id="getEventsListA"  parameterType="java.lang.String" resultMap="BaseResultMap">
         select * from dic_events_catalog group by catalog_a
